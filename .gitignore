@@ -1,0 +1,27 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor / tooling
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Claude Code local state
+.claude/
+
+# Env files (each package also ignores its own)
+.env
+.env.local
+.env.*.local
+
+# Node
+node_modules/
+dist/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/

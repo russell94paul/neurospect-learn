@@ -1,0 +1,99 @@
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { useAuth } from '@/lib/auth';
+import { AppShell } from '@/components/layout/app-shell';
+import { LoginPage } from '@/pages/login';
+import { AuthCallbackPage } from '@/pages/auth-callback';
+import { StubPage } from '@/pages/stub';
+import { LibraryPage } from '@/pages/library';
+import { ConceptReaderPage } from '@/pages/concept-reader';
+
+// ============================================================
+// Protected layout — redirects to /login if not authenticated
+// ============================================================
+
+function ProtectedLayout() {
+  const { token, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p className="text-muted-foreground">Loading…</p>
+      </div>
+    );
+  }
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <AppShell />;
+}
+
+// ============================================================
+// Router — route taxonomy per learning-platform.md §Route taxonomy.
+// Every protected route is a stub until its phase lands (5c–5g).
+// ============================================================
+
+const router = createBrowserRouter([
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/auth/callback',
+    element: <AuthCallbackPage />,
+  },
+  {
+    element: <ProtectedLayout />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="/path" replace />,
+      },
+      {
+        path: '/path',
+        element: <StubPage title="Path" phase="Phase 5e" />,
+      },
+      {
+        path: '/path/:stage',
+        element: <StubPage title="Stage Detail" phase="Phase 5e" />,
+      },
+      {
+        path: '/library',
+        element: <LibraryPage />,
+      },
+      {
+        path: '/concepts/:slug',
+        element: <ConceptReaderPage />,
+      },
+      {
+        path: '/drills',
+        element: <StubPage title="Drills" phase="Phase 5e" />,
+      },
+      {
+        path: '/journal',
+        element: <StubPage title="Journal" phase="Phase 5f" />,
+      },
+      {
+        path: '/journal/new',
+        element: <StubPage title="New Journal Entry" phase="Phase 5f" />,
+      },
+      {
+        path: '/journal/:id',
+        element: <StubPage title="Journal Entry" phase="Phase 5f" />,
+      },
+      {
+        path: '/expectancy',
+        element: <StubPage title="Expectancy" phase="Phase 5f" />,
+      },
+      {
+        path: '/gate',
+        element: <StubPage title="Gate" phase="Phase 5g" />,
+      },
+    ],
+  },
+]);
+
+export function App() {
+  return <RouterProvider router={router} />;
+}
