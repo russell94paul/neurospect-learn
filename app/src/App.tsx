@@ -6,6 +6,9 @@ import { AuthCallbackPage } from '@/pages/auth-callback';
 import { StubPage } from '@/pages/stub';
 import { LibraryPage } from '@/pages/library';
 import { ConceptReaderPage } from '@/pages/concept-reader';
+import { PathPage } from '@/pages/path';
+import { StageDetailPage } from '@/pages/stage-detail';
+import { DrillsPage } from '@/pages/drills';
 
 // ============================================================
 // Protected layout — redirects to /login if not authenticated
@@ -52,11 +55,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/path',
-        element: <StubPage title="Path" phase="Phase 5e" />,
+        element: <PathPage />,
       },
       {
         path: '/path/:stage',
-        element: <StubPage title="Stage Detail" phase="Phase 5e" />,
+        element: <StageDetailPage />,
       },
       {
         path: '/library',
@@ -68,7 +71,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/drills',
-        element: <StubPage title="Drills" phase="Phase 5e" />,
+        element: <DrillsPage />,
       },
       {
         path: '/journal',

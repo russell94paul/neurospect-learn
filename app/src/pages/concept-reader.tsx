@@ -2,20 +2,30 @@ import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { buildResolutionMaps, stripLeadingH1, useContentPage, useContentPages } from '@/lib/content';
+import { useProgress } from '@/lib/learning';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { ConceptBadgeRow } from '@/components/content/badges';
 import { MarkdownRenderer } from '@/components/content/markdown-renderer';
+import { ConceptTrackPanel } from '@/components/progress/concept-track-panel';
 
 export function ConceptReaderPage() {
   const { slug } = useParams<{ slug: string }>();
   const pageQuery = useContentPage(slug);
   const pagesQuery = useContentPages(); // for wikilink resolution maps
+  const progressQuery = useProgress(); // concepts referencing this page → track panels
 
   const maps = useMemo(
     () => buildResolutionMaps(pagesQuery.data ?? []),
     [pagesQuery.data]
+  );
+
+  // A content page may be referenced by 0..N gradable concepts (via
+  // concept.content_slug). Surface a "track this" panel for each.
+  const trackedConcepts = useMemo(
+    () => (progressQuery.data ?? []).filter((r) => r.content_slug === slug),
+    [progressQuery.data, slug]
   );
 
   return (
@@ -60,6 +70,17 @@ export function ConceptReaderPage() {
             <MarkdownRenderer body={stripLeadingH1(pageQuery.data.body)} maps={maps} />
           </CardContent>
         </Card>
+      )}
+
+      {pageQuery.data && trackedConcepts.length > 0 && (
+        <div className="space-y-3">
+          <h2 className="text-sm font-semibold text-muted-foreground">
+            {trackedConcepts.length > 1 ? 'Concepts on this page' : 'Track your progress'}
+          </h2>
+          {trackedConcepts.map((row) => (
+            <ConceptTrackPanel key={row.concept_id} row={row} />
+          ))}
+        </div>
       )}
     </div>
   );

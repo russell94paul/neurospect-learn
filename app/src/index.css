@@ -2,6 +2,15 @@
 @plugin "@tailwindcss/typography";
 
 /*
+ * Tailwind v4 defaults the `dark:` variant to the `prefers-color-scheme` media
+ * query, but this app's theme is CLASS-based (`.dark` on an ancestor — same as
+ * shadcn + the 5d prose token binding). Re-point `dark:` at the class so new
+ * `dark:` utilities (5e-1 progress/gate components) track the real theme, not
+ * the OS setting. (Flagged in learning-platform.md §5d as-built.)
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
  * Tailwind v4 + shadcn/ui token bridge.
  *
  * The lifted neurospect-app index.css defined the HSL token triples in :root/.dark

@@ -13,6 +13,8 @@ import app.models.user  # noqa: F401
 import app.models.concept  # noqa: F401
 import app.models.concept_progress  # noqa: F401
 import app.models.content_page  # noqa: F401
+import app.models.drill  # noqa: F401
+import app.models.drill_progress  # noqa: F401
 import app.models.journal_entry  # noqa: F401
 from app.config import settings as app_settings
 

@@ -7,6 +7,7 @@ from app.auth.router import router as auth_router
 from app.config import settings
 from app.database import engine
 from app.routers.content import router as content_router
+from app.routers.learning import router as learning_router
 
 
 @asynccontextmanager
@@ -43,3 +44,6 @@ app.include_router(auth_router)
 
 # Content API (course corpus — ingested wiki markdown)
 app.include_router(content_router)
+
+# Learning API (progress, derived stage exit-bars, drills)
+app.include_router(learning_router)
