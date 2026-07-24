@@ -8,6 +8,9 @@ from app.models.content_page import ContentPage
 from app.models.drill import Drill
 from app.models.drill_progress import DrillProgress
 from app.models.journal_entry import JournalEntry
+from app.models.plan_item import PlanItem
+from app.models.study_preferences import StudyPreferences
+from app.models.track_stage import TrackStage
 from app.models.user import User
 
 __all__ = [
@@ -18,5 +21,8 @@ __all__ = [
     "Drill",
     "DrillProgress",
     "JournalEntry",
+    "PlanItem",
+    "StudyPreferences",
+    "TrackStage",
     "User",
 ]

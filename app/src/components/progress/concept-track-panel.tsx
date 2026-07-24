@@ -1,8 +1,15 @@
 import { useEffect, useState } from 'react';
-import { AlertTriangle, Check, Eye, Loader2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { AlertTriangle, Check, Eye, Loader2, Waypoints } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { advanceBlocked, LADDER_LABELS, useUpdateProgress } from '@/lib/learning';
+import {
+  advanceBlocked,
+  LADDER_LABELS,
+  TRACK_LABELS,
+  useConceptIndex,
+  useUpdateProgress,
+} from '@/lib/learning';
 import type { ProgressRow } from '@/types/api';
 import { LadderBadge } from './ladder-badge';
 import { ConfidenceRating } from './confidence-rating';
@@ -17,6 +24,13 @@ const CAN_MARK = 2;
  */
 export function ConceptTrackPanel({ row }: { row: ProgressRow }) {
   const update = useUpdateProgress();
+  const conceptIndex = useConceptIndex();
+
+  // "Also taught in …" — resolve cross_refs (equivalent concept slugs in other
+  // tracks) to their track + stage, so the user can jump to a second take.
+  const crossLinks = (row.cross_refs ?? [])
+    .map((slug) => conceptIndex.get(slug))
+    .filter((c): c is NonNullable<typeof c> => !!c && !!c.stage_code);
 
   const [ladder, setLadder] = useState<number | null>(row.ladder_stage);
   const [confidence, setConfidence] = useState<number | null>(row.confidence);
@@ -136,6 +150,24 @@ export function ConceptTrackPanel({ row }: { row: ProgressRow }) {
           <span className="text-xs text-muted-foreground">Saved</span>
         )}
       </div>
+
+      {/* Also taught in — cross-track links (display-only; separate progress). */}
+      {crossLinks.length > 0 && (
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 border-t pt-3 text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-1">
+            <Waypoints className="h-3.5 w-3.5" /> Also taught in:
+          </span>
+          {crossLinks.map((c) => (
+            <Link
+              key={c.slug}
+              to={`/path/${c.track}/${c.stage_code}`}
+              className="text-primary underline-offset-2 hover:underline"
+            >
+              {TRACK_LABELS[c.track] ?? c.track} — {c.title}
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

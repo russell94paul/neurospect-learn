@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { HTTPError } from 'ky';
 import { api } from '@/lib/api';
+import { useMemo } from 'react';
 import type {
   ConceptOut,
   DrillOut,
@@ -8,6 +9,7 @@ import type {
   ProgressPatch,
   ProgressRow,
   StageOut,
+  TrackOut,
 } from '@/types/api';
 
 // ============================================================
@@ -17,39 +19,81 @@ import type {
 
 export const learningKeys = {
   all: ['learning'] as const,
-  concepts: (stage?: string) => [...learningKeys.all, 'concepts', stage ?? 'all'] as const,
-  progress: () => [...learningKeys.all, 'progress'] as const,
-  stages: () => [...learningKeys.all, 'stages'] as const,
+  concepts: (track?: string, stage?: string) =>
+    [...learningKeys.all, 'concepts', track ?? 'all', stage ?? 'all'] as const,
+  progress: (track?: string) => [...learningKeys.all, 'progress', track ?? 'all'] as const,
+  tracks: () => [...learningKeys.all, 'tracks'] as const,
+  stages: (track?: string) => [...learningKeys.all, 'stages', track ?? 'unified'] as const,
   drills: (track?: string, stage?: string) =>
     [...learningKeys.all, 'drills', track ?? 'all', stage ?? 'all'] as const,
+};
+
+/** The three graded tracks (5e-1b) in display order + their labels. */
+export const TRACKS: { key: string; label: string }[] = [
+  { key: 'aura', label: 'Aura' },
+  { key: 'ict_course', label: 'AXL' },
+  { key: 'unified', label: 'Unified' },
+];
+
+export const TRACK_LABELS: Record<string, string> = {
+  aura: 'Aura',
+  ict_course: 'AXL / MrWitness',
+  unified: 'Unified',
 };
 
 // ============================================================
 // Queries
 // ============================================================
 
-export function useConcepts(stage?: string) {
+export function useConcepts(track?: string, stage?: string) {
   return useQuery({
-    queryKey: learningKeys.concepts(stage),
-    queryFn: () =>
-      api
-        .get('api/concepts', stage ? { searchParams: { stage } } : undefined)
-        .json<ConceptOut[]>(),
+    queryKey: learningKeys.concepts(track, stage),
+    queryFn: () => {
+      const searchParams: Record<string, string> = {};
+      if (track) searchParams.track = track;
+      if (stage) searchParams.stage = stage;
+      return api
+        .get('api/concepts', Object.keys(searchParams).length ? { searchParams } : undefined)
+        .json<ConceptOut[]>();
+    },
     staleTime: 5 * 60_000, // seed data
   });
 }
 
-export function useProgress() {
+/** A slug → concept index across ALL tracks, for resolving cross_refs
+ * ("Also taught in …") to their track + stage. Cached seed data. */
+export function useConceptIndex() {
+  const q = useConcepts();
+  const index = useMemo(() => {
+    const m = new Map<string, ConceptOut>();
+    for (const c of q.data ?? []) m.set(c.slug, c);
+    return m;
+  }, [q.data]);
+  return index;
+}
+
+export function useProgress(track?: string) {
   return useQuery({
-    queryKey: learningKeys.progress(),
-    queryFn: () => api.get('api/progress').json<ProgressRow[]>(),
+    queryKey: learningKeys.progress(track),
+    queryFn: () =>
+      api
+        .get('api/progress', track ? { searchParams: { track } } : undefined)
+        .json<ProgressRow[]>(),
   });
 }
 
-export function useStages() {
+/** The three graded tracks + their stage rollups (the /path switcher/spine). */
+export function useTracks() {
   return useQuery({
-    queryKey: learningKeys.stages(),
-    queryFn: () => api.get('api/stages').json<StageOut[]>(),
+    queryKey: learningKeys.tracks(),
+    queryFn: () => api.get('api/tracks').json<TrackOut[]>(),
+  });
+}
+
+export function useStages(track = 'unified') {
+  return useQuery({
+    queryKey: learningKeys.stages(track),
+    queryFn: () => api.get('api/stages', { searchParams: { track } }).json<StageOut[]>(),
   });
 }
 
@@ -103,8 +147,11 @@ export function useUpdateProgress() {
       }
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: learningKeys.progress() });
-      qc.invalidateQueries({ queryKey: learningKeys.stages() });
+      // A progress write feeds the derived stages + track rollups; invalidate
+      // the whole progress/stages/tracks subtrees (track-scoped keys included).
+      qc.invalidateQueries({ queryKey: [...learningKeys.all, 'progress'] });
+      qc.invalidateQueries({ queryKey: [...learningKeys.all, 'stages'] });
+      qc.invalidateQueries({ queryKey: learningKeys.tracks() });
     },
   });
 }

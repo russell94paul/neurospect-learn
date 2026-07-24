@@ -67,6 +67,19 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
     --radius: 0.5rem;
+
+    /*
+     * Chart palette (Phase 5f). Two validated categorical hues for the two
+     * journal axes — backtest = slot-1 blue, live = slot-2 orange — plus grid /
+     * axis / zero-line chrome. Values + light/dark steps from the dataviz skill's
+     * reference palette; the pair passes all six checks in BOTH modes (light CVD
+     * ΔE 24.7, dark 26.8 — well above the ≥8 target). Axis ink is mode-invariant.
+     */
+    --chart-backtest: #2a78d6;
+    --chart-live: #eb6834;
+    --chart-grid: #e1e0d9;
+    --chart-axis: #898781;
+    --chart-zero: #c3c2b7;
   }
 
   .dark {
@@ -89,6 +102,13 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* Dark steps of the chart palette (see :root above). */
+    --chart-backtest: #3987e5;
+    --chart-live: #d95926;
+    --chart-grid: #2c2c2a;
+    --chart-axis: #898781;
+    --chart-zero: #383835;
   }
 }
 

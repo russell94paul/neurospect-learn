@@ -6,8 +6,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.auth.router import router as auth_router
 from app.config import settings
 from app.database import engine
+from app.routers.analytics import router as analytics_router
 from app.routers.content import router as content_router
+from app.routers.journal import router as journal_router
 from app.routers.learning import router as learning_router
+from app.routers.planner import router as planner_router
 
 
 @asynccontextmanager
@@ -47,3 +50,12 @@ app.include_router(content_router)
 
 # Learning API (progress, derived stage exit-bars, drills)
 app.include_router(learning_router)
+
+# Study-Planner API (preferences, today, calendar, regenerate, mark-item-done)
+app.include_router(planner_router)
+
+# Journal API (model-aligned backtest|live entries — the proof-of-edge write side)
+app.include_router(journal_router)
+
+# Analytics API (per-model expectancy, mode summary, R distribution — read side)
+app.include_router(analytics_router)

@@ -10,11 +10,20 @@ from app.models.enums import UStage, pg_enum
 
 
 class Concept(Base):
-    """One gradable concept on the U0–U6 learning path.
+    """One gradable concept on a track's learning path (5e-1b: multi-track).
 
-    Seed data (not user-editable), sourced from concepts/mastery/unified/
-    learning-path.md + tracker.md via scripts/seed_concepts.py. The live
-    per-user grid lives in `concept_progress`.
+    Seed data (not user-editable), sourced from the per-track learning-path +
+    exercise pages via scripts/seed_concepts.py. The live per-user grid lives in
+    `concept_progress`.
+
+    Multi-track (5e-1b): every concept belongs to exactly one `track`
+    (aura | ict_course | unified) and one per-track stage (`stage_code` /
+    `stage_order`, e.g. A1 / M2 / U1) — a concept taught by two mentors is
+    DUPLICATED across tracks on purpose (more reps + a second explanation).
+    `cross_refs` are the equivalent concept slugs in the OTHER tracks
+    (display-only "Also taught in …"; never merges progress). `u_stage` is now
+    UNIFIED-ONLY (nullable) — it still drives the frontier CHECK, the
+    content_pages join, and the unified exit bars.
 
     `content_slug` and `drill_refs` are deliberately SOFT references — a
     nullable slug + a TEXT[] of drill IDs — NOT hard FKs. `content_pages` is
@@ -30,7 +39,15 @@ class Concept(Base):
 
     slug: Mapped[str] = mapped_column(String(128), unique=True, nullable=False)
     code: Mapped[str | None] = mapped_column(String(16))  # e.g. "U1.3"
-    u_stage: Mapped[UStage] = mapped_column(pg_enum(UStage, "u_stage"), nullable=False)
+
+    # Multi-track (5e-1b) — the (track, stage_code) grouping key.
+    track: Mapped[str] = mapped_column(String(16), nullable=False, server_default="unified")
+    stage_code: Mapped[str | None] = mapped_column(String(16))  # A1 / M2 / U1
+    stage_order: Mapped[int | None] = mapped_column()  # SMALLINT — stage position
+    cross_refs: Mapped[list[str] | None] = mapped_column(ARRAY(Text))  # equivalent slugs (other tracks)
+
+    # Unified-only (nullable): frontier CHECK + content join + unified exit bars.
+    u_stage: Mapped[UStage | None] = mapped_column(pg_enum(UStage, "u_stage"))
     title: Mapped[str] = mapped_column(Text, nullable=False)
 
     # Core = part of the established U1–U4 playbook the gate requires at

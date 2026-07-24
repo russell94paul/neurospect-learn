@@ -9,6 +9,12 @@ import { ConceptReaderPage } from '@/pages/concept-reader';
 import { PathPage } from '@/pages/path';
 import { StageDetailPage } from '@/pages/stage-detail';
 import { DrillsPage } from '@/pages/drills';
+import { TodayPage } from '@/pages/today';
+import { PlanPage } from '@/pages/plan';
+import { PlanSetupPage } from '@/pages/plan-setup';
+import { JournalPage } from '@/pages/journal';
+import { JournalEntryPage } from '@/pages/journal-entry';
+import { ExpectancyPage } from '@/pages/expectancy';
 
 // ============================================================
 // Protected layout — redirects to /login if not authenticated
@@ -58,7 +64,7 @@ const router = createBrowserRouter([
         element: <PathPage />,
       },
       {
-        path: '/path/:stage',
+        path: '/path/:track/:stage',
         element: <StageDetailPage />,
       },
       {
@@ -74,20 +80,32 @@ const router = createBrowserRouter([
         element: <DrillsPage />,
       },
       {
+        path: '/today',
+        element: <TodayPage />,
+      },
+      {
+        path: '/plan',
+        element: <PlanPage />,
+      },
+      {
+        path: '/plan/setup',
+        element: <PlanSetupPage />,
+      },
+      {
         path: '/journal',
-        element: <StubPage title="Journal" phase="Phase 5f" />,
+        element: <JournalPage />,
       },
       {
         path: '/journal/new',
-        element: <StubPage title="New Journal Entry" phase="Phase 5f" />,
+        element: <JournalEntryPage />,
       },
       {
         path: '/journal/:id',
-        element: <StubPage title="Journal Entry" phase="Phase 5f" />,
+        element: <JournalEntryPage />,
       },
       {
         path: '/expectancy',
-        element: <StubPage title="Expectancy" phase="Phase 5f" />,
+        element: <ExpectancyPage />,
       },
       {
         path: '/gate',

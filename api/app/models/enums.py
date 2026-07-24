@@ -94,6 +94,35 @@ class Grade(str, Enum):
     C = "c"
 
 
+class PlanActivity(str, Enum):
+    """The kind of work a Study-Planner `plan_item` prescribes (Phase 5e-2).
+
+    learn    read a concept's content (first exposure)
+    drill    practise a drill toward its rep target
+    review   spaced-repetition review of a ≥Can-mark concept (retention)
+    observe  frontier (U5) study-and-watch only — never live-gate-eligible
+    habit    a foundation-stage (U0-equivalent) daily discipline task
+    backtest a concept-less evidence stage (backtest / journal) placeholder
+    """
+
+    LEARN = "learn"
+    DRILL = "drill"
+    REVIEW = "review"
+    OBSERVE = "observe"
+    HABIT = "habit"
+    BACKTEST = "backtest"
+
+
+class PlanItemStatus(str, Enum):
+    """The lifecycle status of a `plan_item` (Phase 5e-2). Skipping is logged as
+    a `skipped` (hurts adherence), never hidden — accountability by design."""
+
+    PENDING = "pending"
+    DONE = "done"
+    PARTIAL = "partial"
+    SKIPPED = "skipped"
+
+
 def pg_enum(enum_cls: type[Enum], name: str) -> sa.Enum:
     """Build a ``sa.Enum`` bound by name to a Postgres type the migration owns.
 

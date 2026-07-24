@@ -23,7 +23,11 @@ class ConceptOut(BaseModel):
     id: uuid.UUID
     slug: str
     code: str | None = None
-    u_stage: UStage
+    track: str
+    stage_code: str | None = None
+    stage_order: int | None = None
+    cross_refs: list[str] | None = None
+    u_stage: UStage | None = None
     title: str
     is_core: bool
     tier: str | None = None
@@ -52,7 +56,11 @@ class ProgressRow(BaseModel):
     concept_id: uuid.UUID
     slug: str
     code: str | None = None
-    u_stage: UStage
+    track: str
+    stage_code: str | None = None
+    stage_order: int | None = None
+    cross_refs: list[str] | None = None
+    u_stage: UStage | None = None
     title: str
     is_core: bool
     watch_only: bool
@@ -97,9 +105,15 @@ class RequirementOut(BaseModel):
     concept_code: str | None = None
 
 
-class StageOut(BaseModel):
-    u_stage: str
+class StageRollup(BaseModel):
+    """A stage's status without the requirement detail (track switcher/spine)."""
+
+    track: str
+    stage_code: str
+    stage_order: int
     title: str
+    summary: str | None = None
+    gate_text: str | None = None
     watch_only: bool
     never_gate_eligible: bool
     locked: bool
@@ -108,7 +122,20 @@ class StageOut(BaseModel):
     attest_pending: bool
     total: int
     reached: int
+
+
+class StageOut(StageRollup):
+    """A stage rollup + the full exit-bar requirement checklist."""
+
     requirements: list[RequirementOut]
+
+
+class TrackOut(BaseModel):
+    """One graded track + its ordered stages (GET /api/tracks)."""
+
+    track: str
+    label: str
+    stages: list[StageRollup]
 
 
 # ---------------------------------------------------------------------------

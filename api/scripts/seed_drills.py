@@ -134,12 +134,18 @@ def _parse_map_table(md: str) -> list[dict]:
     ]
 
 
-def _build_ref_to_slugs() -> dict[str, list[str]]:
-    """Reverse the concept seed's drill_refs → {drill_ref: [concept slug, ...]}."""
-    out: dict[str, list[str]] = defaultdict(list)
+def _build_ref_to_slugs() -> dict[tuple[str, str], list[str]]:
+    """Reverse the concept seed's drill_refs → {(track, drill_ref): [slug, ...]}.
+
+    5e-1b: keyed by (concept.track, drill_ref) so a drill's `concept_slugs`
+    back-link resolves to SAME-TRACK concepts only. A drill_ref like "aura D1-a"
+    is now referenced by both a unified row and an aura row; the aura drill
+    should link to the aura concept, not the unified one.
+    """
+    out: dict[tuple[str, str], list[str]] = defaultdict(list)
     for c in SEED_CONCEPTS:
         for ref in c.get("drill_refs") or []:
-            out[ref].append(c["slug"])
+            out[(c["track"], ref)].append(c["slug"])
     return out
 
 
@@ -148,6 +154,7 @@ def build_drills() -> tuple[list[dict], list[str]]:
     where orphan_refs are concept.drill_refs with no drill row (transparency)."""
     wiki_root = Path(settings.wiki_content_root) / "concepts"
     ref_to_slugs = _build_ref_to_slugs()
+    all_refs = {ref for (_track, ref) in ref_to_slugs}
 
     drills: list[dict] = []
     seen: set[str] = set()
@@ -170,13 +177,15 @@ def build_drills() -> tuple[list[dict], list[str]]:
                     "title": title,
                     "advances_to": advances or None,
                     "rep_target": rep_target,
-                    "concept_slugs": sorted(ref_to_slugs.get(drill_ref, [])) or None,
+                    # Same-track back-link only (5e-1b): the concept.track must
+                    # match the drill's track.
+                    "concept_slugs": sorted(ref_to_slugs.get((track, drill_ref), [])) or None,
                     "sort_order": order,
                 })
                 order += 1
 
     produced = {d["drill_ref"] for d in drills}
-    orphans = sorted(ref for ref in ref_to_slugs if ref not in produced)
+    orphans = sorted(ref for ref in all_refs if ref not in produced)
     return drills, orphans
 
 

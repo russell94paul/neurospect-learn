@@ -22,6 +22,7 @@ from app.models.concept import Concept
 from app.models.concept_progress import ConceptProgress
 from app.models.drill import Drill
 from app.models.drill_progress import DrillProgress
+from app.models.track_stage import TrackStage
 from app.models.user import User
 from app.schemas.learning import (
     ConceptOut,
@@ -30,6 +31,8 @@ from app.schemas.learning import (
     ProgressPatch,
     ProgressRow,
     StageOut,
+    StageRollup,
+    TrackOut,
 )
 from app.services import rep_targets, stages
 
@@ -40,6 +43,10 @@ router = APIRouter(
 )
 
 CAN_MARK = stages.CAN_MARK
+
+# The three graded tracks (5e-1b), in display order + their labels.
+TRACK_LABELS = {"aura": "Aura", "ict_course": "AXL / MrWitness", "unified": "Unified"}
+TRACK_ORDER = ["aura", "ict_course", "unified"]
 
 # The exact predicate of the partial unique indexes (mirrors the 0002/0004 DDL:
 # `WHERE NOT is_deleted`). ON CONFLICT index inference requires the predicate to
@@ -54,8 +61,9 @@ _NOT_DELETED = text("NOT is_deleted")
 def _concept_out(c: Concept) -> ConceptOut:
     t = rep_targets.parse(c.rep_target)
     return ConceptOut(
-        id=c.id, slug=c.slug, code=c.code, u_stage=c.u_stage, title=c.title,
-        is_core=c.is_core, tier=c.tier, label=c.label, axis=c.axis,
+        id=c.id, slug=c.slug, code=c.code, track=c.track, stage_code=c.stage_code,
+        stage_order=c.stage_order, cross_refs=c.cross_refs, u_stage=c.u_stage,
+        title=c.title, is_core=c.is_core, tier=c.tier, label=c.label, axis=c.axis,
         watch_only=c.watch_only, rep_target=c.rep_target,
         rep_target_kind=t.kind, rep_target_count=t.count,
         content_slug=c.content_slug, drill_refs=c.drill_refs,
@@ -66,7 +74,9 @@ def _concept_out(c: Concept) -> ConceptOut:
 def _progress_row(c: Concept, pg: ConceptProgress | None) -> ProgressRow:
     t = rep_targets.parse(c.rep_target)
     return ProgressRow(
-        concept_id=c.id, slug=c.slug, code=c.code, u_stage=c.u_stage, title=c.title,
+        concept_id=c.id, slug=c.slug, code=c.code, track=c.track,
+        stage_code=c.stage_code, stage_order=c.stage_order, cross_refs=c.cross_refs,
+        u_stage=c.u_stage, title=c.title,
         is_core=c.is_core, watch_only=c.watch_only, content_slug=c.content_slug,
         drill_refs=c.drill_refs, rep_target=c.rep_target,
         rep_target_kind=t.kind, rep_target_count=t.count, sort_order=c.sort_order,
@@ -98,12 +108,15 @@ def _drill_out(d: Drill, dp: DrillProgress | None) -> DrillOut:
 
 @router.get("/concepts", response_model=list[ConceptOut])
 async def list_concepts(
-    stage: str | None = Query(None, description="Filter by U-stage, e.g. U1"),
+    track: str | None = Query(None, description="aura | ict_course | unified"),
+    stage: str | None = Query(None, description="Filter by stage_code, e.g. U1 / A1 / M2"),
     db: AsyncSession = Depends(get_db),
 ):
     stmt = select(Concept).order_by(Concept.sort_order)
+    if track:
+        stmt = stmt.where(Concept.track == track)
     if stage:
-        stmt = stmt.where(Concept.u_stage == stage)
+        stmt = stmt.where(Concept.stage_code == stage)
     rows = (await db.execute(stmt)).scalars().all()
     return [_concept_out(c) for c in rows]
 
@@ -114,6 +127,7 @@ async def list_concepts(
 
 @router.get("/progress", response_model=list[ProgressRow])
 async def get_progress(
+    track: str | None = Query(None, description="aura | ict_course | unified"),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
@@ -129,6 +143,8 @@ async def get_progress(
         )
         .order_by(Concept.sort_order)
     )
+    if track:
+        stmt = stmt.where(Concept.track == track)
     rows = (await db.execute(stmt)).all()
     return [_progress_row(c, pg) for c, pg in rows]
 
@@ -230,14 +246,20 @@ async def patch_progress(
 
 
 # ---------------------------------------------------------------------------
-# GET /api/stages — the derived exit-bar status per U-stage
+# Shared: compute one track's derived exit-bar stages from concept_progress
 # ---------------------------------------------------------------------------
 
-@router.get("/stages", response_model=list[StageOut])
-async def get_stages(
-    current_user: User = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db),
-):
+async def _compute_track_stages(
+    db: AsyncSession, user_id, track: str
+) -> list[stages.StageStatus]:
+    """Load `track`'s stage metadata + this user's concept_progress and compute
+    the derived exit-bar status per stage (COMPUTED, never stored)."""
+    metas = (
+        await db.execute(
+            select(TrackStage).where(TrackStage.track == track).order_by(TrackStage.stage_order)
+        )
+    ).scalars().all()
+
     rows = (
         await db.execute(
             select(Concept, ConceptProgress)
@@ -245,18 +267,20 @@ async def get_stages(
                 ConceptProgress,
                 and_(
                     ConceptProgress.concept_id == Concept.id,
-                    ConceptProgress.user_id == current_user.id,
+                    ConceptProgress.user_id == user_id,
                     ConceptProgress.is_deleted.is_(False),
                 ),
             )
+            .where(Concept.track == track)
             .order_by(Concept.sort_order)
         )
     ).all()
 
     views = [
         stages.ConceptView(
-            slug=c.slug, code=c.code, u_stage=c.u_stage.value, title=c.title,
+            slug=c.slug, code=c.code, stage_code=c.stage_code, title=c.title,
             is_core=c.is_core, watch_only=c.watch_only, rep_target=c.rep_target,
+            u_stage=c.u_stage.value if c.u_stage else None,
         )
         for c, _ in rows
     ]
@@ -265,12 +289,62 @@ async def get_stages(
         for c, pg in rows
         if pg is not None
     }
+    stage_metas = [
+        stages.StageMeta(
+            track=m.track, stage_code=m.stage_code, stage_order=m.stage_order,
+            title=m.title, summary=m.summary, gate_text=m.gate_text,
+        )
+        for m in metas
+    ]
+    return stages.compute_stages(track, stage_metas, views, progress)
+
+
+def _rollup(s: stages.StageStatus) -> dict:
+    return dict(
+        track=s.track, stage_code=s.stage_code, stage_order=s.stage_order,
+        title=s.title, summary=s.summary, gate_text=s.gate_text,
+        watch_only=s.watch_only, never_gate_eligible=s.never_gate_eligible,
+        locked=s.locked, met=s.met, auto_met=s.auto_met,
+        attest_pending=s.attest_pending, total=s.total, reached=s.reached,
+    )
+
+
+# ---------------------------------------------------------------------------
+# GET /api/tracks — the three graded tracks + their stage rollups (switcher)
+# ---------------------------------------------------------------------------
+
+@router.get("/tracks", response_model=list[TrackOut])
+async def get_tracks(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    out: list[TrackOut] = []
+    for track in TRACK_ORDER:
+        statuses = await _compute_track_stages(db, current_user.id, track)
+        out.append(TrackOut(
+            track=track,
+            label=TRACK_LABELS[track],
+            stages=[StageRollup(**_rollup(s)) for s in statuses],
+        ))
+    return out
+
+
+# ---------------------------------------------------------------------------
+# GET /api/stages?track= — the derived exit-bar status per stage (one track)
+# ---------------------------------------------------------------------------
+
+@router.get("/stages", response_model=list[StageOut])
+async def get_stages(
+    track: str = Query("unified", description="aura | ict_course | unified"),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    if track not in TRACK_LABELS:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Unknown track")
+    statuses = await _compute_track_stages(db, current_user.id, track)
     return [
         StageOut(
-            u_stage=s.u_stage, title=s.title, watch_only=s.watch_only,
-            never_gate_eligible=s.never_gate_eligible, locked=s.locked, met=s.met,
-            auto_met=s.auto_met, attest_pending=s.attest_pending,
-            total=s.total, reached=s.reached,
+            **_rollup(s),
             requirements=[
                 {
                     "label": r.label, "met": r.met, "attest": r.attest,
@@ -279,7 +353,7 @@ async def get_stages(
                 for r in s.requirements
             ],
         )
-        for s in stages.compute_stages(views, progress)
+        for s in statuses
     ]
 
 

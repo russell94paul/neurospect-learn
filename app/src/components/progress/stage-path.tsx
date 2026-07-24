@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Check, Eye, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import type { StageOut } from '@/types/api';
+import type { StageRollup } from '@/types/api';
 
 /** A small SVG progress ring (reached / total at ≥ Can-mark). */
 function Ring({ value, met }: { value: number; met: boolean }) {
@@ -30,11 +30,11 @@ function Ring({ value, met }: { value: number; met: boolean }) {
   );
 }
 
-export function StageNode({ stage }: { stage: StageOut }) {
+export function StageNode({ stage }: { stage: StageRollup }) {
   const pct = stage.total ? (stage.reached / stage.total) * 100 : stage.met ? 100 : 0;
   return (
     <Link
-      to={`/path/${stage.u_stage}`}
+      to={`/path/${stage.track}/${stage.stage_code}`}
       className={cn(
         'flex items-center gap-4 rounded-lg border p-4 transition-colors',
         stage.locked ? 'opacity-60 hover:opacity-100' : 'hover:bg-accent'
@@ -43,7 +43,7 @@ export function StageNode({ stage }: { stage: StageOut }) {
       <Ring value={pct} met={stage.met} />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-xs text-muted-foreground">{stage.u_stage}</span>
+          <span className="font-mono text-xs text-muted-foreground">{stage.stage_code}</span>
           <span className="truncate font-semibold">{stage.title}</span>
           {stage.watch_only && (
             <span className="inline-flex items-center gap-1 text-xs text-amber-600 dark:text-amber-500">
@@ -77,12 +77,12 @@ export function StageNode({ stage }: { stage: StageOut }) {
   );
 }
 
-/** The U0→U6 curriculum spine — the one-glance gated stage map. */
-export function StagePath({ stages }: { stages: StageOut[] }) {
+/** A track's curriculum spine — the one-glance gated stage map. */
+export function StagePath({ stages }: { stages: StageRollup[] }) {
   return (
     <div className="space-y-3">
       {stages.map((s) => (
-        <StageNode key={s.u_stage} stage={s} />
+        <StageNode key={`${s.track}-${s.stage_code}`} stage={s} />
       ))}
     </div>
   );

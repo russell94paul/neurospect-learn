@@ -1,14 +1,16 @@
 import { NavLink } from 'react-router-dom';
-import { Route, BookOpen, Dumbbell, NotebookPen, TrendingUp, ShieldCheck, Menu } from 'lucide-react';
+import { Route, BookOpen, Dumbbell, NotebookPen, TrendingUp, ShieldCheck, Menu, CalendarDays, Calendar } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useState } from 'react';
 
 const navItems = [
+  { to: '/today', label: 'Today', icon: CalendarDays },
   { to: '/path', label: 'Path', icon: Route },
   { to: '/library', label: 'Library', icon: BookOpen },
   { to: '/drills', label: 'Drills', icon: Dumbbell },
+  { to: '/plan', label: 'Plan', icon: Calendar },
   { to: '/journal', label: 'Journal', icon: NotebookPen },
   { to: '/expectancy', label: 'Expectancy', icon: TrendingUp },
   { to: '/gate', label: 'Gate', icon: ShieldCheck },
