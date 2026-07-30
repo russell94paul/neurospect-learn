@@ -8,12 +8,19 @@ Progress rows are created LAZILY: GET /progress LEFT JOINs so untracked concepts
 read null; PATCH /progress upserts exactly one row on demand — never pre-seeds.
 Advancing ladder to Can-mark+ is gated (reps ≥ parsed target AND confidence set)
 per the north star — no self-declared skips.
+
+Phase 6a: this module also owns the two DB loaders the stage exit bars and the gate
+both need — `load_concepts_and_ladder` (all tracks × this user's ladder) and
+`load_stage_evidence` (the shipped gate-attestation / expectancy / gate-verdict
+evidence the behavioural + empirical bars grade on). They live here because
+`routers/gate.py` and `routers/planner.py` already depend on this module and not
+the other way round, and because `app/services/*` is deliberately pure/DB-free.
 """
 
 from types import SimpleNamespace
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import and_, select, text
+from sqlalchemy import and_, func, select, text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -22,6 +29,10 @@ from app.models.concept import Concept
 from app.models.concept_progress import ConceptProgress
 from app.models.drill import Drill
 from app.models.drill_progress import DrillProgress
+from app.models.evidence import EvidenceAsset
+from app.models.gate_attestation import GateAttestation
+from app.models.journal_entry import JournalEntry
+from app.models.missed_trade import MissedTrade
 from app.models.track_stage import TrackStage
 from app.models.user import User
 from app.schemas.learning import (
@@ -34,7 +45,7 @@ from app.schemas.learning import (
     StageRollup,
     TrackOut,
 )
-from app.services import rep_targets, stages
+from app.services import expectancy, gate, rep_targets, stages
 
 router = APIRouter(
     prefix="/api",
@@ -55,6 +66,69 @@ _NOT_DELETED = text("NOT is_deleted")
 
 
 # ---------------------------------------------------------------------------
+# The evidence ledger — where `reps` now comes from (Phase E2)
+# ---------------------------------------------------------------------------
+
+class EvidenceReps:
+    """This user's evidenced rep counts, per concept and per drill_ref.
+
+    `reps` is DERIVED — `legacy_reps + Σ evidence_assets.reps_claimed` — so no
+    endpoint can mint one. `legacy_reps` is whatever was claimed before the
+    evidence layer existed (Alembic `0009` froze it); it is preserved so no
+    already-met stage un-meets, and it is reported separately so the
+    pre-evidence gap is visible rather than folded away.
+    """
+
+    __slots__ = ("by_concept", "by_drill")
+
+    def __init__(self, by_concept: dict, by_drill: dict[str, int]):
+        self.by_concept = by_concept
+        self.by_drill = by_drill
+
+    def concept(self, concept_id) -> int:
+        return self.by_concept.get(concept_id, 0)
+
+    def drill(self, drill_ref: str) -> int:
+        return self.by_drill.get(drill_ref, 0)
+
+
+async def load_evidence_reps(db: AsyncSession, user_id) -> EvidenceReps:
+    """Σ `reps_claimed` per subject over this user's live evidence."""
+    rows = (
+        await db.execute(
+            select(
+                EvidenceAsset.concept_id,
+                EvidenceAsset.subject_drill_ref,
+                func.sum(EvidenceAsset.reps_claimed),
+            )
+            .where(
+                EvidenceAsset.user_id == user_id,
+                EvidenceAsset.is_deleted.is_(False),
+            )
+            .group_by(EvidenceAsset.concept_id, EvidenceAsset.subject_drill_ref)
+        )
+    ).all()
+    by_concept: dict = {}
+    by_drill: dict[str, int] = {}
+    for concept_id, drill_ref, total in rows:
+        if concept_id is not None:
+            by_concept[concept_id] = by_concept.get(concept_id, 0) + int(total or 0)
+        elif drill_ref is not None:
+            by_drill[drill_ref] = by_drill.get(drill_ref, 0) + int(total or 0)
+    return EvidenceReps(by_concept, by_drill)
+
+
+# The message every rep-writing attempt now gets. Naming the endpoint matters:
+# a refusal that does not say what to do instead is the friction that makes a
+# tool get abandoned.
+REPS_ARE_DERIVED = (
+    "`reps` is no longer writable — a rep counts only when there is evidence of "
+    "the work. Upload the capture to POST /api/evidence (reps_claimed) and the "
+    "count follows from it."
+)
+
+
+# ---------------------------------------------------------------------------
 # Builders
 # ---------------------------------------------------------------------------
 
@@ -71,8 +145,9 @@ def _concept_out(c: Concept) -> ConceptOut:
     )
 
 
-def _progress_row(c: Concept, pg: ConceptProgress | None) -> ProgressRow:
+def _progress_row(c: Concept, pg: ConceptProgress | None, evidenced: int = 0) -> ProgressRow:
     t = rep_targets.parse(c.rep_target)
+    legacy = pg.legacy_reps if pg else 0
     return ProgressRow(
         concept_id=c.id, slug=c.slug, code=c.code, track=c.track,
         stage_code=c.stage_code, stage_order=c.stage_order, cross_refs=c.cross_refs,
@@ -82,19 +157,24 @@ def _progress_row(c: Concept, pg: ConceptProgress | None) -> ProgressRow:
         rep_target_kind=t.kind, rep_target_count=t.count, sort_order=c.sort_order,
         ladder_stage=pg.ladder_stage if pg else None,
         confidence=pg.confidence if pg else None,
-        reps=pg.reps if pg else 0,
+        reps=legacy + evidenced,
+        reps_evidenced=evidenced,
+        reps_legacy=legacy,
         last_practiced=pg.last_practiced if pg else None,
         notes=pg.notes if pg else None,
     )
 
 
-def _drill_out(d: Drill, dp: DrillProgress | None) -> DrillOut:
+def _drill_out(d: Drill, dp: DrillProgress | None, evidenced: int = 0) -> DrillOut:
     t = rep_targets.parse(d.rep_target)
+    legacy = dp.legacy_reps if dp else 0
     return DrillOut(
         id=d.id, drill_ref=d.drill_ref, track=d.track, stage_code=d.stage_code,
         title=d.title, advances_to=d.advances_to, rep_target=d.rep_target,
         rep_target_count=t.count, concept_slugs=d.concept_slugs, sort_order=d.sort_order,
-        reps=dp.reps if dp else 0,
+        reps=legacy + evidenced,
+        reps_evidenced=evidenced,
+        reps_legacy=legacy,
         hand_done=dp.hand_done if dp else False,
         tool_done=dp.tool_done if dp else False,
         last_practiced=dp.last_practiced if dp else None,
@@ -146,7 +226,8 @@ async def get_progress(
     if track:
         stmt = stmt.where(Concept.track == track)
     rows = (await db.execute(stmt)).all()
-    return [_progress_row(c, pg) for c, pg in rows]
+    ev = await load_evidence_reps(db, current_user.id)
+    return [_progress_row(c, pg, ev.concept(c.id)) for c, pg in rows]
 
 
 # ---------------------------------------------------------------------------
@@ -184,7 +265,14 @@ async def patch_progress(
 
     final_ladder = resolved("ladder_stage", None)
     final_conf = resolved("confidence", None)
-    final_reps = resolved("reps", 0) or 0
+
+    # Phase E2: reps are DERIVED, never sent. `ProgressPatch` forbids the field,
+    # so this reads the ledger rather than the request — the ladder-advance gate
+    # below is now graded on evidence of the work, not on a self-reported int.
+    ev = await load_evidence_reps(db, current_user.id)
+    legacy_reps = existing.legacy_reps if existing else 0
+    evidenced_reps = ev.concept(body.concept_id)
+    final_reps = legacy_reps + evidenced_reps
 
     # Frontier invariant: watch-only (U5) concepts are observation-only and may
     # never advance past Can-mark (never live-gate-eligible).
@@ -207,7 +295,9 @@ async def patch_progress(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail=(
                     f"Cannot advance to Can-mark+ until reps ≥ target "
-                    f"({final_reps}/{target.count} for '{target.raw}')."
+                    f"({final_reps}/{target.count} for '{target.raw}'). "
+                    f"{evidenced_reps} of those are evidenced — upload the work "
+                    f"to POST /api/evidence to add more."
                 ),
             )
 
@@ -216,7 +306,6 @@ async def patch_progress(
         "concept_id": body.concept_id,
         "ladder_stage": final_ladder,
         "confidence": final_conf,
-        "reps": final_reps,
         "last_practiced": resolved("last_practiced", None),
         "notes": resolved("notes", None),
     }
@@ -227,7 +316,6 @@ async def patch_progress(
         set_={
             "ladder_stage": stmt.excluded.ladder_stage,
             "confidence": stmt.excluded.confidence,
-            "reps": stmt.excluded.reps,
             "last_practiced": stmt.excluded.last_practiced,
             "notes": stmt.excluded.notes,
         },
@@ -239,10 +327,135 @@ async def patch_progress(
     # the ORM would return the stale identity-map row loaded above (session has
     # expire_on_commit=False); this reflects exactly what was written.
     written = SimpleNamespace(
-        ladder_stage=final_ladder, confidence=final_conf, reps=final_reps,
+        ladder_stage=final_ladder, confidence=final_conf, legacy_reps=legacy_reps,
         last_practiced=values["last_practiced"], notes=values["notes"],
     )
-    return _progress_row(concept, written)
+    return _progress_row(concept, written, evidenced_reps)
+
+
+# ---------------------------------------------------------------------------
+# Shared loaders (Phase 6a) — also used by routers/gate.py + routers/planner.py
+# ---------------------------------------------------------------------------
+
+async def load_concepts_and_ladder(
+    db: AsyncSession, user_id
+) -> tuple[list[gate.ConceptGateView], dict[str, int | None]]:
+    """ALL tracks' concepts + this user's ladder position per slug. Every track is
+    loaded because cross-ref credit may come from any of them (see services/gate.py)."""
+    rows = (
+        await db.execute(
+            select(Concept, ConceptProgress)
+            .outerjoin(
+                ConceptProgress,
+                and_(
+                    ConceptProgress.concept_id == Concept.id,
+                    ConceptProgress.user_id == user_id,
+                    ConceptProgress.is_deleted.is_(False),
+                ),
+            )
+            .order_by(Concept.sort_order)
+        )
+    ).all()
+
+    views = [
+        gate.ConceptGateView(
+            slug=c.slug,
+            track=c.track,
+            title=c.title,
+            is_core=c.is_core,
+            watch_only=c.watch_only,
+            code=c.code,
+            u_stage=c.u_stage.value if c.u_stage else None,
+            stage_code=c.stage_code,
+            tier=c.tier,
+            label=c.label,
+            cross_refs=tuple(c.cross_refs or ()),
+        )
+        for c, _ in rows
+    ]
+    ladder = {c.slug: (pg.ladder_stage if pg else None) for c, pg in rows}
+    return views, ladder
+
+
+async def load_stage_evidence(
+    db: AsyncSession, user_id, *, with_gate: bool = True
+) -> stages.Evidence:
+    """The already-shipped evidence the 6a-wired stage exit bars grade on.
+
+    (b) the POOLED backtest group from the pure 5f `services/expectancy.py`
+        (reused, never reimplemented) + the corroboration counts;
+    (c) the 5g `gate_attestations` store — ONE source of truth with /gate;
+    and, when `with_gate`, the 5g per-model verdict rolled up for the unified U6
+    readiness arc. `with_gate=False` skips the verdict (and its all-tracks concept
+    load) for callers that cannot use it — the planner's stage computation, whose
+    concept-less stages are excluded from scheduling anyway.
+    """
+    jrows = (
+        await db.execute(
+            select(
+                JournalEntry.entry_model,
+                JournalEntry.mode,
+                JournalEntry.r_multiple,
+                JournalEntry.rr_planned,
+                JournalEntry.entry_date,
+            ).where(
+                JournalEntry.user_id == user_id,
+                JournalEntry.is_deleted.is_(False),
+            )
+        )
+    ).all()
+    trades = [
+        expectancy.TradeR(
+            entry_model=em.value if hasattr(em, "value") else str(em),
+            mode=md.value if hasattr(md, "value") else str(md),
+            r_multiple=float(r) if r is not None else None,
+            rr_planned=float(rr) if rr is not None else None,
+        )
+        for em, md, r, rr, _d in jrows
+    ]
+
+    attested_rows = (
+        await db.execute(
+            select(GateAttestation.item, GateAttestation.attested).where(
+                GateAttestation.user_id == user_id,
+                GateAttestation.is_deleted.is_(False),
+            )
+        )
+    ).all()
+    attested = {
+        (it.value if hasattr(it, "value") else str(it)): bool(a) for it, a in attested_rows
+    }
+
+    # Corroboration only (shown beside a self-attest; never a threshold).
+    missed_logged = (
+        await db.execute(
+            select(func.count(MissedTrade.id)).where(
+                MissedTrade.user_id == user_id,
+                MissedTrade.is_deleted.is_(False),
+            )
+        )
+    ).scalar_one()
+
+    cleared: tuple[str, ...] = ()
+    if with_gate:
+        concepts, ladder = await load_concepts_and_ladder(db, user_id)
+        verdict = gate.compute_readiness(
+            concepts=concepts,
+            ladder=ladder,
+            groups=expectancy.compute_groups(trades),
+            attested=attested,
+        )
+        cleared = tuple(m.entry_model for m in verdict.models if m.cleared)
+
+    return stages.Evidence(
+        attested=attested,
+        backtest=expectancy.compute_pooled(trades, "backtest"),
+        live_logged=sum(1 for t in trades if t.mode == "live"),
+        journaling_days=len({d for *_r, d in jrows if d is not None}),
+        missed_logged=int(missed_logged or 0),
+        cleared_models=cleared,
+        gate_computed=with_gate,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -250,10 +463,12 @@ async def patch_progress(
 # ---------------------------------------------------------------------------
 
 async def _compute_track_stages(
-    db: AsyncSession, user_id, track: str
+    db: AsyncSession, user_id, track: str, evidence: stages.Evidence | None = None,
+    reps: "EvidenceReps | None" = None,
 ) -> list[stages.StageStatus]:
     """Load `track`'s stage metadata + this user's concept_progress and compute
-    the derived exit-bar status per stage (COMPUTED, never stored)."""
+    the derived exit-bar status per stage (COMPUTED, never stored). `evidence` is
+    the 6a bundle — omitted, every behavioural/empirical row reads unmet."""
     metas = (
         await db.execute(
             select(TrackStage).where(TrackStage.track == track).order_by(TrackStage.stage_order)
@@ -284,8 +499,13 @@ async def _compute_track_stages(
         )
         for c, _ in rows
     ]
+    # The exit bars grade on the DERIVED rep count, so a stage can only be met
+    # on evidence of the work (`stages.py` itself stays pure and unchanged).
+    reps = reps or await load_evidence_reps(db, user_id)
     progress = {
-        c.slug: stages.ProgressView(pg.ladder_stage, pg.confidence, pg.reps)
+        c.slug: stages.ProgressView(
+            pg.ladder_stage, pg.confidence, pg.legacy_reps + reps.concept(c.id)
+        )
         for c, pg in rows
         if pg is not None
     }
@@ -296,7 +516,7 @@ async def _compute_track_stages(
         )
         for m in metas
     ]
-    return stages.compute_stages(track, stage_metas, views, progress)
+    return stages.compute_stages(track, stage_metas, views, progress, evidence)
 
 
 def _rollup(s: stages.StageStatus) -> dict:
@@ -318,9 +538,12 @@ async def get_tracks(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
+    # One evidence load for all three tracks (6a) + one ledger load (E2).
+    evidence = await load_stage_evidence(db, current_user.id)
+    reps = await load_evidence_reps(db, current_user.id)
     out: list[TrackOut] = []
     for track in TRACK_ORDER:
-        statuses = await _compute_track_stages(db, current_user.id, track)
+        statuses = await _compute_track_stages(db, current_user.id, track, evidence, reps)
         out.append(TrackOut(
             track=track,
             label=TRACK_LABELS[track],
@@ -341,7 +564,8 @@ async def get_stages(
 ):
     if track not in TRACK_LABELS:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Unknown track")
-    statuses = await _compute_track_stages(db, current_user.id, track)
+    evidence = await load_stage_evidence(db, current_user.id)
+    statuses = await _compute_track_stages(db, current_user.id, track, evidence)
     return [
         StageOut(
             **_rollup(s),
@@ -349,6 +573,8 @@ async def get_stages(
                 {
                     "label": r.label, "met": r.met, "attest": r.attest,
                     "concept_slug": r.concept_slug, "concept_code": r.concept_code,
+                    "derived": r.derived, "detail": r.detail,
+                    "attest_item": r.attest_item, "link": r.link,
                 }
                 for r in s.requirements
             ],
@@ -385,7 +611,8 @@ async def get_drills(
     if stage:
         stmt = stmt.where(Drill.stage_code == stage)
     rows = (await db.execute(stmt)).all()
-    return [_drill_out(d, dp) for d, dp in rows]
+    ev = await load_evidence_reps(db, current_user.id)
+    return [_drill_out(d, dp, ev.drill(d.drill_ref)) for d, dp in rows]
 
 
 # ---------------------------------------------------------------------------
@@ -421,10 +648,12 @@ async def patch_drill(
             return provided[field]
         return getattr(existing, field) if existing else default
 
+    # Phase E2: `reps` is not in `DrillPatch` and is never written here — the ✋/🛠
+    # variant marks and notes remain self-declared (they gate nothing), but the
+    # COUNT comes only from the evidence ledger.
     values = {
         "user_id": current_user.id,
         "drill_ref": body.drill_ref,
-        "reps": resolved("reps", 0) or 0,
         "hand_done": bool(resolved("hand_done", False)),
         "tool_done": bool(resolved("tool_done", False)),
         "last_practiced": resolved("last_practiced", None),
@@ -435,7 +664,6 @@ async def patch_drill(
         index_elements=[DrillProgress.user_id, DrillProgress.drill_ref],
         index_where=_NOT_DELETED,
         set_={
-            "reps": stmt.excluded.reps,
             "hand_done": stmt.excluded.hand_done,
             "tool_done": stmt.excluded.tool_done,
             "last_practiced": stmt.excluded.last_practiced,
@@ -445,8 +673,10 @@ async def patch_drill(
     await db.execute(stmt)
     await db.commit()
 
+    ev = await load_evidence_reps(db, current_user.id)
     written = SimpleNamespace(
-        reps=values["reps"], hand_done=values["hand_done"], tool_done=values["tool_done"],
+        legacy_reps=(existing.legacy_reps if existing else 0),
+        hand_done=values["hand_done"], tool_done=values["tool_done"],
         last_practiced=values["last_practiced"], notes=values["notes"],
     )
-    return _drill_out(drill, written)
+    return _drill_out(drill, written, ev.drill(body.drill_ref))

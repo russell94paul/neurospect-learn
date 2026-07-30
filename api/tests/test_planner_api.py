@@ -25,9 +25,11 @@ from app.main import app
 from app.models.concept import Concept
 from app.models.concept_progress import ConceptProgress
 from app.models.drill_progress import DrillProgress
+from app.models.evidence import EvidenceAsset
 from app.models.plan_item import PlanItem
 from app.models.study_preferences import StudyPreferences
 from app.models.user import User
+from tests.evidence_helpers import give_concept_reps, give_drill_reps
 
 # Dedicated test engine with NullPool: no connection is pooled across pytest's
 # per-test event loops (which otherwise reuse a connection bound to a closed
@@ -82,7 +84,8 @@ async def _mark_stage_canmark(user_id, track, stage_code):
             select(Concept).where(Concept.track == track, Concept.stage_code == stage_code)
         )).scalars().all()
         for c in cs:
-            db.add(ConceptProgress(user_id=user_id, concept_id=c.id, ladder_stage=2, confidence=3, reps=10))
+            db.add(ConceptProgress(user_id=user_id, concept_id=c.id, ladder_stage=2,
+                                   confidence=3, legacy_reps=10))
         await db.commit()
 
 
@@ -98,6 +101,7 @@ async def _cleanup():
             await db.execute(delete(StudyPreferences).where(StudyPreferences.user_id == uid))
             await db.execute(delete(ConceptProgress).where(ConceptProgress.user_id == uid))
             await db.execute(delete(DrillProgress).where(DrillProgress.user_id == uid))
+            await db.execute(delete(EvidenceAsset).where(EvidenceAsset.user_id == uid))
         await db.commit()
 
 
@@ -144,7 +148,15 @@ async def test_plan_today_materializes_idempotently():
     assert cnt == n1  # exactly one row per computed slot — idempotent
 
 
-async def test_patch_item_feeds_concept_progress():
+async def test_patch_item_records_practice_but_mints_no_concept_rep():
+    """THE PLANNER BYPASS, closed (Phase E2).
+
+    Marking a plan item done used to increment `concept_progress.reps`, so the
+    planner was a second way to mint a rep with no evidence — which would have
+    made the whole evidence layer theatre. It now records the practice
+    (`last_practiced`, so spaced review still works) and credits NOTHING; the
+    count moves only when evidence is uploaded.
+    """
     async with await _client() as c:
         h = await _token(c, f"{_PREFIX}cfeed")
         await c.put("/api/preferences", headers=h, json=_prefs_body())
@@ -155,16 +167,31 @@ async def test_patch_item_feeds_concept_progress():
         assert r.status_code == 200, r.text
         assert r.json()["status"] == "done"
 
+        # The plan's own record of the work still says 2 …
+        assert r.json()["done_qty"] == 2
+        # … but no rep was created.
+        row = next(p for p in (await c.get("/api/progress", headers=h)).json()
+                   if p["concept_id"] == learn["concept_id"])
+        assert row["reps"] == 0 and row["reps_evidenced"] == 0
+        assert row["last_practiced"] is not None
+
+        # Upload evidence for the same concept: NOW the rep exists.
+        await give_concept_reps(c, h, learn["concept_id"], 2, seed=4101)
+        row = next(p for p in (await c.get("/api/progress", headers=h)).json()
+                   if p["concept_id"] == learn["concept_id"])
+        assert row["reps"] == 2 and row["reps_evidenced"] == 2
+
     uid = await _user_id(f"{_PREFIX}cfeed")
     async with AsyncSessionLocal() as db:
         cp = (await db.execute(select(ConceptProgress).where(
             ConceptProgress.user_id == uid,
             ConceptProgress.concept_id == uuid.UUID(learn["concept_id"]),
         ))).scalar_one()
-    assert cp.reps == 2 and cp.last_practiced is not None
+    # The stored column stays frozen at its pre-evidence value: nothing writes it.
+    assert cp.legacy_reps == 0 and cp.last_practiced is not None
 
 
-async def test_patch_item_feeds_drill_progress():
+async def test_patch_item_records_practice_but_mints_no_drill_rep():
     uid_discord = f"{_PREFIX}dfeed"
     async with await _client() as c:
         h = await _token(c, uid_discord)
@@ -182,11 +209,21 @@ async def test_patch_item_feeds_drill_progress():
                           json={"status": "done", "done_qty": 7})
         assert r.status_code == 200, r.text
 
+        # The ✋/🛠 mark and last_practiced are recorded; the rep count is not.
+        row = next(d for d in (await c.get("/api/drills", headers=h)).json()
+                   if d["drill_ref"] == drill["drill_ref"])
+        assert row["reps"] == 0 and row["last_practiced"] is not None
+
+        await give_drill_reps(c, h, drill["drill_ref"], 7, seed=4102)
+        row = next(d for d in (await c.get("/api/drills", headers=h)).json()
+                   if d["drill_ref"] == drill["drill_ref"])
+        assert row["reps"] == 7 and row["reps_evidenced"] == 7
+
     async with AsyncSessionLocal() as db:
         dp = (await db.execute(select(DrillProgress).where(
             DrillProgress.user_id == uid, DrillProgress.drill_ref == drill["drill_ref"]
         ))).scalar_one()
-    assert dp.reps == 7 and dp.last_practiced is not None
+    assert dp.legacy_reps == 0 and dp.last_practiced is not None
 
 
 async def test_regenerate_bumps_version_and_preserves_done():

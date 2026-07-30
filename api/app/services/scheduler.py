@@ -236,6 +236,7 @@ def schedule(
     past_items: list[PastItemView],
     *,
     horizon_days: int = 120,
+    evidence: stages.Evidence | None = None,
 ) -> ScheduleResult:
     max_session = max(1, prefs.max_session_minutes)
     drill_by_ref = {d.drill_ref: d for d in drills}
@@ -253,7 +254,13 @@ def schedule(
         slug: stages.ProgressView(p.ladder_stage, p.confidence, p.reps)
         for slug, p in concept_progress.items()
     }
-    statuses = stages.compute_stages(prefs.active_track, stage_metas, cviews, sprog)
+    # 6a: the same evidence bundle /path grades its exit bars on, so the daily plan
+    # and the curriculum page never disagree about whether a bar is met (the
+    # foundation-habit overlay below stops exactly when the foundation stage does).
+    # Omitted (the pure default) → every behavioural row unmet, i.e. 5e-2 behaviour.
+    statuses = stages.compute_stages(
+        prefs.active_track, stage_metas, cviews, sprog, evidence
+    )
     status_by_code = {s.stage_code: s for s in statuses}
     schedulable = {s.stage_code for s in statuses if not s.locked}
 

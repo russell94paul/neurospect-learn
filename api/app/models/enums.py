@@ -50,6 +50,32 @@ class EntryModel(str, Enum):
     UNIFIED = "unified"
 
 
+class MissType(str, Enum):
+    """How a logged setup came to be missed (Phase 6b).
+
+    Provenance: concepts/aura/journaling-system (aura-05) treats missed/canceled
+    trades as a distinct, high-value journaling category. `canceled` is Dante's
+    category — you had a working order and pulled it.
+    """
+
+    ALMOST_TOOK = "almost_took"  # considered it, never entered
+    HESITATED = "hesitated"  # planned it, froze at the trigger
+    CANCELED = "canceled"  # had a working order and pulled it
+
+
+class HypotheticalOutcome(str, Enum):
+    """What the missed setup WOULD have done, resolved after watching price.
+
+    `unknown` is a first-class value: an unresolved miss is logged honestly rather
+    than left out of the record.
+    """
+
+    WOULD_WIN = "would_win"
+    WOULD_LOSE = "would_lose"
+    WOULD_BREAKEVEN = "would_breakeven"
+    UNKNOWN = "unknown"
+
+
 class RangePosition(str, Enum):
     """Where price sits in the dealing range (Aura ranges / R3)."""
 
@@ -121,6 +147,74 @@ class PlanItemStatus(str, Enum):
     DONE = "done"
     PARTIAL = "partial"
     SKIPPED = "skipped"
+
+
+class GateAttestationItem(str, Enum):
+    """The behavioural checklist items of the Readiness-to-Live Gate (Phase 5g).
+
+    These are the four items of concepts/mastery/README §Gate that no data can
+    prove — they are USER-ATTESTED. Attesting them is an INPUT to the gate, never
+    an override: it cannot satisfy the concept-ladder or expectancy requirements.
+    Labels are also the keys of app/services/gate.BEHAVIOURAL_ITEMS.
+    """
+
+    RISK_PRECOMMITTED = "risk_precommitted"
+    SIM_TRACK_RECORD = "sim_track_record"
+    JOURNALING_HABIT = "journaling_habit"
+    CIRCUIT_BREAKER = "circuit_breaker"
+
+
+class EvidenceSubject(str, Enum):
+    """What a piece of evidence is attached to (Phase E2).
+
+    ONE polymorphic evidence layer serves all four: drill evidence, concept
+    evidence, the journal's deferred screenshots (5c) and the missed-trade
+    screenshots deliberately omitted from 0008. Exactly one subject column is
+    populated per row, agreeing with this discriminator — enforced by a DB CHECK
+    that fails closed.
+    """
+
+    DRILL = "drill"
+    CONCEPT = "concept"
+    JOURNAL_ENTRY = "journal_entry"
+    MISSED_TRADE = "missed_trade"
+
+
+class EvidenceKind(str, Enum):
+    """The five kinds of evidence the curriculum actually produces
+    (concepts/architecture/learning-enforcement.md §1 — the table there maps each
+    kind to the drills it serves; not restated here).
+
+    Deliberately NOT "one screenshot per rep": `services/rep_targets.py` already
+    distinguishes reps/days/sessions/qualitative/habit, and a "1 week" habit
+    target has no rep to photograph.
+    """
+
+    CHART_MARKUP = "chart_markup"       # a marked-up chart capture
+    WRITTEN_ARTIFACT = "written_artifact"  # routine, identity statements, contracts
+    COMPUTATION = "computation"         # a computed number or table
+    PREDICTION = "prediction"           # a call committed BEFORE the reveal (E5)
+    TAPE_READ = "tape_read"             # a narrated live/delayed session read
+
+
+class EvidenceGrader(str, Enum):
+    """Which of the three tiers produced a grade. Only `deterministic` BLOCKS;
+    it is also the only tier E2 builds (`self_check` = E3, `ai_vision` = E4)."""
+
+    DETERMINISTIC = "deterministic"
+    SELF_CHECK = "self_check"
+    AI_VISION = "ai_vision"
+
+
+class EvidenceGradeState(str, Enum):
+    """A grading pass's verdict. A grade may FLAG, never retract — retraction
+    would make progress non-monotonic, since stages.py and gate.py read reps."""
+
+    UNGRADED = "ungraded"
+    PENDING = "pending"
+    PASSED = "passed"
+    FLAGGED = "flagged"
+    FAILED = "failed"
 
 
 def pg_enum(enum_cls: type[Enum], name: str) -> sa.Enum:

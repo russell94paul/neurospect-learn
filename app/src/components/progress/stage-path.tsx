@@ -60,6 +60,11 @@ export function StageNode({ stage }: { stage: StageRollup }) {
             <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
               <Check className="h-3 w-3" /> Exit bar met
             </span>
+          ) : stage.total === 0 ? (
+            // Concept-less stage (backtest / live / journal): 6a grades it on the
+            // journal evidence or a /gate attestation, so "0/0 at Can-mark+" would
+            // misdescribe it.
+            <span className="text-muted-foreground">graded on your logged evidence</span>
           ) : (
             <span className="text-muted-foreground">
               {stage.reached}/{stage.total} at Can-mark+

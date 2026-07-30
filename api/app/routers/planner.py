@@ -42,6 +42,7 @@ from app.schemas.planner import (
     PreferencesOut,
     TodayOut,
 )
+from app.routers.learning import load_evidence_reps, load_stage_evidence
 from app.services import scheduler, stages
 
 router = APIRouter(
@@ -116,6 +117,10 @@ def _prefs_view(p: StudyPreferences) -> scheduler.PrefsView:
 # ---------------------------------------------------------------------------
 
 async def _load_inputs(db: AsyncSession, user_id, track: str):
+    # Phase E2: the scheduler decides "how many reps are still owed" from the
+    # DERIVED count, so an unevidenced drill keeps being prescribed until the
+    # work is actually captured.
+    ev = await load_evidence_reps(db, user_id)
     metas = (
         await db.execute(
             select(TrackStage).where(TrackStage.track == track).order_by(TrackStage.stage_order)
@@ -159,7 +164,8 @@ async def _load_inputs(db: AsyncSession, user_id, track: str):
         concept_meta[c.id] = (c.slug, c.title, c.content_slug)
         if pg is not None:
             cprog[c.slug] = scheduler.ConceptProgressView(
-                pg.ladder_stage, pg.confidence, pg.reps, pg.last_practiced
+                pg.ladder_stage, pg.confidence,
+                pg.legacy_reps + ev.concept(c.id), pg.last_practiced
             )
 
     # Drills: load ALL (concept.drill_refs can cross tracks, e.g. unified → "ict-course S7").
@@ -182,10 +188,15 @@ async def _load_inputs(db: AsyncSession, user_id, track: str):
     ).scalars().all()
     dprog = {
         dp.drill_ref: scheduler.DrillProgressView(
-            dp.reps, dp.hand_done, dp.tool_done, dp.last_practiced
+            dp.legacy_reps + ev.drill(dp.drill_ref),
+            dp.hand_done, dp.tool_done, dp.last_practiced,
         )
         for dp in dpr
     }
+    # A drill with evidence but no drill_progress row yet still counts.
+    for drill_ref, evidenced in ev.by_drill.items():
+        if drill_ref not in dprog:
+            dprog[drill_ref] = scheduler.DrillProgressView(evidenced, False, False, None)
     return stage_metas, concepts, drills, cprog, dprog, concept_meta, drill_titles
 
 
@@ -407,7 +418,11 @@ async def get_plan_today(
         db, current_user.id, prefs.active_track
     )
     past = await _load_past_pending(db, current_user.id, today)
-    result = scheduler.schedule(today, pview, stage_metas, concepts, drills, cprog, dprog, past, horizon_days=1)
+    evidence = await load_stage_evidence(db, current_user.id, with_gate=False)
+    result = scheduler.schedule(
+        today, pview, stage_metas, concepts, drills, cprog, dprog, past,
+        horizon_days=1, evidence=evidence,
+    )
 
     await _materialize_today(db, current_user.id, today, result, prefs.plan_version)
 
@@ -460,8 +475,12 @@ async def get_plan_range(
         db, current_user.id, prefs.active_track
     )
     past = await _load_past_pending(db, current_user.id, today)
+    evidence = await load_stage_evidence(db, current_user.id, with_gate=False)
     horizon = max(1, (date_to - today).days)
-    result = scheduler.schedule(today, pview, stage_metas, concepts, drills, cprog, dprog, past, horizon_days=horizon)
+    result = scheduler.schedule(
+        today, pview, stage_metas, concepts, drills, cprog, dprog, past,
+        horizon_days=horizon, evidence=evidence,
+    )
 
     # Past + today: FROZEN (from plan_items). Future: COMPUTED (from the scheduler).
     frozen_rows = (
@@ -530,7 +549,11 @@ async def regenerate_plan(
         db, current_user.id, prefs.active_track
     )
     past = await _load_past_pending(db, current_user.id, today)
-    result = scheduler.schedule(today, pview, stage_metas, concepts, drills, cprog, dprog, past, horizon_days=1)
+    evidence = await load_stage_evidence(db, current_user.id, with_gate=False)
+    result = scheduler.schedule(
+        today, pview, stage_metas, concepts, drills, cprog, dprog, past,
+        horizon_days=1, evidence=evidence,
+    )
     await _materialize_today(db, current_user.id, today, result, new_version)
 
     rows = (
@@ -555,10 +578,16 @@ async def regenerate_plan(
 # PATCH /api/plan/items/{item_id}  — mark done/partial/skipped → feed progress
 # ===========================================================================
 
-async def _feed_concept(db: AsyncSession, user_id, concept_id, inc: int, today: date):
-    """Add `inc` reps + set last_practiced on the user's concept_progress. Never
-    touches ladder_stage/confidence — the ladder-advance gate stays owned by
-    /api/progress (this only records that reps happened)."""
+async def _feed_concept(db: AsyncSession, user_id, concept_id, today: date):
+    """Record that the concept was practised today.
+
+    PHASE E2 — THIS NO LONGER CREDITS REPS. Marking a plan item done used to
+    increment `concept_progress.reps`, which made this endpoint a second way to
+    mint an unevidenced rep; with `reps` derived from `evidence_assets` there is
+    no number here to write. `last_practiced` still moves, because spaced review
+    schedules off it and a review IS practice — what it is not, on its own, is
+    proof of the work.
+    """
     existing = (
         await db.execute(
             select(ConceptProgress).where(
@@ -568,24 +597,25 @@ async def _feed_concept(db: AsyncSession, user_id, concept_id, inc: int, today: 
             )
         )
     ).scalar_one_or_none()
-    new_reps = (existing.reps if existing else 0) + inc
     values = dict(
         user_id=user_id, concept_id=concept_id,
         ladder_stage=existing.ladder_stage if existing else None,
         confidence=existing.confidence if existing else None,
-        reps=new_reps, last_practiced=today,
+        last_practiced=today,
         notes=existing.notes if existing else None,
     )
     stmt = pg_insert(ConceptProgress).values(**values)
     stmt = stmt.on_conflict_do_update(
         index_elements=[ConceptProgress.user_id, ConceptProgress.concept_id],
         index_where=_NOT_DELETED,
-        set_={"reps": stmt.excluded.reps, "last_practiced": stmt.excluded.last_practiced},
+        set_={"last_practiced": stmt.excluded.last_practiced},
     )
     await db.execute(stmt)
 
 
-async def _feed_drill(db: AsyncSession, user_id, drill_ref: str, inc: int, variant: str | None, today: date):
+async def _feed_drill(db: AsyncSession, user_id, drill_ref: str, variant: str | None, today: date):
+    """As `_feed_concept`: the ✋/🛠 variant mark and `last_practiced` are recorded;
+    the rep count is not, because reps come only from evidence (Phase E2)."""
     existing = (
         await db.execute(
             select(DrillProgress).where(
@@ -595,11 +625,10 @@ async def _feed_drill(db: AsyncSession, user_id, drill_ref: str, inc: int, varia
             )
         )
     ).scalar_one_or_none()
-    new_reps = (existing.reps if existing else 0) + inc
     hand = (existing.hand_done if existing else False) or (variant == "hand")
     tool = (existing.tool_done if existing else False) or (variant == "tool")
     values = dict(
-        user_id=user_id, drill_ref=drill_ref, reps=new_reps,
+        user_id=user_id, drill_ref=drill_ref,
         hand_done=hand, tool_done=tool, last_practiced=today,
         notes=existing.notes if existing else None,
     )
@@ -608,8 +637,9 @@ async def _feed_drill(db: AsyncSession, user_id, drill_ref: str, inc: int, varia
         index_elements=[DrillProgress.user_id, DrillProgress.drill_ref],
         index_where=_NOT_DELETED,
         set_={
-            "reps": stmt.excluded.reps, "hand_done": stmt.excluded.hand_done,
-            "tool_done": stmt.excluded.tool_done, "last_practiced": stmt.excluded.last_practiced,
+            "hand_done": stmt.excluded.hand_done,
+            "tool_done": stmt.excluded.tool_done,
+            "last_practiced": stmt.excluded.last_practiced,
         },
     )
     await db.execute(stmt)
@@ -638,21 +668,23 @@ async def patch_plan_item(
     today = _today_in(prefs.timezone if prefs else "UTC")
 
     completed = body.status in (PlanItemStatus.DONE, PlanItemStatus.PARTIAL)
-    # reps to credit: explicit done_qty, else 1 for a done item, else 0.
-    inc = body.done_qty if body.done_qty is not None else (1 if body.status == PlanItemStatus.DONE else 0)
 
     item.status = body.status
     item.done_qty = body.done_qty if body.done_qty is not None else (item.done_qty or (1 if body.status == PlanItemStatus.DONE else 0))
     item.completed_at = datetime.now(timezone.utc) if completed else None
 
-    # Feed progress (reps + last_practiced) for done/partial concept/drill items.
-    if completed and inc > 0:
+    # Record the practice (last_practiced + the ✋/🛠 mark). Phase E2: this no
+    # longer credits reps — `done_qty` remains the plan's own record of how much
+    # was worked, but the rep count is derived from `evidence_assets`, so marking
+    # a plan item done can no longer mint an unevidenced rep. Without this change
+    # the planner would be a bypass around the whole evidence layer.
+    if completed:
         if item.concept_id is not None and item.activity in (
             PlanActivity.LEARN, PlanActivity.REVIEW, PlanActivity.OBSERVE, PlanActivity.HABIT
         ):
-            await _feed_concept(db, current_user.id, item.concept_id, inc, today)
+            await _feed_concept(db, current_user.id, item.concept_id, today)
         elif item.drill_ref is not None and item.activity == PlanActivity.DRILL:
-            await _feed_drill(db, current_user.id, item.drill_ref, inc, item.drill_variant, today)
+            await _feed_drill(db, current_user.id, item.drill_ref, item.drill_variant, today)
 
     await db.commit()
     await db.refresh(item)

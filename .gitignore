@@ -25,3 +25,7 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
+
+# Evidence blobs written by the local storage backend (user data, not source —
+# and chart captures are private). Override with EVIDENCE_LOCAL_ROOT.
+.evidence-store/

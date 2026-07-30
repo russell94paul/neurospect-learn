@@ -27,7 +27,9 @@ class DrillProgress(Base):
     )
     drill_ref: Mapped[str] = mapped_column(Text, nullable=False)  # soft ref → drills.drill_ref
 
-    reps: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0")
+    # Reps claimed BEFORE the evidence layer existed (Phase E2, Alembic 0009).
+    # Frozen; the API's `reps` is derived — see concept_progress.legacy_reps.
+    legacy_reps: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0")
     hand_done: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
     tool_done: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
     last_practiced: Mapped[date | None] = mapped_column(Date)

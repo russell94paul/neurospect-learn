@@ -3,7 +3,6 @@ import { useAuth } from '@/lib/auth';
 import { AppShell } from '@/components/layout/app-shell';
 import { LoginPage } from '@/pages/login';
 import { AuthCallbackPage } from '@/pages/auth-callback';
-import { StubPage } from '@/pages/stub';
 import { LibraryPage } from '@/pages/library';
 import { ConceptReaderPage } from '@/pages/concept-reader';
 import { PathPage } from '@/pages/path';
@@ -14,7 +13,9 @@ import { PlanPage } from '@/pages/plan';
 import { PlanSetupPage } from '@/pages/plan-setup';
 import { JournalPage } from '@/pages/journal';
 import { JournalEntryPage } from '@/pages/journal-entry';
+import { MissedTradeEntryPage } from '@/pages/missed-trade-entry';
 import { ExpectancyPage } from '@/pages/expectancy';
+import { GatePage } from '@/pages/gate';
 
 // ============================================================
 // Protected layout — redirects to /login if not authenticated
@@ -40,7 +41,7 @@ function ProtectedLayout() {
 
 // ============================================================
 // Router — route taxonomy per learning-platform.md §Route taxonomy.
-// Every protected route is a stub until its phase lands (5c–5g).
+// Fully implemented as of Phase 5g: no route is a stub any more.
 // ============================================================
 
 const router = createBrowserRouter([
@@ -99,6 +100,17 @@ const router = createBrowserRouter([
         path: '/journal/new',
         element: <JournalEntryPage />,
       },
+      // The missed/canceled log (6b) lives under /journal — same journaling
+      // surface, separate record type. Two static segments, so these rank above
+      // the single-segment /journal/:id below.
+      {
+        path: '/journal/missed/new',
+        element: <MissedTradeEntryPage />,
+      },
+      {
+        path: '/journal/missed/:id',
+        element: <MissedTradeEntryPage />,
+      },
       {
         path: '/journal/:id',
         element: <JournalEntryPage />,
@@ -109,7 +121,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/gate',
-        element: <StubPage title="Gate" phase="Phase 5g" />,
+        element: <GatePage />,
       },
     ],
   },

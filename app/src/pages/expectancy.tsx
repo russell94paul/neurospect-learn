@@ -203,7 +203,12 @@ export function ExpectancyPage() {
                 Amber sample sizes are below the reference of {sampleTarget} closed trades — a guideline for
                 statistical meaning, <span className="font-medium">not</span> the live-eligibility gate. Confluence
                 (frontier) tags are study-only and never count toward going live. The Readiness-to-Live decision
-                lives on the Gate.
+                lives on the Gate. Trades you <span className="font-medium">didn't</span> take are excluded from
+                every figure here by design — their opportunity cost is on the{' '}
+                <Link to="/journal?tab=missed" className="underline decoration-dotted hover:text-foreground">
+                  missed &amp; canceled log
+                </Link>
+                .
               </p>
             </CardContent>
           </Card>

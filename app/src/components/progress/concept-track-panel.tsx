@@ -10,6 +10,7 @@ import {
   useConceptIndex,
   useUpdateProgress,
 } from '@/lib/learning';
+import { EvidenceCapture } from '@/components/evidence/evidence-capture';
 import type { ProgressRow } from '@/types/api';
 import { LadderBadge } from './ladder-badge';
 import { ConfidenceRating } from './confidence-rating';
@@ -18,9 +19,14 @@ import { RepCounter } from './rep-counter';
 const CAN_MARK = 2;
 
 /**
- * The "track this" panel — edit a concept's ladder / confidence / reps / notes,
+ * The "track this" panel — edit a concept's ladder / confidence / notes,
  * PATCH /api/progress on save. Surfaces the ladder-advance gate (reps ≥ target
  * AND confidence set) and the frontier watch-only cap (Can-mark max).
+ *
+ * PHASE E2: reps are no longer editable here. They are derived from the evidence
+ * ledger, so the panel CAPTURES evidence instead — which matters because this is
+ * the surface where the ladder gate bites: a concept with a numeric rep target
+ * cannot reach Can-mark+ until the work behind those reps exists.
  */
 export function ConceptTrackPanel({ row }: { row: ProgressRow }) {
   const update = useUpdateProgress();
@@ -34,24 +40,21 @@ export function ConceptTrackPanel({ row }: { row: ProgressRow }) {
 
   const [ladder, setLadder] = useState<number | null>(row.ladder_stage);
   const [confidence, setConfidence] = useState<number | null>(row.confidence);
-  const [reps, setReps] = useState<number>(row.reps);
   const [notes, setNotes] = useState<string>(row.notes ?? '');
 
   // Re-sync from the server row (e.g. after a save invalidates + refetches).
   useEffect(() => {
     setLadder(row.ladder_stage);
     setConfidence(row.confidence);
-    setReps(row.reps);
     setNotes(row.notes ?? '');
-  }, [row.ladder_stage, row.confidence, row.reps, row.notes]);
+  }, [row.ladder_stage, row.confidence, row.notes]);
 
   const dirty =
     ladder !== row.ladder_stage ||
     confidence !== row.confidence ||
-    reps !== row.reps ||
     (notes ?? '') !== (row.notes ?? '');
 
-  const gateMsg = advanceBlocked(ladder ?? 0, reps, confidence, row.rep_target_count);
+  const gateMsg = advanceBlocked(ladder ?? 0, row.reps, confidence, row.rep_target_count);
   const maxLadder = row.watch_only ? CAN_MARK : 4;
 
   function save() {
@@ -59,7 +62,6 @@ export function ConceptTrackPanel({ row }: { row: ProgressRow }) {
       concept_id: row.concept_id,
       ladder_stage: ladder,
       confidence: confidence,
-      reps: reps,
       notes: notes.trim() ? notes.trim() : null,
       last_practiced: new Date().toISOString().slice(0, 10),
     });
@@ -106,12 +108,22 @@ export function ConceptTrackPanel({ row }: { row: ProgressRow }) {
         <ConfidenceRating value={confidence} onChange={setConfidence} />
       </div>
 
-      {/* Reps */}
+      {/* Reps — derived from evidence (Phase E2), not typed in */}
       <div className="space-y-1.5">
         <span className="text-xs font-medium text-muted-foreground">
           Reps{row.rep_target ? ` · target: ${row.rep_target}` : ''}
         </span>
-        <RepCounter reps={reps} target={row.rep_target_count} onChange={setReps} />
+        <RepCounter
+          reps={row.reps}
+          target={row.rep_target_count}
+          evidenced={row.reps_evidenced}
+          legacy={row.reps_legacy}
+        />
+        <EvidenceCapture
+          subject={{ subject_type: 'concept', concept_id: row.concept_id }}
+          label="Evidence of the work"
+          hint="A capture of your markings for this concept — this is what makes a rep count."
+        />
       </div>
 
       {/* Notes */}

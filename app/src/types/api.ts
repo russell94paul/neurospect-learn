@@ -91,27 +91,42 @@ export interface ProgressRow {
   sort_order: number;
   ladder_stage: number | null;
   confidence: number | null;
+  /** DERIVED (Phase E2) = reps_legacy + reps_evidenced. Read-only. */
   reps: number;
+  /** Σ reps_claimed over this concept's live evidence — the proven part. */
+  reps_evidenced: number;
+  /** Claimed before the evidence layer existed (Alembic 0009 froze it). */
+  reps_legacy: number;
   last_practiced: string | null;
   notes: string | null;
 }
 
-/** PATCH /api/progress body — concept_id required, rest partial. */
+/** PATCH /api/progress body — concept_id required, rest partial.
+ * `reps` is deliberately absent: since Phase E2 a rep counts only when there is
+ * evidence of the work, so the count comes from POST /api/evidence and the API
+ * rejects a `reps` key with a 422. */
 export interface ProgressPatch {
   concept_id: string;
   ladder_stage?: number | null;
   confidence?: number | null;
-  reps?: number | null;
   last_practiced?: string | null;
   notes?: string | null;
 }
 
+/** One exit-bar row. Phase 6a wiring fields: `derived` = objectively EARNED from
+ * logged evidence (journal expectancy / the gate verdict); `attest` + `attest_item`
+ * = REFLECTS a /gate attestation (never a second checkbox here); `detail` = the
+ * evidence in numbers; `link` = where the row is satisfied. */
 export interface Requirement {
   label: string;
   met: boolean;
   attest: boolean;
   concept_slug: string | null;
   concept_code: string | null;
+  derived: boolean;
+  detail: string | null;
+  attest_item: string | null;
+  link: string | null;
 }
 
 export interface StageRollup {
@@ -152,17 +167,20 @@ export interface DrillOut {
   rep_target_count: number | null;
   concept_slugs: string[] | null;
   sort_order: number;
+  /** DERIVED (Phase E2) = reps_legacy + reps_evidenced. Read-only. */
   reps: number;
+  reps_evidenced: number;
+  reps_legacy: number;
   hand_done: boolean;
   tool_done: boolean;
   last_practiced: string | null;
   notes: string | null;
 }
 
-/** PATCH /api/drills body — drill_ref required, rest partial. */
+/** PATCH /api/drills body — drill_ref required, rest partial. `reps` is absent
+ * for the same reason as on ProgressPatch: evidence is the only source. */
 export interface DrillPatch {
   drill_ref: string;
-  reps?: number | null;
   hand_done?: boolean | null;
   tool_done?: boolean | null;
   last_practiced?: string | null;
@@ -320,6 +338,7 @@ export interface JournalEntry {
   target_price: number | null;
   rr_planned: number | null;
   risk_pct: number | null;
+  position_size: number | null; // contracts/lots — record-keeping only (6c)
   exit_price: number | null;
   r_multiple: number | null;
   outcome: Outcome | null;
@@ -355,6 +374,7 @@ export interface JournalEntryIn {
   target_price?: number | null;
   rr_planned?: number | null;
   risk_pct?: number | null;
+  position_size?: number | null; // contracts/lots — record-keeping only (6c)
   exit_price?: number | null;
   r_multiple?: number | null;
   outcome?: Outcome | null;
@@ -375,6 +395,91 @@ export interface JournalFilterState {
   mode?: JournalMode;
   entry_model?: EntryModel;
   instrument?: string;
+}
+
+// ============================================================
+// Missed-trade log (mirrors backend app/schemas/missed_trade.py — 6b)
+// ============================================================
+
+/** How the setup came to be missed. `canceled` is Dante's category — you had a
+ * working order and pulled it (concepts/aura/journaling-system). */
+export type MissType = 'almost_took' | 'hesitated' | 'canceled';
+export type HypotheticalOutcome = 'would_win' | 'would_lose' | 'would_breakeven' | 'unknown';
+
+/** One setup you did NOT take. A row is "resolved" (and enters the
+ * opportunity-cost sums) iff it carries a `hypothetical_r`. NOTHING here enters
+ * expectancy or the Readiness-to-Live Gate — these trades were never taken. */
+export interface MissedTrade {
+  id: string;
+  entry_date: string;
+  instrument: string;
+  session: SessionType | null;
+  entry_model: EntryModel;
+  miss_type: MissType;
+  reason: string | null;
+  hesitation_tags: string[] | null;
+  planned_entry: number | null;
+  planned_stop: number | null;
+  planned_target: number | null;
+  rr_planned: number | null;
+  hypothetical_outcome: HypotheticalOutcome | null;
+  hypothetical_r: number | null;
+  narrative: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/** POST /api/missed-trades body — date + instrument + model + miss type required. */
+export interface MissedTradeIn {
+  entry_date: string;
+  instrument: string;
+  session?: SessionType | null;
+  entry_model: EntryModel;
+  miss_type: MissType;
+  reason?: string | null;
+  hesitation_tags?: string[] | null;
+  planned_entry?: number | null;
+  planned_stop?: number | null;
+  planned_target?: number | null;
+  rr_planned?: number | null;
+  hypothetical_outcome?: HypotheticalOutcome | null;
+  hypothetical_r?: number | null;
+  narrative?: string | null;
+  notes?: string | null;
+}
+
+export type MissedTradeUpdate = Partial<MissedTradeIn>;
+
+/** Filters for GET /api/missed-trades. */
+export interface MissedFilterState {
+  miss_type?: MissType;
+  entry_model?: EntryModel;
+  hypothetical_outcome?: HypotheticalOutcome;
+  instrument?: string;
+}
+
+/** One slice of the missed log. A NEGATIVE `net_r` means standing down was
+ * PROTECTIVE — the sign carries the whole insight. */
+export interface MissBucket {
+  key: string;
+  logged: number;
+  resolved: number;
+  would_win: number;
+  would_lose: number;
+  would_breakeven: number;
+  forgone_r: number | null;
+  saved_r: number | null;
+  net_r: number | null;
+  avg_r: number | null;
+}
+
+/** GET /api/analytics/missed-summary — opportunity cost in R. NOT expectancy. */
+export interface OpportunityCostResponse {
+  total: MissBucket;
+  by_miss_type: MissBucket[];
+  by_hesitation_tag: MissBucket[];
+  by_entry_model: MissBucket[];
 }
 
 // ============================================================
@@ -433,4 +538,154 @@ export interface RDistributionBucket {
 
 export interface RDistributionResponse {
   buckets: RDistributionBucket[];
+}
+
+// ============================================================
+// Gate API (mirrors backend app/schemas/gate.py — 5g)
+// ============================================================
+
+/** One checkable gate requirement. `source` says which of the gate's three
+ * evidence sources it comes from: `concepts` (a) · `evidence` (b) · `behaviour` (c). */
+export interface GateRequirement {
+  key: string;
+  source: 'concepts' | 'evidence' | 'behaviour';
+  label: string;
+  met: boolean;
+  detail: string | null;
+  attest: boolean;
+  concept_slug: string | null;
+  concept_code: string | null;
+  concept_track: string | null;   // link target: /path/:track/:stage
+  concept_stage: string | null;
+  required_ladder: number | null;
+  actual_ladder: number | null;
+  credited_slug: string | null;
+  credited_track: string | null;
+}
+
+/** One entry_model's verdict. `cleared` is COMPUTED server-side from
+ * (a) ∧ (b) ∧ (c) on every read — there is no way to set it. */
+export interface ModelReadiness {
+  entry_model: EntryModel;
+  cleared: boolean;
+  concepts_met: boolean;
+  evidence_met: boolean;
+  behaviour_met: boolean;
+  requirements: GateRequirement[];
+  blocking: string[];
+  backtest_logged: number;
+  backtest_n: number;
+  backtest_expectancy: number | null;
+  backtest_win_rate: number | null;   // FRACTION 0–1
+  backtest_break_even: number | null; // FRACTION 0–1
+  backtest_avg_rr: number | null;
+  sample_target: number;
+  sample_stretch: number;             // "ideally ≥100" — surfaced, NOT gating
+  stretch_met: boolean;
+  live_n: number;
+  live_expectancy: number | null;
+}
+
+export interface GateFrontierConcept {
+  slug: string;
+  title: string;
+  u_stage: string | null;
+  tier: string | null;
+  label: string | null;
+}
+
+export interface GateAttestation {
+  item: string;
+  label: string;
+  attested: boolean;
+  note: string | null;
+}
+
+export interface GateCorroboration {
+  entries_logged: number;
+  entries_closed: number;
+  journaling_days: number;
+  live_entries: number;
+  backtest_entries: number;
+  last_entry_date: string | null;
+}
+
+export interface GateResponse {
+  anchor_track: string;
+  credit_track: string | null;
+  sample_target: number;
+  sample_stretch: number;
+  any_cleared: boolean;
+  models: ModelReadiness[];
+  attestations: GateAttestation[];
+  corroboration: GateCorroboration;
+  frontier: GateFrontierConcept[];
+}
+
+export interface GateAttestationPatch {
+  item: string;
+  attested: boolean;
+  note?: string | null;
+}
+
+// ============================================================
+// Evidence layer (Phase E2) — the ONLY way a rep is created
+// ============================================================
+
+export type EvidenceSubject = 'drill' | 'concept' | 'journal_entry' | 'missed_trade';
+
+export type EvidenceKind =
+  | 'chart_markup'
+  | 'written_artifact'
+  | 'computation'
+  | 'prediction'
+  | 'tape_read';
+
+export type EvidenceGrader = 'deterministic' | 'self_check' | 'ai_vision';
+
+export type EvidenceGradeState = 'ungraded' | 'pending' | 'passed' | 'flagged' | 'failed';
+
+/** One grading pass. E2 only emits `deterministic`; the score is always advisory
+ * and never writes confidence or ladder_stage. */
+export interface EvidenceGrade {
+  id: string;
+  grader: EvidenceGrader;
+  state: EvidenceGradeState;
+  score: number | null;
+  rubric_slug: string | null;
+  rubric_version: number | null;
+  findings: unknown;
+  model: string | null;
+  graded_at: string;
+}
+
+export interface EvidenceAsset {
+  id: string;
+  subject_type: EvidenceSubject;
+  subject_drill_ref: string | null;
+  concept_id: string | null;
+  journal_entry_id: string | null;
+  missed_trade_id: string | null;
+  kind: EvidenceKind;
+  content_type: string;
+  original_filename: string | null;
+  byte_size: number;
+  sha256: string;
+  perceptual_hash: string | null;
+  captured_at: string | null;
+  reps_claimed: number;
+  notes: string | null;
+  created_at: string;
+  /** Presigned (R2) or signed local URL — renderable directly in an <img>. */
+  url: string;
+  grades: EvidenceGrade[];
+}
+
+/** Which subject a capture attaches to — exactly one id is set. */
+export interface EvidenceSubjectRef {
+  subject_type: EvidenceSubject;
+  drill_ref?: string;
+  concept_id?: string;
+  journal_entry_id?: string;
+  missed_trade_id?: string;
 }

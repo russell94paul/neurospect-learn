@@ -37,10 +37,15 @@ class JournalEntry(Base):
     `mode` discriminator (backtest|live) makes the same journal power both axes
     and lets the gate compare them. User-scoped + soft-deleted.
 
-    Deferred (documented in learning-platform.md §5c as-built): screenshots (no
-    R2 this phase), position_size / dollar sizing (expectancy is computed in R,
-    not dollars — risk_pct carries the %/R framing), and the Aura canceled-order
-    `missed_trades` surface (separate lightweight table, out of scope).
+    Phase 6c added `position_size` — RECORD-KEEPING ONLY. Expectancy stays R-based
+    (`r_multiple` / `rr_planned` / `risk_pct` carry the %/R framing) and no
+    expectancy, analytics or gate computation reads it. The Aura canceled-order
+    surface shipped in 6b as the separate `missed_trades` table (see
+    app/models/missed_trade.py) — deliberately NOT columns here, so executed-trade
+    analytics are never diluted by trades that were never taken.
+
+    Still deferred: screenshots / uploaded evidence (owned by the
+    learning-enforcement workstream, which owns verified drill grading).
     """
 
     __tablename__ = "journal_entries"
@@ -79,6 +84,7 @@ class JournalEntry(Base):
     target_price: Mapped[Decimal | None] = mapped_column(Numeric(12, 4))
     rr_planned: Mapped[Decimal | None] = mapped_column(Numeric(6, 2))  # planned R:R
     risk_pct: Mapped[Decimal | None] = mapped_column(Numeric(5, 2))  # % risked per trade (R5 blueprint)
+    position_size: Mapped[Decimal | None] = mapped_column(Numeric(10, 2))  # contracts/lots — record-keeping ONLY (6c)
     exit_price: Mapped[Decimal | None] = mapped_column(Numeric(12, 4))
     r_multiple: Mapped[Decimal | None] = mapped_column(Numeric(6, 2))  # realized R — core expectancy input
     outcome: Mapped[Outcome | None] = mapped_column(pg_enum(Outcome, "outcome"))

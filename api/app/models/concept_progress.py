@@ -33,7 +33,12 @@ class ConceptProgress(Base):
     ladder_stage: Mapped[int | None] = mapped_column(SmallInteger)
     # Confidence 1 (no feel) … 5 (automatic). NULL = unclaimed.
     confidence: Mapped[int | None] = mapped_column(SmallInteger)
-    reps: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0")
+    # Reps claimed BEFORE the evidence layer existed (Phase E2, Alembic 0009).
+    # Frozen: nothing writes this column any more. The API's `reps` is DERIVED —
+    # `legacy_reps + SUM(evidence_assets.reps_claimed)` — so a rep cannot be
+    # minted by any endpoint. Renamed rather than dropped so no already-met stage
+    # un-meets (progress stays monotonic) and the pre-evidence gap stays visible.
+    legacy_reps: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0")
     last_practiced: Mapped[date | None] = mapped_column(Date)
     notes: Mapped[str | None] = mapped_column(Text)
 

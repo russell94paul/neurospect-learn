@@ -8,8 +8,11 @@ from app.config import settings
 from app.database import engine
 from app.routers.analytics import router as analytics_router
 from app.routers.content import router as content_router
+from app.routers.evidence import router as evidence_router
+from app.routers.gate import router as gate_router
 from app.routers.journal import router as journal_router
 from app.routers.learning import router as learning_router
+from app.routers.missed_trades import router as missed_trades_router
 from app.routers.planner import router as planner_router
 
 
@@ -48,6 +51,9 @@ app.include_router(auth_router)
 # Content API (course corpus — ingested wiki markdown)
 app.include_router(content_router)
 
+# Evidence API (E2 — captured evidence of the work; the ONLY way a rep is minted)
+app.include_router(evidence_router)
+
 # Learning API (progress, derived stage exit-bars, drills)
 app.include_router(learning_router)
 
@@ -57,5 +63,11 @@ app.include_router(planner_router)
 # Journal API (model-aligned backtest|live entries — the proof-of-edge write side)
 app.include_router(journal_router)
 
-# Analytics API (per-model expectancy, mode summary, R distribution — read side)
+# Missed-trade log (6b — the trades you did NOT take; never enters expectancy)
+app.include_router(missed_trades_router)
+
+# Analytics API (per-model expectancy, mode summary, R distribution, opportunity cost)
 app.include_router(analytics_router)
+
+# Gate API (the computed per-model "cleared to live?" verdict — non-overridable)
+app.include_router(gate_router)

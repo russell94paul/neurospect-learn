@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { chartPng, clearEvidence, giveReps } from './evidence-helpers';
 
 // Phase 5e-1b — multi-track curriculum. These specs pin the UI wiring of the
 // track switcher, the per-track curriculum unit (Read → Drill → Track → Gate),
@@ -85,12 +86,20 @@ test('stage exit-bar flips with concept_progress (per-track isolation)', async (
     rep_target_count: number | null;
   }>;
   const u1 = rows.filter((r) => r.stage_code === 'U1' && r.is_core);
-  for (const c of u1) {
+  // Phase E2: reps are DERIVED from uploaded evidence — `reps: N` on the PATCH
+  // is refused, so the fixture has to produce the work like a user would.
+  await clearEvidence(request, API_URL, tok);
+  for (const [i, c] of u1.entries()) {
+    await giveReps(
+      request, API_URL, tok,
+      { subject_type: 'concept', concept_id: c.concept_id },
+      c.rep_target_count ?? 1,
+      700 + i
+    );
     await patchProgress(request, tok, {
       concept_id: c.concept_id,
       ladder_stage: 2,
       confidence: 3,
-      reps: c.rep_target_count ?? 0,
     });
   }
 
@@ -117,7 +126,15 @@ test('cross-track "Also taught in" link jumps to the other track', async ({ page
   await expect(page.getByRole('heading', { name: 'The three structural primitives' })).toBeVisible();
 });
 
-test('drill mark (reps) persists across reload', async ({ page }) => {
+test('a drill rep comes from a captured file and persists across reload', async ({
+  page,
+  request,
+}) => {
+  // Phase E2 replaced the +/- rep control with capture: the only way a rep
+  // appears is an uploaded piece of evidence.
+  const tok = await token(request);
+  await clearEvidence(request, API_URL, tok);
+
   await page.goto('/drills');
   const card = page.getByTestId('drill-card').first();
   await expect(card).toBeVisible();
@@ -126,10 +143,43 @@ test('drill mark (reps) persists across reload', async ({ page }) => {
     const txt = await card.getByTestId('rep-count').innerText();
     return parseInt(txt.split('/')[0].trim(), 10);
   };
+  // Whatever this drill already carried is `legacy_reps` — claimed before the
+  // evidence layer existed (Alembic 0009 froze it rather than deleting it, so no
+  // met stage un-meets). It is reported SEPARATELY, never folded away.
   const before = await readReps();
-  await card.getByRole('button', { name: 'Increase reps' }).click();
-  await expect(card.getByTestId('rep-count')).toContainText(String(before + 1));
+  // The old control is gone — a rep is not a number you type any more.
+  await expect(card.getByRole('button', { name: 'Increase reps' })).toHaveCount(0);
+
+  await card
+    .getByTestId('evidence-file-input')
+    .setInputFiles({ name: 'markup.png', mimeType: 'image/png', buffer: chartPng(811) });
+
+  await expect(card.getByTestId('evidence-thumb')).toHaveCount(1);
+  await expect.poll(readReps).toBe(before + 1);
+  await expect(card.getByTestId('rep-split')).toContainText('1 evidenced');
+  if (before > 0) {
+    await expect(card.getByTestId('rep-split')).toContainText(`${before} pre-evidence`);
+  }
 
   await page.reload();
   expect(await readReps()).toBe(before + 1);
+  await expect(page.getByTestId('drill-card').first().getByTestId('evidence-thumb')).toHaveCount(1);
+});
+
+test('a recycled capture is refused, with the reason shown', async ({ page, request }) => {
+  const tok = await token(request);
+  await page.goto('/drills');
+  const card = page.getByTestId('drill-card').first();
+  await expect(card).toBeVisible();
+  // The previous spec left exactly one asset (seed 811) on this drill.
+  await expect(card.getByTestId('evidence-thumb')).toHaveCount(1);
+
+  await card
+    .getByTestId('evidence-file-input')
+    .setInputFiles({ name: 'again.png', mimeType: 'image/png', buffer: chartPng(811) });
+
+  await expect(card.getByTestId('evidence-rejection')).toContainText('already uploaded');
+  // And it did not silently count — still exactly one asset.
+  await expect(card.getByTestId('evidence-thumb')).toHaveCount(1);
+  await clearEvidence(request, API_URL, tok);
 });

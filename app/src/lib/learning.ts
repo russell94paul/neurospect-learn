@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
-import { api } from '@/lib/api';
+import { api, apiErrorMessage } from '@/lib/api';
 import { useMemo } from 'react';
 import type {
   ConceptOut,
@@ -117,22 +116,6 @@ export function useDrills(track?: string, stage?: string) {
 // grid, the derived stages, and any drill views refetch. Progress edits feed
 // the exit-bar derivation, so a progress write must also refresh stages.
 // ============================================================
-
-/** Extract a FastAPI `detail` message from a ky HTTPError (e.g. the 422 gate
- * rejection) so the UI can show why an advance was blocked. */
-async function apiErrorMessage(e: unknown): Promise<string> {
-  if (e instanceof HTTPError) {
-    try {
-      const body = (await e.response.json()) as { detail?: unknown };
-      if (body?.detail) {
-        return typeof body.detail === 'string' ? body.detail : JSON.stringify(body.detail);
-      }
-    } catch {
-      /* fall through */
-    }
-  }
-  return e instanceof Error ? e.message : 'Request failed';
-}
 
 /** Upsert one concept's progress. Throws (with the server message) on the
  * ladder-advance gate (422) — the caller surfaces `error` to the user. */

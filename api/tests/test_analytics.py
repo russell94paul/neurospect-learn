@@ -10,10 +10,12 @@ formula: (1) the by-hand win%/avgWinR/avgLossR/expectancy/break-even, and
 import statistics
 
 from app.services.expectancy import (
+    POOLED,
     SAMPLE_TARGET,
     TradeR,
     compute_groups,
     compute_mode_summaries,
+    compute_pooled,
     compute_r_distribution,
 )
 
@@ -141,3 +143,55 @@ def test_r_distribution_buckets_split_by_mode():
     assert dist["≥ 3R"]["live"] == 1
     # total counted = 4 (the open trade is excluded)
     assert sum(b["backtest"] + b["live"] for b in dist.values()) == 4
+
+
+# ---------------------------------------------------------------------------
+# compute_pooled (Phase 6a) — the stage-level view of the same evidence
+# ---------------------------------------------------------------------------
+
+def test_pooled_group_spans_models_but_never_modes():
+    # backtest: london +2/-1 and daily_bias +2/-1/-1, all planned 2R:R →
+    #   5 closed pooled: wins 2 (+2 each), losses 3 (-1 each)
+    #   expectancy = 0.4·2 − 0.6·1 = 0.2; win 0.4; break-even 1/3 → above
+    trades = [
+        _r("london", "backtest", 2.0, 2.0),
+        _r("london", "backtest", -1.0, 2.0),
+        _r("daily_bias", "backtest", 2.0, 2.0),
+        _r("daily_bias", "backtest", -1.0, 2.0),
+        _r("daily_bias", "backtest", -1.0, 2.0),
+        _r("london", "live", 9.0, 2.0),  # the live axis must NOT leak in
+    ]
+    g = compute_pooled(trades, "backtest")
+    assert g is not None
+    assert g.entry_model == POOLED and g.mode == "backtest"
+    assert g.n == 5 and (g.wins, g.losses) == (2, 3)
+    assert g.expectancy == 0.2 and g.win_rate == 0.4
+    assert g.break_even == round(1 / 3, 4) and g.above_break_even is True
+
+    live = compute_pooled(trades, "live")
+    assert live is not None and live.n == 1 and live.expectancy == 9.0
+
+
+def test_pooled_matches_the_per_model_math_when_there_is_one_model():
+    """Reuse proof: pooling delegates to compute_groups, so a single-model sample
+    yields identical stats under both entry points."""
+    trades = [_r("london", "backtest", r, 2.0) for r in (2.0, 2.0, -1.0, -1.0, -1.0)]
+    (per_model,) = compute_groups(trades)
+    pooled = compute_pooled(trades, "backtest")
+    assert pooled is not None
+    for f in ("logged", "n", "wins", "losses", "breakevens", "win_rate", "avg_win_r",
+              "avg_loss_r", "expectancy", "avg_rr_planned", "break_even",
+              "above_break_even", "sample_met"):
+        assert getattr(pooled, f) == getattr(per_model, f), f
+
+
+def test_pooled_is_none_for_a_mode_with_no_entries():
+    assert compute_pooled([_r("london", "backtest", 1.0)], "live") is None
+    assert compute_pooled([], "backtest") is None
+
+
+def test_pooled_open_only_sample_is_computable_as_none():
+    """Entries logged but none closed: a group exists (logged>0) with no math."""
+    g = compute_pooled([_r("london", "backtest", None)], "backtest")
+    assert g is not None and g.logged == 1 and g.n == 0
+    assert g.expectancy is None and g.sample_met is False

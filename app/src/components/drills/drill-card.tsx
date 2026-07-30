@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useUpdateDrill } from '@/lib/learning';
+import { EvidenceCapture } from '@/components/evidence/evidence-capture';
 import { RepCounter } from '@/components/progress/rep-counter';
 import type { DrillOut } from '@/types/api';
 
@@ -12,9 +13,11 @@ const TRACK_LABELS: Record<string, string> = {
 };
 
 /**
- * One drill: the ✋ hand-marking / 🛠 tool-assisted variant marks + a rep
- * counter, mark-complete → PATCH /api/drills. Hand-marking first, tools second
- * (concepts/mastery/README) — the ✋ toggle leads.
+ * One drill: the ✋ hand-marking / 🛠 tool-assisted variant marks, the rep count,
+ * and — since Phase E2 — the CAPTURE that creates a rep. The ✋/🛠 toggles still
+ * PATCH /api/drills (they are descriptive and gate nothing); the rep counter is
+ * read-only, because a rep now means "there is evidence of this work".
+ * Hand-marking first, tools second (concepts/mastery/README) — the ✋ toggle leads.
  */
 export function DrillCard({ drill }: { drill: DrillOut }) {
   const update = useUpdateDrill();
@@ -24,13 +27,6 @@ export function DrillCard({ drill }: { drill: DrillOut }) {
       drill_ref: drill.drill_ref,
       [variant === 'hand' ? 'hand_done' : 'tool_done']:
         variant === 'hand' ? !drill.hand_done : !drill.tool_done,
-      last_practiced: new Date().toISOString().slice(0, 10),
-    });
-
-  const setReps = (reps: number) =>
-    update.mutate({
-      drill_ref: drill.drill_ref,
-      reps,
       last_practiced: new Date().toISOString().slice(0, 10),
     });
 
@@ -75,7 +71,18 @@ export function DrillCard({ drill }: { drill: DrillOut }) {
           </Button>
         </div>
 
-        <RepCounter reps={drill.reps} target={drill.rep_target_count} onChange={setReps} />
+        <RepCounter
+          reps={drill.reps}
+          target={drill.rep_target_count}
+          evidenced={drill.reps_evidenced}
+          legacy={drill.reps_legacy}
+        />
+
+        <EvidenceCapture
+          subject={{ subject_type: 'drill', drill_ref: drill.drill_ref }}
+          label="Evidence of the work"
+          hint="A capture of your markings for this drill — this is what makes a rep count."
+        />
 
         {drill.concept_slugs && drill.concept_slugs.length > 0 && (
           <div className="flex flex-wrap items-center gap-1.5 text-xs">

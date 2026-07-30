@@ -8,7 +8,8 @@ the expectancy dashboard (and the future 5g gate) compare them.
 
 Numeric price / R fields are typed `float` for clean JSON; the DB stores them as
 NUMERIC. Expectancy is computed in R (`r_multiple` / `rr_planned` / `risk_pct`),
-never dollars — there is no `position_size` (deferred in 5c).
+never dollars: `position_size` (added in 6c) is RECORD-KEEPING ONLY and is read by
+no expectancy, analytics or gate computation.
 """
 
 import uuid
@@ -58,6 +59,7 @@ class JournalEntryIn(BaseModel):
     target_price: float | None = None
     rr_planned: float | None = None
     risk_pct: float | None = None
+    position_size: float | None = None  # contracts/lots — record-keeping only (6c)
     exit_price: float | None = None
     r_multiple: float | None = None  # realized R — the core expectancy input
     outcome: Outcome | None = None
@@ -97,6 +99,7 @@ class JournalEntryUpdate(BaseModel):
     target_price: float | None = None
     rr_planned: float | None = None
     risk_pct: float | None = None
+    position_size: float | None = None  # contracts/lots — record-keeping only (6c)
     exit_price: float | None = None
     r_multiple: float | None = None
     outcome: Outcome | None = None
@@ -135,6 +138,7 @@ class JournalEntryOut(BaseModel):
     target_price: float | None = None
     rr_planned: float | None = None
     risk_pct: float | None = None
+    position_size: float | None = None  # contracts/lots — record-keeping only (6c)
     exit_price: float | None = None
     r_multiple: float | None = None
     outcome: Outcome | None = None

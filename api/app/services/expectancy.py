@@ -22,7 +22,12 @@ which the unit tests assert both ways. Only CLOSED trades (a non-null
 `r_multiple`) enter the sample.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+
+# The `entry_model` label of the POOLED group (Phase 6a). A stage exit bar is not
+# per-model (unlike the gate), so `compute_pooled` reports one group across all
+# models; the sentinel is not an `entry_model` enum label and never collides.
+POOLED = "__all__"
 
 # Reference sample size — the design Readiness Gate wants ≥50 backtested setups
 # per model (concepts/mastery/README §Gate). Surfaced so an under-evidenced model
@@ -142,6 +147,22 @@ def compute_groups(trades: list[TradeR], sample_target: int = SAMPLE_TARGET) -> 
             sample_met=len(closed) >= sample_target,
         ))
     return out
+
+
+def compute_pooled(
+    trades: list[TradeR], mode: str, sample_target: int = SAMPLE_TARGET
+) -> Group | None:
+    """One POOLED `Group` across every model for `mode` — the stage-level view of
+    the same evidence (Phase 6a: services/stages.py grades A4/M7/U4 on it).
+
+    Deliberately implemented by DELEGATING to `compute_groups` over a re-labelled
+    copy, so the sample / win-rate / expectancy / break-even math is literally the
+    same code path (no second implementation to drift). Returns None when the mode
+    has no entries at all. Backtest and live are never conflated: one mode per call.
+    """
+    relabelled = [replace(t, entry_model=POOLED) for t in trades if t.mode == mode]
+    groups = compute_groups(relabelled, sample_target)
+    return groups[0] if groups else None
 
 
 def compute_mode_summaries(trades: list[TradeR]) -> list[ModeStats]:

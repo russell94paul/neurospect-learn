@@ -3,9 +3,10 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Loader2, Trash2 } from 'lucide-react';
 import { useCreateEntry, useDeleteEntry, useJournalEntry, useUpdateEntry } from '@/lib/journal';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { JournalForm } from '@/components/journal/journal-form';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { EvidenceCapture } from '@/components/evidence/evidence-capture';
 import type { JournalEntryIn } from '@/types/api';
 
 /** /journal/new (create) + /journal/:id (edit) — one form, both flows.
@@ -96,6 +97,27 @@ export function JournalEntryPage() {
         saveError={saveError}
         submitLabel={editing ? 'Save changes' : 'Create entry'}
       />
+
+      {/* Screenshots were deferred at 5c because they are the SAME primitive
+          verified drill grading needs. Phase E2 built that one evidence layer,
+          so the journal attaches to it here — no second table, no duplication.
+          Only available once the entry exists (evidence needs something to
+          attach to). Journal evidence is a record, not a rep. */}
+      {editing && id && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Screenshots</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <EvidenceCapture
+              subject={{ subject_type: 'journal_entry', journal_entry_id: id }}
+              label="Charts for this trade"
+              hint="Entry, management and exit captures. These are a record — they do not count reps."
+              showRepsClaimed={false}
+            />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

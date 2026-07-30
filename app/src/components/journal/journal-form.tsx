@@ -56,7 +56,8 @@ const schema = z.object({
   entry_pda: z.string(),
   // Execution / risk
   entry_price: numStr, stop_price: numStr, target_price: numStr,
-  rr_planned: numStr, risk_pct: numStr, exit_price: numStr, r_multiple: numStr,
+  rr_planned: numStr, risk_pct: numStr, position_size: numStr,
+  exit_price: numStr, r_multiple: numStr,
   outcome: z.string().optional(),
   mae: numStr, mfe: numStr,
   // Review
@@ -86,7 +87,8 @@ function toDefaults(d?: JournalEntry): FormValues {
     time_window_valid: d?.time_window_valid ?? false,
     entry_pda: d?.entry_pda ?? 'fvg',
     entry_price: s(d?.entry_price), stop_price: s(d?.stop_price), target_price: s(d?.target_price),
-    rr_planned: s(d?.rr_planned), risk_pct: s(d?.risk_pct), exit_price: s(d?.exit_price),
+    rr_planned: s(d?.rr_planned), risk_pct: s(d?.risk_pct), position_size: s(d?.position_size),
+    exit_price: s(d?.exit_price),
     r_multiple: s(d?.r_multiple), mae: s(d?.mae), mfe: s(d?.mfe),
     outcome: e(d?.outcome),
     plan_followed: d?.plan_followed ?? true,
@@ -146,7 +148,8 @@ export function JournalForm({
       time_window_valid: !!v.time_window_valid,
       entry_pda: (v.entry_pda || 'fvg') as JournalEntryIn['entry_pda'],
       entry_price: num(v.entry_price), stop_price: num(v.stop_price), target_price: num(v.target_price),
-      rr_planned: num(v.rr_planned), risk_pct: num(v.risk_pct), exit_price: num(v.exit_price),
+      rr_planned: num(v.rr_planned), risk_pct: num(v.risk_pct),
+      position_size: num(v.position_size), exit_price: num(v.exit_price),
       r_multiple: num(v.r_multiple), mae: num(v.mae), mfe: num(v.mfe),
       outcome: enumOrNull(v.outcome) as JournalEntryIn['outcome'],
       confluence_tags: confluenceTags.length ? confluenceTags : null,
@@ -245,6 +248,12 @@ export function JournalForm({
             <NumField label="Target price" reg={register('target_price')} err={errors.target_price?.message} />
             <NumField label="Planned R:R" reg={register('rr_planned')} err={errors.rr_planned?.message} />
             <NumField label="Risk %" reg={register('risk_pct')} err={errors.risk_pct?.message} />
+            <NumField
+              label="Position size"
+              reg={register('position_size')}
+              err={errors.position_size?.message}
+              note="contracts/lots — record only"
+            />
             <NumField label="Exit price" reg={register('exit_price')} err={errors.exit_price?.message} />
             <NumField label="Realized R" reg={register('r_multiple')} err={errors.r_multiple?.message} />
             <NumField label="MAE" reg={register('mae')} err={errors.mae?.message} />
@@ -306,11 +315,12 @@ function Field({ label, error, children }: { label: string; error?: string; chil
   );
 }
 
-function NumField({ label, reg, err }: { label: string; reg: ReturnType<ReturnType<typeof useForm>['register']>; err?: string }) {
+function NumField({ label, reg, err, note }: { label: string; reg: ReturnType<ReturnType<typeof useForm>['register']>; err?: string; note?: string }) {
   return (
     <div className="space-y-1.5">
       <Label>{label}</Label>
       <Input type="number" step="any" inputMode="decimal" className="tabular-nums" aria-label={label} {...reg} />
+      {note && <p className="text-xs text-muted-foreground">{note}</p>}
       {err && <p className="text-xs text-destructive">{err}</p>}
     </div>
   );
