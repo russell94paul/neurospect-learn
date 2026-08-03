@@ -689,3 +689,45 @@ export interface EvidenceSubjectRef {
   journal_entry_id?: string;
   missed_trade_id?: string;
 }
+
+// ============================================================
+// Rubric layer (Phase E3) — the drill's own bar, projected from the wiki
+// ============================================================
+
+/** ✋ hand-marking · 🛠 tool-assisted · `either` = the wiki bullet carries no
+ * glyph (a computation, a written artifact, a procedure) — not a fallback. */
+export type RubricVariant = 'hand' | 'tool' | 'either';
+
+/** One checkable assertion. `text` is VERBATIM wiki markdown — no rubric text is
+ * authored in the app, so the UI renders it rather than restating it. */
+export interface RubricItem {
+  item_key: string;
+  ordinal: number;
+  bullet_ordinal: number;
+  variant: RubricVariant;
+  text: string;
+  rule_refs: string[] | null;
+}
+
+export interface Rubric {
+  id: string;
+  slug: string;
+  drill_ref: string;
+  track: string;
+  /** Bumps when the projected wiki text changes, so a historical grade's
+   * `rubric_version` names the exact bar it was judged against. */
+  version: number;
+  source_path: string;
+  source_ref: string | null;
+  items: RubricItem[];
+}
+
+/** One row of a `self_check` grade's `findings` — the whole bar plus what was
+ * ticked, stored with the item text so the grade stays legible after a re-seed. */
+export interface SelfCheckFinding {
+  item_key: string;
+  ordinal: number;
+  variant: RubricVariant;
+  text: string;
+  checked: boolean;
+}

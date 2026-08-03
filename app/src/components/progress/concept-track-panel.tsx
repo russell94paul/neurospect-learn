@@ -123,6 +123,8 @@ export function ConceptTrackPanel({ row }: { row: ProgressRow }) {
           subject={{ subject_type: 'concept', concept_id: row.concept_id }}
           label="Evidence of the work"
           hint="A capture of your markings for this concept — this is what makes a rep count."
+          // A concept's bar is the union of the bars of the drills that advance it.
+          rubricDrillRefs={row.drill_refs}
         />
       </div>
 

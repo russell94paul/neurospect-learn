@@ -9,6 +9,8 @@ import {
   useEvidence,
   useUploadEvidence,
 } from '@/lib/evidence';
+import { ungradedCount, useRubrics } from '@/lib/rubrics';
+import { SelfCheck } from '@/components/evidence/self-check';
 import type { EvidenceKind, EvidenceSubjectRef } from '@/types/api';
 
 /**
@@ -29,6 +31,7 @@ export function EvidenceCapture({
   label = 'Evidence',
   hint,
   showRepsClaimed = true,
+  rubricDrillRefs,
   className,
 }: {
   subject: EvidenceSubjectRef;
@@ -37,11 +40,21 @@ export function EvidenceCapture({
   hint?: string;
   /** Drill/concept evidence counts reps; journal + missed-trade evidence does not. */
   showRepsClaimed?: boolean;
+  /** For a CONCEPT subject: the drills that advance it (`ProgressRow.drill_refs`),
+   * whose bars become this concept's bar. Ignored for a drill subject, which
+   * resolves its own. */
+  rubricDrillRefs?: string[] | null;
   className?: string;
 }) {
   const list = useEvidence(subject);
   const upload = useUploadEvidence();
   const remove = useDeleteEvidence();
+  // E3: the drill's own bar, sliced from the once-per-session rubric catalog.
+  // Empty for journal / missed-trade subjects (no bar exists), and for the handful
+  // of drills the wiki writes as a paragraph plus a table rather than ✋/🛠
+  // bullets — in both cases the self-check simply does not render, rather than
+  // showing an invented criterion.
+  const bars = useRubrics(subject, rubricDrillRefs);
   const zoneRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
@@ -71,6 +84,16 @@ export function EvidenceCapture({
   const assets = list.data ?? [];
   const evidencedReps = assets.reduce((n, a) => n + a.reps_claimed, 0);
   const rejection = upload.isError ? (upload.error as Error).message : null;
+  // The honest backlog (E3). Shown as work OWED, never subtracted from the count:
+  // an unchecked capture's reps already count and a self-check cannot retract
+  // them, since `reps` feeds the stage bars and the Gate and must stay monotonic.
+  const unchecked = bars.length > 0 ? ungradedCount(assets) : 0;
+  const deterministicFlags = assets
+    .flatMap((a) => a.grades)
+    .filter((g) => g.grader === 'deterministic' && g.state === 'flagged')
+    .flatMap((g) => (Array.isArray(g.findings) ? g.findings : []))
+    .map((f) => (f as { message?: string }).message)
+    .filter((m): m is string => !!m);
 
   return (
     <div className={cn('space-y-2', className)} data-testid="evidence-capture">
@@ -81,6 +104,12 @@ export function EvidenceCapture({
             <span data-testid="evidence-count">
               {' '}
               · {assets.length} captured{showRepsClaimed ? ` · ${evidencedReps} reps` : ''}
+              {unchecked > 0 && (
+                <span className="text-amber-600 dark:text-amber-500" data-testid="evidence-unchecked">
+                  {' '}
+                  · {unchecked} awaiting your check
+                </span>
+              )}
             </span>
           )}
         </span>
@@ -178,40 +207,57 @@ export function EvidenceCapture({
         </p>
       )}
 
+      {/* When a bar exists (drill / concept evidence) each capture gets its own
+          ROW so the self-check can sit beside it; without one — journal and
+          missed-trade evidence — the thumbnails stay a compact wrapped grid. */}
       {assets.length > 0 && (
-        <ul className="flex flex-wrap gap-2">
+        <ul className={cn(bars.length > 0 ? 'space-y-2' : 'flex flex-wrap gap-2')}>
           {assets.map((asset) => {
-            const flagged = asset.grades.some((g) => g.state === 'flagged');
+            // A `flagged` DETERMINISTIC grade is a near-duplicate warning; a
+            // flagged self_check is an honest partial. Only the former belongs on
+            // the thumbnail's border — SelfCheck renders its own state.
+            const flagged = asset.grades.some(
+              (g) => g.grader === 'deterministic' && g.state === 'flagged'
+            );
             return (
-              <li key={asset.id} className="group relative" data-testid="evidence-thumb">
-                <img
-                  src={evidenceSrc(asset.url)}
-                  alt={asset.original_filename ?? 'Captured evidence'}
-                  className={cn(
-                    'h-16 w-24 rounded border object-cover',
-                    flagged && 'border-amber-500'
+              <li
+                key={asset.id}
+                className={cn(bars.length > 0 && 'flex items-start gap-2.5')}
+                data-testid="evidence-thumb"
+              >
+                <div className="group relative shrink-0">
+                  <img
+                    src={evidenceSrc(asset.url)}
+                    alt={asset.original_filename ?? 'Captured evidence'}
+                    className={cn(
+                      'h-16 w-24 rounded border object-cover',
+                      flagged && 'border-amber-500'
+                    )}
+                  />
+                  {/* Only drill/concept evidence counts reps — labelling a journal
+                      screenshot "1 rep" contradicts the panel's own hint. */}
+                  {showRepsClaimed && (
+                    <span className="absolute bottom-0 left-0 rounded-tr bg-background/85 px-1 text-[10px] tabular-nums">
+                      {asset.reps_claimed} rep{asset.reps_claimed === 1 ? '' : 's'}
+                    </span>
                   )}
-                />
-                {/* Only drill/concept evidence counts reps — labelling a journal
-                    screenshot "1 rep" contradicts the panel's own hint. */}
-                {showRepsClaimed && (
-                  <span className="absolute bottom-0 left-0 rounded-tr bg-background/85 px-1 text-[10px] tabular-nums">
-                    {asset.reps_claimed} rep{asset.reps_claimed === 1 ? '' : 's'}
-                  </span>
-                )}
-                <button
-                  type="button"
-                  aria-label="Remove this evidence"
-                  data-testid="evidence-delete"
-                  onClick={() => remove.mutate(asset.id)}
-                  className="absolute right-0 top-0 rounded-bl bg-background/85 p-0.5 opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100"
-                >
-                  <Trash2 className="h-3 w-3 text-destructive" />
-                </button>
-                {flagged && (
-                  <span className="absolute right-0 bottom-0 rounded-tl bg-background/85 px-1 text-[10px] text-amber-600 dark:text-amber-500">
-                    flagged
-                  </span>
+                  <button
+                    type="button"
+                    aria-label="Remove this evidence"
+                    data-testid="evidence-delete"
+                    onClick={() => remove.mutate(asset.id)}
+                    className="absolute right-0 top-0 rounded-bl bg-background/85 p-0.5 opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100"
+                  >
+                    <Trash2 className="h-3 w-3 text-destructive" />
+                  </button>
+                  {flagged && (
+                    <span className="absolute right-0 bottom-0 rounded-tl bg-background/85 px-1 text-[10px] text-amber-600 dark:text-amber-500">
+                      flagged
+                    </span>
+                  )}
+                </div>
+                {bars.length > 0 && (
+                  <SelfCheck asset={asset} rubrics={bars} className="min-w-0 flex-1" />
                 )}
               </li>
             );
@@ -219,16 +265,13 @@ export function EvidenceCapture({
         </ul>
       )}
 
-      {/* Flags are SURFACED, never a refusal. */}
-      {assets.some((a) => a.grades.some((g) => g.state === 'flagged')) && (
+      {/* Flags are SURFACED, never a refusal. DETERMINISTIC flags only: since E3 a
+          partial self-check is also `flagged`, and its findings are rubric items
+          rather than a `message`, so including it here rendered an EMPTY amber
+          strip. SelfCheck states its own verdict. */}
+      {deterministicFlags.length > 0 && (
         <p className="text-xs text-amber-600 dark:text-amber-500" data-testid="evidence-flag">
-          {assets
-            .flatMap((a) => a.grades)
-            .filter((g) => g.state === 'flagged')
-            .flatMap((g) => (Array.isArray(g.findings) ? g.findings : []))
-            .map((f) => (f as { message?: string }).message)
-            .filter(Boolean)
-            .join(' ')}
+          {deterministicFlags.join(' ')}
         </p>
       )}
     </div>

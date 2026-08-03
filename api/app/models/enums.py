@@ -197,6 +197,23 @@ class EvidenceKind(str, Enum):
     TAPE_READ = "tape_read"             # a narrated live/delayed session read
 
 
+class RubricVariant(str, Enum):
+    """Which drill variant a rubric item belongs to, tagged by the WIKI'S OWN
+    glyph (Phase E3): ✋ hand-marking (do first — trains the eye) · 🛠
+    tool-assisted (for speed once the eye is trained).
+
+    `either` is NOT a default-when-unsure. It records that the source bullet
+    carries no glyph at all, which is how both libraries write items that are
+    neither — a computation (aura D2-a's Pearson correlation), a written artifact
+    (the Stage-0 drills), or a procedure. Recording the absence faithfully beats
+    inventing a variant the wiki never claimed.
+    """
+
+    HAND = "hand"
+    TOOL = "tool"
+    EITHER = "either"
+
+
 class EvidenceGrader(str, Enum):
     """Which of the three tiers produced a grade. Only `deterministic` BLOCKS;
     it is also the only tier E2 builds (`self_check` = E3, `ai_vision` = E4)."""

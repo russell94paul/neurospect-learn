@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api, API_BASE_URL, apiErrorDetail } from '@/lib/api';
 import { learningKeys } from '@/lib/learning';
@@ -15,33 +16,58 @@ import type { EvidenceAsset, EvidenceKind, EvidenceSubjectRef } from '@/types/ap
 
 export const evidenceKeys = {
   all: ['evidence'] as const,
-  list: (subject?: EvidenceSubjectRef) =>
-    [...evidenceKeys.all, 'list', subject ?? {}] as const,
+  /** ONE key for all of this user's evidence — see `useEvidenceCatalog`. */
+  catalog: () => [...evidenceKeys.all, 'catalog'] as const,
   detail: (id: string) => [...evidenceKeys.all, 'detail', id] as const,
 };
 
-function subjectParams(subject?: EvidenceSubjectRef): Record<string, string> | undefined {
-  if (!subject) return undefined;
-  const sp: Record<string, string> = { subject_type: subject.subject_type };
-  if (subject.drill_ref) sp.drill_ref = subject.drill_ref;
-  if (subject.concept_id) sp.concept_id = subject.concept_id;
-  if (subject.journal_entry_id) sp.journal_entry_id = subject.journal_entry_id;
-  if (subject.missed_trade_id) sp.missed_trade_id = subject.missed_trade_id;
-  return sp;
+/** Does this asset belong to that subject? Mirrors the server-side filters. */
+function matchesSubject(asset: EvidenceAsset, subject: EvidenceSubjectRef): boolean {
+  if (asset.subject_type !== subject.subject_type) return false;
+  if (subject.drill_ref) return asset.subject_drill_ref === subject.drill_ref;
+  if (subject.concept_id) return asset.concept_id === subject.concept_id;
+  if (subject.journal_entry_id) return asset.journal_entry_id === subject.journal_entry_id;
+  if (subject.missed_trade_id) return asset.missed_trade_id === subject.missed_trade_id;
+  return false;
 }
 
 // ============================================================
 // Queries
 // ============================================================
 
-export function useEvidence(subject?: EvidenceSubjectRef) {
-  const sp = subjectParams(subject);
+/**
+ * ALL of this user's evidence, fetched once.
+ *
+ * `/drills` mounts an `EvidenceCapture` per drill — 58 of them — and a
+ * per-subject query key meant 58 near-identical `GET /api/evidence` calls on one
+ * page load. That saturated the browser's 6-connection-per-origin limit, queued
+ * the user's own upload behind the pile, and reset connections at the dev server
+ * under load. A single shared key dedupes every caller into ONE request.
+ *
+ * A user's evidence set is small and every consumer needs only its own slice, so
+ * filtering client-side is strictly cheaper than slicing server-side. The
+ * `subject_type` / `drill_ref` / … filters on `GET /api/evidence` are unchanged
+ * and still used by tests and any single-subject caller.
+ */
+export function useEvidenceCatalog() {
   return useQuery({
-    queryKey: evidenceKeys.list(subject),
-    queryFn: () =>
-      api.get('api/evidence', sp ? { searchParams: sp } : undefined).json<EvidenceAsset[]>(),
-    enabled: !!subject,
+    queryKey: evidenceKeys.catalog(),
+    queryFn: () => api.get('api/evidence').json<EvidenceAsset[]>(),
   });
+}
+
+export function useEvidence(subject?: EvidenceSubjectRef) {
+  const query = useEvidenceCatalog();
+  const all = query.data;
+  // Keyed on the subject's identity rather than the object, which callers rebuild
+  // inline on every render.
+  const key = subject ? JSON.stringify(subject) : '';
+  const data = useMemo(
+    () => (subject && all ? all.filter((a) => matchesSubject(a, subject)) : undefined),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [all, key]
+  );
+  return { ...query, data };
 }
 
 // ============================================================

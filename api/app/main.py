@@ -14,6 +14,7 @@ from app.routers.journal import router as journal_router
 from app.routers.learning import router as learning_router
 from app.routers.missed_trades import router as missed_trades_router
 from app.routers.planner import router as planner_router
+from app.routers.rubrics import router as rubrics_router
 
 
 @asynccontextmanager
@@ -51,8 +52,13 @@ app.include_router(auth_router)
 # Content API (course corpus — ingested wiki markdown)
 app.include_router(content_router)
 
-# Evidence API (E2 — captured evidence of the work; the ONLY way a rep is minted)
+# Evidence API (E2 — captured evidence of the work; the ONLY way a rep is minted.
+# Also owns E3's self-check, since that appends an `evidence_grades` row)
 app.include_router(evidence_router)
+
+# Rubric API (E3 — the drill's own bar, PROJECTED from the wiki; READ-ONLY, so no
+# rubric text can ever be authored in the app)
+app.include_router(rubrics_router)
 
 # Learning API (progress, derived stage exit-bars, drills)
 app.include_router(learning_router)

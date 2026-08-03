@@ -20,6 +20,7 @@ import app.models.gate_attestation  # noqa: F401
 import app.models.journal_entry  # noqa: F401
 import app.models.missed_trade  # noqa: F401
 import app.models.plan_item  # noqa: F401
+import app.models.rubric  # noqa: F401
 import app.models.study_preferences  # noqa: F401
 import app.models.track_stage  # noqa: F401
 from app.config import settings as app_settings

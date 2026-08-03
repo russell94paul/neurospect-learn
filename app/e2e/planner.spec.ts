@@ -37,7 +37,13 @@ test('setup form saves prefs → Today renders a prescriptive ordered plan', asy
   await page.goto('/plan/setup');
   await expect(page.getByRole('heading', { name: /Availability/ })).toBeVisible();
 
-  // Defaults are pre-filled (aura track, weekday minutes) — just save.
+  // Defaults are pre-filled, but they are WEEKDAY minutes — the form ships
+  // `sun_minutes: 0` ("0 = a day off"). A plan for a zero-capacity day is
+  // correctly EMPTY, so relying on the defaults made this spec fail every Sunday.
+  // Give TODAY explicit capacity so the assertion below is date-independent.
+  const todayKey = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][new Date().getDay()];
+  await page.locator(`#${todayKey}_minutes`).fill('45');
+
   await page.getByRole('button', { name: 'Save & generate plan' }).click();
 
   // Lands on Today with an ordered, non-empty plan.

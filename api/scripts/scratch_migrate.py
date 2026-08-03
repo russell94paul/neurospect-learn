@@ -65,16 +65,30 @@ def _drop(maintenance_url: str) -> None:
     eng.dispose()
 
 
-# Objects `0009` must create on the way up and remove on the way down.
-_TABLES = ("evidence_assets", "evidence_grades")
-_TYPES = ("evidence_subject", "evidence_kind", "evidence_grader", "evidence_grade_state")
-_INDEXES = (
-    "ux_evidence_assets_user_sha256", "ix_evidence_assets_user_drill",
-    "ix_evidence_assets_user_concept", "ix_evidence_assets_user_journal",
-    "ix_evidence_assets_user_missed", "ix_evidence_assets_user_phash",
-    "ix_evidence_grades_evidence", "ix_evidence_grades_user_state",
-)
-_TRIGGERS = ("trg_evidence_assets_updated_at", "trg_evidence_grades_updated_at")
+# Objects each migration must create on the way up and remove on the way down,
+# kept as SEPARATE groups so a single-step reversibility test can assert that
+# `downgrade 0009` removes E3's objects and leaves E2's ALONE — a stricter proof
+# than only checking the full teardown to 0008.
+_E2 = {
+    "tables": ("evidence_assets", "evidence_grades"),
+    "types": ("evidence_subject", "evidence_kind", "evidence_grader", "evidence_grade_state"),
+    "indexes": (
+        "ux_evidence_assets_user_sha256", "ix_evidence_assets_user_drill",
+        "ix_evidence_assets_user_concept", "ix_evidence_assets_user_journal",
+        "ix_evidence_assets_user_missed", "ix_evidence_assets_user_phash",
+        "ix_evidence_grades_evidence", "ix_evidence_grades_user_state",
+    ),
+    "triggers": ("trg_evidence_assets_updated_at", "trg_evidence_grades_updated_at"),
+}
+_E3 = {
+    "tables": ("rubrics", "rubric_items"),
+    "types": ("rubric_variant",),
+    "indexes": (
+        "ux_rubrics_slug", "ux_rubrics_drill_ref", "ix_rubrics_track",
+        "ux_rubric_items_key", "ux_rubric_items_rubric_ordinal",
+    ),
+    "triggers": ("trg_rubrics_updated_at", "trg_rubric_items_updated_at"),
+}
 
 
 def _inspect(url: str) -> dict:
@@ -98,26 +112,31 @@ def _inspect(url: str) -> dict:
     return out
 
 
-def _report(label: str, st: dict, *, present: bool) -> bool:
+def _objects(label: str, st: dict, group: dict, *, present: bool, tag: str) -> bool:
+    """Assert every object in one migration's group is present (or absent)."""
     ok = True
-    for name, key in (
-        (_TABLES, "tables"), (_TYPES, "types"), (_INDEXES, "indexes"), (_TRIGGERS, "triggers")
-    ):
-        for obj in name:
-            has = obj in st[key]
-            if has is not present:
+    for key in ("tables", "types", "indexes", "triggers"):
+        for obj in group[key]:
+            if (obj in st[key]) is not present:
                 print(f"  ✗ {label}: {obj} {'missing' if present else 'still present'}")
                 ok = False
-    reps_col = "legacy_reps" if present else "reps"
-    other = "reps" if present else "legacy_reps"
+    print(f"  {'✓' if ok else '✗'} {label}: {tag} "
+          f"{len(group['tables'])} tables · {len(group['types'])} enums · "
+          f"{len(group['indexes'])} indexes · {len(group['triggers'])} triggers "
+          f"{'present' if present else 'absent'}")
+    return ok
+
+
+def _reps_columns(label: str, st: dict, *, derived: bool) -> bool:
+    """`0009` renames reps → legacy_reps; `0010` must not touch either."""
+    ok = True
+    reps_col = "legacy_reps" if derived else "reps"
+    other = "reps" if derived else "legacy_reps"
     for tbl, key in (("concept_progress", "cp_cols"), ("drill_progress", "dp_cols")):
         if reps_col not in st[key] or other in st[key]:
             print(f"  ✗ {label}: {tbl} should have {reps_col} and not {other} — got {sorted(st[key])}")
             ok = False
-    print(f"  {'✓' if ok else '✗'} {label}: "
-          f"{len(_TABLES)} tables · {len(_TYPES)} enums · {len(_INDEXES)} indexes · "
-          f"{len(_TRIGGERS)} triggers {'present' if present else 'absent'}; "
-          f"progress tables carry `{reps_col}`")
+    print(f"  {'✓' if ok else '✗'} {label}: progress tables carry `{reps_col}`")
     return ok
 
 
@@ -132,17 +151,40 @@ def main() -> int:
     cfg = _alembic(scratch_url)
     ok = True
     try:
-        print("→ upgrade head (0001 → 0009)")
+        print("→ upgrade head (0001 → 0010)")
         command.upgrade(cfg, "head")
-        ok &= _report("after upgrade head", _inspect(scratch_url), present=True)
+        st = _inspect(scratch_url)
+        ok &= _objects("after upgrade head", st, _E2, present=True, tag="E2")
+        ok &= _objects("after upgrade head", st, _E3, present=True, tag="E3")
+        ok &= _reps_columns("after upgrade head", st, derived=True)
 
-        print("→ downgrade 0008")
+        # SINGLE-STEP reversibility of the migration under test: 0010 must remove
+        # exactly its own objects and leave 0009's evidence layer untouched.
+        print("→ downgrade 0009 (0010 only)")
+        command.downgrade(cfg, "0009")
+        st = _inspect(scratch_url)
+        ok &= _objects("after downgrade 0009", st, _E3, present=False, tag="E3")
+        ok &= _objects("after downgrade 0009", st, _E2, present=True, tag="E2 untouched")
+        ok &= _reps_columns("after downgrade 0009", st, derived=True)
+
+        print("→ upgrade head again (0010 re-applies)")
+        command.upgrade(cfg, "head")
+        st = _inspect(scratch_url)
+        ok &= _objects("after re-upgrade", st, _E3, present=True, tag="E3")
+
+        print("→ downgrade 0008 (0010 + 0009)")
         command.downgrade(cfg, "0008")
-        ok &= _report("after downgrade 0008", _inspect(scratch_url), present=False)
+        st = _inspect(scratch_url)
+        ok &= _objects("after downgrade 0008", st, _E2, present=False, tag="E2")
+        ok &= _objects("after downgrade 0008", st, _E3, present=False, tag="E3")
+        ok &= _reps_columns("after downgrade 0008", st, derived=False)
 
         print("→ upgrade head again")
         command.upgrade(cfg, "head")
-        ok &= _report("after re-upgrade", _inspect(scratch_url), present=True)
+        st = _inspect(scratch_url)
+        ok &= _objects("after re-upgrade", st, _E2, present=True, tag="E2")
+        ok &= _objects("after re-upgrade", st, _E3, present=True, tag="E3")
+        ok &= _reps_columns("after re-upgrade", st, derived=True)
 
         print("→ downgrade base (full teardown)")
         command.downgrade(cfg, "base")
