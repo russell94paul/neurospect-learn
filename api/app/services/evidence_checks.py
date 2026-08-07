@@ -19,6 +19,16 @@ import hashlib
 from dataclasses import dataclass, field
 from io import BytesIO
 
+# Imported at MODULE level, not inside `perceptual_hash`. Both are hard
+# dependencies (pyproject: pillow, imagehash), so there is nothing to guard —
+# and a function-level import made the FIRST upload of every server process pay
+# the whole PIL+imagehash import ON THE EVENT LOOP: measured 540 ms warm and
+# 8.3 s cold, against ~4 ms for the hash itself. That stall serves nothing else,
+# and a saturated accept backlog is answered by Windows with an RST, which
+# reaches a client as ECONNRESET. Paid at startup now, before serving begins.
+import imagehash
+from PIL import Image
+
 # Magic-byte signatures. The client's `content_type` header is NEVER trusted:
 # it is trivially forged and is not evidence of anything.
 _SIGNATURES: tuple[tuple[bytes, str], ...] = (
@@ -99,9 +109,6 @@ def perceptual_hash(data: bytes) -> str | None:
     would be exactly the false negative the north star warns about.
     """
     try:
-        import imagehash
-        from PIL import Image
-
         with Image.open(BytesIO(data)) as img:
             return str(imagehash.phash(img.convert("RGB")))
     except Exception:

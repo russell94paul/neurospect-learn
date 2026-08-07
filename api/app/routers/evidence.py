@@ -30,6 +30,7 @@ from fastapi import UploadFile
 from fastapi.responses import Response as RawResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.concurrency import run_in_threadpool
 
 from app.config import settings
 from app.deps import get_current_user, get_db
@@ -266,7 +267,12 @@ async def create_evidence(
             )
         )
     ).all()
-    verdict = evidence_checks.check(
+    # OFF THE EVENT LOOP: `check` is CPU-bound (sha256 + a PIL decode + the pHash
+    # DCT). Run inline in an `async def` it stalls every other request for the
+    # duration — and on Windows a saturated accept backlog is answered with an
+    # RST, which reaches the client as ECONNRESET rather than a retryable drop.
+    verdict = await run_in_threadpool(
+        evidence_checks.check,
         data,
         max_bytes=settings.evidence_max_bytes,
         min_bytes=settings.evidence_min_bytes,
@@ -290,7 +296,11 @@ async def create_evidence(
     key = storage_service.storage_key(
         current_user.id, subject_type.value, subject_segment, ext
     )
-    storage_service.storage.upload_bytes(key, data, verdict.content_type)
+    # Also off the loop: both backends block — the local one on Path.write_bytes,
+    # the R2 one on a synchronous boto3 PUT over the network.
+    await run_in_threadpool(
+        storage_service.storage.upload_bytes, key, data, verdict.content_type
+    )
 
     asset = EvidenceAsset(
         user_id=current_user.id,
