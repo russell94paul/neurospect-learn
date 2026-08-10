@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api, API_BASE_URL, apiErrorDetail } from '@/lib/api';
+import { hasPendingAiGrade } from '@/lib/ai-grade';
 import { learningKeys } from '@/lib/learning';
 import { plannerKeys } from '@/lib/planner';
 import type { EvidenceAsset, EvidenceKind, EvidenceSubjectRef } from '@/types/api';
@@ -53,6 +54,13 @@ export function useEvidenceCatalog() {
   return useQuery({
     queryKey: evidenceKeys.catalog(),
     queryFn: () => api.get('api/evidence').json<EvidenceAsset[]>(),
+    // E4 — the AI second reader resolves ASYNCHRONOUSLY: the upload returns a
+    // `pending` grade row and a worker fills it in seconds later. Without this
+    // the panel would sit on "looking at this…" until something else happened to
+    // refetch. Polls ONLY while a read is outstanding and stops the moment none
+    // is, so the steady state is still zero background traffic — which matters
+    // on `/drills`, where 58 capture panels share this one query.
+    refetchInterval: (query) => (hasPendingAiGrade(query.state.data) ? 4000 : false),
   });
 }
 

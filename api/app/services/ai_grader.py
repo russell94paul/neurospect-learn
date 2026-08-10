@@ -109,24 +109,39 @@ VERDICT_SCHEMA: dict[str, Any] = {
 
 
 # ---------------------------------------------------------------------------
-# The cached system prefix
+# The system prompt — TWO blocks, and deliberately NOT cached
 # ---------------------------------------------------------------------------
 # DIVERGENCE FROM THE DESIGN, stated plainly: design §2 says "the rubric in a
-# cached system prefix". Putting the RUBRIC in the cached prefix would be wrong,
-# and would silently never cache:
+# cached system prefix". There is no cached prefix here at all, and the reason
+# is a measurement rather than an argument.
 #
-#   1. Caching is a PREFIX match. The rubric changes per drill, so a rubric-first
-#      prefix mints a new cache entry per drill and reads one only when the same
-#      drill is graded twice inside the TTL.
-#   2. Claude Sonnet 5's minimum cacheable prefix is 1024 tokens. A rubric is
-#      4-10 short bullets — far under it — so a breakpoint there caches NOTHING
-#      and reports no error. It just silently doesn't work.
+# The design's own trap, avoided first: caching is a PREFIX match, so putting
+# the per-drill RUBRIC first would mint a fresh entry per drill and read one
+# only when the same drill is graded twice inside the TTL. That much was right,
+# and it is why the stable instructions come first and the rubric second.
 #
-# So the STABLE half (these instructions, identical for every grade in the whole
-# curriculum) carries the breakpoint, and the per-drill rubric goes AFTER it as
-# an uncached block. Every grade then reads the cache, not just repeat visits to
-# one drill. Verified by `scripts/ai_grader_probe.py`, which asserts this block
-# clears 1024 tokens and that cache_read_input_tokens is non-zero on call 2.
+# But the fix does not work either, because the stable half is TOO SHORT:
+#
+#   MEASURED 2026-08-09 (scripts/ai_grader_probe.py, count_tokens against
+#   claude-sonnet-5): SYSTEM_INSTRUCTIONS = 981 tokens. Claude Sonnet 5's
+#   minimum cacheable prefix is 1024. It is 43 tokens SHORT, so a breakpoint
+#   here caches NOTHING and reports no error — the exact silent no-op the
+#   comment above it used to warn about.
+#
+# Withdrawn rather than padded, on the numbers: a cache read would save ~981
+# tokens x $2.70/MTok = ~$0.0027 per grade, or ~$1.35 across the whole ~500-unit
+# curriculum — against a ~2,765-token image that dominates every call. Worse, a
+# cache WRITE costs 1.25x, so at the 5-minute TTL of a single user uploading
+# evidence sporadically, most grades would pay the write premium and never live
+# to be read. Growing the block to 1024+ would mean writing instruction text to
+# satisfy a token threshold rather than to inform the reader, and would leave
+# the prompt permanently hostage to it.
+#
+# The two-block split is KEPT: it documents the stable/volatile boundary, and it
+# is where a breakpoint would go if this ever becomes worth doing. Note the
+# prefix already clears Claude Opus 5's 512-token minimum — so this conclusion
+# is specific to `AI_GRADER_MODEL=claude-sonnet-5`, and re-measuring is the
+# first step if that setting changes.
 
 SYSTEM_INSTRUCTIONS = """\
 You are a SECOND READER for a trading-practice journal. A trader marks up price \
@@ -194,9 +209,12 @@ Return only the structured verdict.\
 # ---------------------------------------------------------------------------
 # Pricing — list rates, so cost telemetry is comparable across time
 # ---------------------------------------------------------------------------
-# USD per million tokens. Cache reads are ~0.1x base input and cache writes
-# ~1.25x (5-minute TTL), which is the whole reason the prefix above is cached —
-# without pricing them separately the telemetry could not show the cache working.
+# USD per million tokens. Cache reads (~0.1x base input) and writes (~1.25x at
+# the 5-minute TTL) are still priced separately even though nothing is cached
+# today: the API reports those counters regardless, pricing them keeps the
+# telemetry correct if caching is ever re-enabled, and a non-zero cache figure
+# appearing in a stored grade is then a visible signal rather than a silent
+# mispricing.
 #
 # NOTE (honest): these are STANDARD list rates. Claude Sonnet 5 carries a lower
 # introductory rate ($2/$10) through 2026-08-31, so real billed spend during that
@@ -332,14 +350,13 @@ async def grade(
                 "format": {"type": "json_schema", "schema": VERDICT_SCHEMA},
             },
             system=[
-                # STABLE half — identical for every grade, so it caches and every
-                # call reads it. The breakpoint goes here, not on the rubric.
-                {
-                    "type": "text",
-                    "text": SYSTEM_INSTRUCTIONS,
-                    "cache_control": {"type": "ephemeral"},
-                },
-                # VOLATILE half — per drill, deliberately after the breakpoint.
+                # STABLE half — identical for every grade in the curriculum.
+                # No `cache_control`: at 981 tokens it is under Sonnet 5's 1024
+                # minimum, so a breakpoint here would cache nothing and say
+                # nothing. See the measurement above before adding one back.
+                {"type": "text", "text": SYSTEM_INSTRUCTIONS},
+                # VOLATILE half — per drill, and second so that it could never
+                # become the prefix.
                 {"type": "text", "text": rubric_block},
             ],
             messages=[

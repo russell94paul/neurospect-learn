@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 import { checkedKeys, latestSelfCheck, useSelfCheck } from '@/lib/rubrics';
+import { RubricText } from '@/components/evidence/rubric-text';
 import type { EvidenceAsset, Rubric, RubricItem } from '@/types/api';
 
 /**
@@ -21,27 +22,6 @@ import type { EvidenceAsset, Rubric, RubricItem } from '@/types/api';
  * specific unticked items, and the unchecked backlog is SURFACED (below) rather
  * than deducted.
  */
-
-/** Render the wiki's markdown emphasis as emphasis — never rewrite the words. */
-function RubricText({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`|\*[^*]+\*)/g).filter(Boolean);
-  return (
-    <>
-      {parts.map((part, i) => {
-        if (part.startsWith('**') && part.endsWith('**'))
-          return <strong key={i}>{part.slice(2, -2)}</strong>;
-        if (part.startsWith('`') && part.endsWith('`'))
-          return (
-            <code key={i} className="rounded bg-muted px-1 font-mono text-[0.9em]">
-              {part.slice(1, -1)}
-            </code>
-          );
-        if (part.startsWith('*') && part.endsWith('*')) return <em key={i}>{part.slice(1, -1)}</em>;
-        return <span key={i}>{part}</span>;
-      })}
-    </>
-  );
-}
 
 function VariantIcon({ variant }: { variant: RubricItem['variant'] }) {
   if (variant === 'hand') return <Hand className="h-3 w-3 shrink-0 text-muted-foreground" aria-label="Hand-marked" />;

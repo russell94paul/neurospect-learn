@@ -1,6 +1,17 @@
 from pathlib import Path
 
+from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# E4 — make `.env` reach consumers that are NOT this settings object.
+# pydantic-settings reads `.env` into `Settings` and stops there; it never
+# populates `os.environ`. The Anthropic SDK resolves its own credential FROM
+# `os.environ`, so an ANTHROPIC_API_KEY written to `api/.env` was invisible to
+# it — the app read the file, the SDK saw nothing, and grading failed with an
+# auth error while the key sat right there. `override=False` keeps a real
+# exported variable winning over the file, matching the SDK's own precedence.
+_API_ROOT = Path(__file__).resolve().parents[1]
+load_dotenv(_API_ROOT / ".env", override=False)
 
 # Repo root = neurospect-learn/ (this file is api/app/config.py → parents[2]).
 # The wiki is checked out as a sibling of the repo by default.
@@ -12,7 +23,16 @@ _DEFAULT_EVIDENCE_ROOT = str(_REPO_ROOT / ".evidence-store")
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    # `extra="ignore"` because `.env` is shared with consumers that are NOT this
+    # settings object. E4 deliberately declares no api-key setting (the Anthropic
+    # SDK resolves ANTHROPIC_API_KEY itself, so a second copy here could only
+    # drift from it) — but pydantic-settings defaults to `extra="forbid"`, which
+    # made putting that key in `.env` crash the app at import: alembic, uvicorn
+    # and pytest all died on `extra_forbidden`. Ignoring unknown keys is what
+    # makes "the SDK owns the credential, the app never sees it" actually work.
+    model_config = SettingsConfigDict(
+        env_file=".env", env_file_encoding="utf-8", extra="ignore"
+    )
 
     # Database
     database_url: str

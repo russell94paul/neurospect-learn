@@ -11,6 +11,7 @@ import {
 } from '@/lib/evidence';
 import { ungradedCount, useRubrics } from '@/lib/rubrics';
 import { SelfCheck } from '@/components/evidence/self-check';
+import { AiReading } from '@/components/evidence/ai-reading';
 import type { EvidenceKind, EvidenceSubjectRef } from '@/types/api';
 
 /**
@@ -257,7 +258,13 @@ export function EvidenceCapture({
                   )}
                 </div>
                 {bars.length > 0 && (
-                  <SelfCheck asset={asset} rubrics={bars} className="min-w-0 flex-1" />
+                  <div className="min-w-0 flex-1 space-y-1.5">
+                    {/* The user's own check FIRST — it is what makes the rep
+                        graded. The advisory read sits UNDER it, quieter, so the
+                        second reader can never be mistaken for the bar. */}
+                    <SelfCheck asset={asset} rubrics={bars} />
+                    <AiReading asset={asset} />
+                  </div>
                 )}
               </li>
             );
