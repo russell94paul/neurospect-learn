@@ -44,7 +44,7 @@ from app.models.rubric import Rubric
 from app.models.user import User
 from app.schemas.evidence import EvidenceGradeOut, EvidenceOut
 from app.schemas.rubric import SelfCheckIn
-from app.services import evidence_checks, storage as storage_service
+from app.services import ai_grade_queue, ai_grader, evidence_checks, storage as storage_service
 
 router = APIRouter(prefix="/api", tags=["evidence"])
 
@@ -330,10 +330,29 @@ async def create_evidence(
         findings=verdict.flags or None,
     )
     db.add(grade)
+
+    # E4 — queue the ADVISORY second reader. Same transaction as the upload, so a
+    # rolled-back capture takes its queue entry with it; resolved later by the
+    # worker, so upload latency is unchanged whatever the Anthropic API is doing.
+    #
+    # Drill subjects only: `_resolve_rubric` needs a `drill_ref`, a concept's bar
+    # is the union of several drills' bars (E3 makes the USER pick which, and the
+    # reader may not pick for them), and journal / missed-trade evidence has no
+    # bar at all. Queueing those would only mint rows that resolve to `ungraded`.
+    queued = None
+    if ai_grader.is_configured() and asset.subject_drill_ref is not None:
+        queued = ai_grade_queue.enqueue_row(asset.id, current_user.id)
+        db.add(queued)
+
     await db.commit()
     await db.refresh(asset)
     await db.refresh(grade)
-    return _out(asset, [grade])
+    if queued is not None:
+        await db.refresh(queued)
+        # Fire-and-forget: the durable `pending` row is what makes the work
+        # survive, so nothing is lost if this task never runs.
+        ai_grade_queue.kick()
+    return _out(asset, [g for g in (grade, queued) if g is not None])
 
 
 # ---------------------------------------------------------------------------

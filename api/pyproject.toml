@@ -23,6 +23,7 @@ python-frontmatter = "^1.1"
 boto3 = "^1.43.58"
 pillow = "^12.3.0"
 imagehash = "^4.3.2"
+anthropic = "^0.116"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0"

@@ -223,3 +223,23 @@ def make_backend() -> StorageBackend:
 
 # Module-level singleton; tests may monkeypatch `app.services.storage.storage`.
 storage: StorageBackend = make_backend()
+
+
+def storage_read_bytes(key: str) -> bytes:
+    """Read a stored object back, whichever backend is configured (Phase E4).
+
+    `LocalBackend` reads from disk; `R2Backend` has no `read_bytes` of its own
+    (E2 only ever needed to WRITE to R2, since reads there go straight to a
+    presigned URL in the browser). The AI reader is the first server-side
+    consumer of the bytes, so the S3 GET lives here rather than widening the
+    backend Protocol for one caller.
+
+    Blocking on both paths — callers must run it off the event loop.
+    """
+    backend = storage
+    if isinstance(backend, LocalBackend):
+        return backend.read_bytes(key)
+    if isinstance(backend, R2Backend):
+        obj = backend._client.get_object(Bucket=backend._bucket, Key=key)
+        return obj["Body"].read()
+    raise StorageError(f"Backend {getattr(backend, 'name', '?')} cannot read objects")

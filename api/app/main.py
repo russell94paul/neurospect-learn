@@ -15,10 +15,15 @@ from app.routers.learning import router as learning_router
 from app.routers.missed_trades import router as missed_trades_router
 from app.routers.planner import router as planner_router
 from app.routers.rubrics import router as rubrics_router
+from app.services import ai_grade_queue
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # E4 — pick up any `ai_vision` grades left `pending` by a restart. The queue
+    # is a DB row rather than an in-process task precisely so this can exist; a
+    # no-op when AI grading is off, which is the default.
+    await ai_grade_queue.sweep_on_startup()
     yield
     await engine.dispose()
 

@@ -72,5 +72,17 @@ class Settings(BaseSettings):
     evidence_max_bytes: int = 12 * 1024 * 1024
     evidence_min_bytes: int = 512
 
+    # AI vision second reader (Phase E4) — tier 3, ADVISORY. Off by default, so
+    # the app runs with no LLM dependency at all and the upload path is identical
+    # either way. The Anthropic SDK resolves the credential itself (env var or an
+    # `ant auth login` profile), so there is deliberately no api-key setting here
+    # to get out of sync with it.
+    ai_grading_enabled: bool = False
+    ai_grader_model: str = "claude-sonnet-5"
+    ai_grader_max_tokens: int = 2048
+    #: How many queued grades one worker pass drains. Small, because this is a
+    #: single-user app and a grade is never urgent.
+    ai_grader_batch_size: int = 5
+
 
 settings = Settings()  # type: ignore[call-arg]
