@@ -314,19 +314,78 @@ def test_u6_never_guesses_when_the_verdict_was_not_loaded():
 # Honest un-wired rows + drift guards
 # ---------------------------------------------------------------------------
 
-def test_unwired_bar_stays_self_attested_and_says_so():
-    """ict_course M6's bar is drill completion; no shipped evidence source covers
-    it, so it stays self-attested with an honest note — never a fake threshold."""
-    full = stages.Evidence(
+def test_m6_is_derived_from_the_precommitment_ledger_not_self_attested():
+    """REPLACES `test_unwired_bar_stays_self_attested_and_says_so` (pre-E5).
+
+    That test pinned M6 as a permanently-unmet self-attested row, which was the
+    honest state while no evidence source covered its bar. E5 built that source, so
+    the assertion is now inverted deliberately: the row is DERIVED, carries no
+    attestation, and cannot be ticked into existence — every other kind of evidence
+    in the bundle being maxed out must not move it.
+    """
+    everything_else = stages.Evidence(
         attested=dict.fromkeys(gate.BEHAVIOURAL_KEYS, True),
         backtest=_bt_group(500, expectancy_r=5.0, win_rate=0.9, break_even=0.33, above=True),
         cleared_models=("london",), gate_computed=True,
+        # The ledger IS loaded and genuinely empty — distinct from not loaded at
+        # all, which is the separate never-guess case below.
+        tape_reads=stages.TapeReads(loaded=True),
     )
-    m6 = _stages("ict_course", _ict_metas(), _ict_concepts(), {}, full)["M6"]
-    assert not m6.met and m6.attest_pending
+    m6 = _stages("ict_course", _ict_metas(), _ict_concepts(), {}, everything_else)["M6"]
     row = m6.requirements[0]
-    assert row.attest and row.attest_item is None and row.link == "/drills"
-    assert "no gate attestation covers this bar" in row.detail
+    assert not m6.met, "no attestation and no backtest edge can substitute for the calls"
+    assert row.derived and not row.attest and row.attest_item is None
+    assert row.link == "/drills"
+    assert "0/14" in row.detail
+
+
+def test_m6_is_met_by_fourteen_resolved_calls_and_by_nothing_else():
+    metas, concepts = _ict_metas(), _ict_concepts()
+    all14 = frozenset(stages.TAPE_STUDY_DRILLS)
+
+    # Committed but not resolved — surfaced, not met (the E3 idiom).
+    committed = _stages("ict_course", metas, concepts, {}, stages.Evidence(
+        tape_reads=stages.TapeReads(committed=all14, loaded=True)))["M6"]
+    assert not committed.met
+    assert "14 calls committed and awaiting" in committed.requirements[0].detail
+
+    # Thirteen of fourteen — the blind live read (T-14) is part of the bar.
+    thirteen = frozenset(stages.TAPE_STUDY_DRILLS[:-1])
+    partial = _stages("ict_course", metas, concepts, {}, stages.Evidence(
+        tape_reads=stages.TapeReads(committed=all14, resolved=thirteen, loaded=True)))["M6"]
+    assert not partial.met and "13/14" in partial.requirements[0].detail
+
+    done = _stages("ict_course", metas, concepts, {}, stages.Evidence(
+        tape_reads=stages.TapeReads(committed=all14, resolved=all14, loaded=True)))["M6"]
+    assert done.met and "14/14" in done.requirements[0].detail
+    # Invariant 6: M6 is concept-less, so this never touches auto_met or the chain.
+    assert not done.auto_met
+
+
+def test_m6_never_guesses_when_the_ledger_was_not_loaded():
+    """Mirrors `test_u6_never_guesses_when_the_verdict_was_not_loaded`: the
+    planner's cheaper bundle does not load the ledger, and `loaded=False` must read
+    unmet rather than infer "no calls committed"."""
+    st = _stages("ict_course", _ict_metas(), _ict_concepts(), {}, stages.Evidence(
+        tape_reads=stages.TapeReads(
+            committed=frozenset(stages.TAPE_STUDY_DRILLS),
+            resolved=frozenset(stages.TAPE_STUDY_DRILLS),
+            loaded=False,
+        )))["M6"]
+    assert not st.met
+    assert "open the track" in st.requirements[0].detail
+
+
+def test_the_unwired_fallback_still_works_even_though_nothing_uses_it():
+    """STAGE_UNWIRED is empty at E5 (the acceptance test), but the mechanism is
+    KEPT so a future concept-less stage no evidence covers is declared rather than
+    silently emitting a dead row. This pins the fallback, not the map."""
+    assert stages.STAGE_UNWIRED == {}
+    metas = [stages.StageMeta("ict_course", "MX", 9, "MX", gate_text="an uncovered bar")]
+    st = stages.compute_stages("ict_course", metas, [], {}, stages.Evidence())[0]
+    row = st.requirements[0]
+    assert row.attest and not row.derived and not row.met
+    assert "self-attested" in row.detail
 
 
 def test_every_mapped_attestation_item_exists_in_the_gate_store():

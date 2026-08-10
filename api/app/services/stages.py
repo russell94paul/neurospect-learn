@@ -40,6 +40,14 @@ evidence that already exists:
     `above_break_even`); where it does not, the row stays self-attested and SAYS
     SO rather than inventing a threshold (see STAGE_UNWIRED).
 
+PHASE E5 — `STAGE_UNWIRED` IS NOW EMPTY, which is the learning-enforcement
+workstream's acceptance test (learning-enforcement.md §9). Its last entry was
+`ict_course` M6, whose bar is 14 tape reads; those had no honest evidence source
+until the pre-commitment ledger existed, and are now graded on calls COMMITTED
+BEFORE THE REVEAL (`tape_studies` in STAGE_EVIDENCE). M6 is concept-less, so its
+`auto_met` stays False and the ict_course lock chain is byte-identical — wiring the
+bar moves `met` only.
+
 A stage's *auto_met* (objective, CONCEPT-based) stays distinct from *met* (every
 requirement satisfied), and the per-track lock chain still uses *auto_met* only —
 so wiring the attestations cannot freeze a track on behavioural evidence, and the
@@ -120,32 +128,69 @@ STAGE_ATTESTATIONS: dict[tuple[str, str], tuple[tuple[str, str], ...]] = {
 #                          clearing break-even" — the three conditions verbatim.
 #   gate_verdict           unified U6 "run the full Readiness-to-Live Gate" — the
 #                          shipped per-model verdict, rolled up to the stage.
+#   tape_studies           ict_course M6 "13 tape studies (T-01…13) + a blind
+#                          live-read (T-14)" — graded on the E5 pre-commitment
+#                          ledger: one call COMMITTED BEFORE THE REVEAL and then
+#                          resolved, per tape drill.
 STAGE_EVIDENCE: dict[tuple[str, str], str] = {
     ("unified", "U4"): "expectancy_computable",
     ("unified", "U6"): "gate_verdict",
     ("aura", "A4"): "backtest_edge",
     ("ict_course", "M7"): "backtest_edge",
+    ("ict_course", "M6"): "tape_studies",
 }
 
-# Stages whose exit bar NO shipped evidence source covers. Left honestly
-# self-attested with a note saying where the work is tracked — deliberately NOT
-# wired to an invented threshold. `ict_course` M6's bar is drill completion
-# (T-01…T-14 on /drills); grading a drill as genuinely done is the subject of the
-# learning-enforcement workstream (verified evidence of markings), so self-declared
-# drill marks are NOT promoted to stage-gate evidence here.
-STAGE_UNWIRED: dict[tuple[str, str], tuple[str, str]] = {
-    ("ict_course", "M6"): (
-        "no gate attestation covers this bar — the 14 tape studies are tracked on /drills",
-        "/drills",
-    ),
-}
+# The 14 tape drills M6's bar names, as `drills.drill_ref` values (the seed emits
+# "ict-course T-01"…"T-14" from the map row `| T-01…14 | whole-model tape read |`).
+# Named EXPLICITLY, in the _U2_GATE_SLUGS idiom: greppable, and immune to a re-seed
+# rewording `track_stages.gate_text`. T-01…T-13 are the studies, T-14 the blind
+# live read — the bar is all 14, which is what makes this E1's acceptance test.
+TAPE_STUDY_DRILLS: tuple[str, ...] = tuple(f"ict-course T-{n:02d}" for n in range(1, 15))
+
+# Stages whose exit bar NO shipped evidence source covers.
+#
+# **EMPTY SINCE E5 — and that is the acceptance test** for the whole
+# learning-enforcement workstream (design §9: "`STAGE_UNWIRED` becomes empty —
+# E1's acceptance test"). `ict_course` M6 was the last entry: its bar is 14 tape
+# reads, which had no honest evidence source until the pre-commitment ledger
+# existed, and was left as an explicitly-declared dead checkbox rather than wired
+# to an invented threshold.
+#
+# The map and the `_behavioural_reqs` fallback are KEPT, deliberately. A future
+# track/stage seed can add a concept-less stage no evidence covers, and
+# `test_concept_less_stages_are_all_wired_or_explicitly_unwired` requires it to be
+# declared here rather than silently emitting a dead row. Empty is the correct
+# state, not a reason to delete the mechanism.
+STAGE_UNWIRED: dict[tuple[str, str], tuple[str, str]] = {}
+
+
+@dataclass(frozen=True)
+class TapeReads:
+    """Which tape drills carry a pre-committed call (Phase E5).
+
+    THE BAR IS COMMITMENT AND RESOLUTION, NEVER CORRECTNESS. A wrong call that was
+    written down before the reveal and then honestly scored IS the work M6 asks
+    for — "compare your read to the mentor's" (ict-course/exercises.md §Stage 6).
+    Gating the stage on being RIGHT would make the calibration score a currency,
+    which design §6 forbids on Deci/Koestner/Ryan (1999): it would teach the user
+    to stop writing down calls they might lose.
+
+    `loaded` distinguishes "no tape reads committed" from "the ledger was not
+    loaded for this call" (the planner does not need it) — the latter never
+    guesses, matching the `gate_computed` convention below.
+    """
+
+    committed: frozenset[str] = frozenset()
+    resolved: frozenset[str] = frozenset()
+    loaded: bool = False
 
 
 @dataclass(frozen=True)
 class Evidence:
     """The already-shipped evidence a behavioural / empirical exit bar grades on
-    (Phase 6a). PURE data: the router loads it (`learning.load_stage_evidence`)
-    and this module never touches a DB.
+    (Phase 6a; extended at E5 with the pre-commitment ledger). PURE data: the
+    router loads it (`learning.load_stage_evidence`) and this module never touches
+    a DB.
 
     All fields default to "no evidence", so `compute_stages(...)` without an
     Evidence bundle behaves exactly as it did before 6a.
@@ -167,6 +212,8 @@ class Evidence:
     # call" (the planner does not need it) — the latter never guesses.
     cleared_models: tuple[str, ...] = ()
     gate_computed: bool = False
+    # The E5 pre-commitment ledger (`routers/predictions.load_tape_coverage`).
+    tape_reads: TapeReads = TapeReads()
 
 
 _NO_EVIDENCE = Evidence()
@@ -359,6 +406,48 @@ def _evidence_req(kind: str, ev: Evidence) -> Requirement:
             met=sample_ok and positive and above_be,
             derived=True,
             link="/expectancy",
+            detail=" · ".join(bits),
+        )
+
+    if kind == "tape_studies":
+        # ict_course M6: "13 tape studies (T-01…13) + a blind live-read (T-14)".
+        # E5 grades this on the pre-commitment ledger — one call per tape drill,
+        # committed BEFORE the reveal and then resolved against it. Correctness is
+        # NOT part of the bar (see TapeReads); the wiki's method is "compare your
+        # read to the mentor's", and doing that honestly on a losing call is the
+        # exercise.
+        tr = ev.tape_reads
+        total = len(TAPE_STUDY_DRILLS)
+        done = len(tr.resolved)
+        if not tr.loaded:
+            return Requirement(
+                label=(
+                    f"{total - 1} tape studies (T-01…T-{total - 1:02d}) + a blind live read "
+                    f"(T-{total:02d}), each called before it resolved"
+                ),
+                met=False,
+                derived=True,
+                link="/drills",
+                detail="open the track for the tape-read ledger",
+            )
+        outstanding = [d for d in TAPE_STUDY_DRILLS if d not in tr.resolved]
+        bits = [f"{done}/{total} called before the reveal, then scored"]
+        awaiting = len(tr.committed - tr.resolved)
+        if awaiting:
+            # SURFACED, never deducted — the E3 idiom. An unresolved call is a
+            # commitment whose answer is not in yet, not a wrong answer.
+            bits.append(f"{_plural(awaiting, 'call', 'calls')} committed and awaiting its outcome")
+        if outstanding:
+            bits.append("not yet called: " + ", ".join(d.split()[-1] for d in outstanding[:4])
+                        + ("…" if len(outstanding) > 4 else ""))
+        return Requirement(
+            label=(
+                f"{total - 1} tape studies (T-01…T-{total - 1:02d}) + a blind live read "
+                f"(T-{total:02d}), each called before it resolved"
+            ),
+            met=done == total,
+            derived=True,
+            link="/drills",
             detail=" · ".join(bits),
         )
 

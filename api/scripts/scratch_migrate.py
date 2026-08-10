@@ -69,7 +69,7 @@ def _drop(maintenance_url: str) -> None:
 # kept as SEPARATE groups so a single-step reversibility test can assert that
 # `downgrade 0009` removes E3's objects and leaves E2's ALONE — a stricter proof
 # than only checking the full teardown to 0008.
-_E2 = {
+_E2: dict[str, tuple[str, ...]] = {
     "tables": ("evidence_assets", "evidence_grades"),
     "types": ("evidence_subject", "evidence_kind", "evidence_grader", "evidence_grade_state"),
     "indexes": (
@@ -79,6 +79,7 @@ _E2 = {
         "ix_evidence_grades_evidence", "ix_evidence_grades_user_state",
     ),
     "triggers": ("trg_evidence_assets_updated_at", "trg_evidence_grades_updated_at"),
+    "functions": (),
 }
 _E3 = {
     "tables": ("rubrics", "rubric_items"),
@@ -88,6 +89,18 @@ _E3 = {
         "ux_rubric_items_key", "ux_rubric_items_rubric_ordinal",
     ),
     "triggers": ("trg_rubrics_updated_at", "trg_rubric_items_updated_at"),
+    "functions": (),
+}
+# E5 (`0011`) — the pre-commitment ledger. It is the FIRST migration here to own a
+# trigger FUNCTION of its own, so the group tracks functions too: `0011` must drop
+# `predictions_freeze_the_call` and must NOT drop `update_updated_at()`, which
+# `0001` owns and every other table's trigger depends on.
+_E5 = {
+    "tables": ("predictions",),
+    "types": ("prediction_bias",),
+    "indexes": ("ix_predictions_user_drill", "ix_predictions_user_committed"),
+    "triggers": ("trg_predictions_freeze_the_call", "trg_predictions_updated_at"),
+    "functions": ("predictions_freeze_the_call",),
 }
 
 
@@ -101,6 +114,9 @@ def _inspect(url: str) -> dict:
             "types": q("SELECT typname FROM pg_type WHERE typtype='e'"),
             "indexes": q("SELECT indexname FROM pg_indexes WHERE schemaname='public'"),
             "triggers": q("SELECT tgname FROM pg_trigger WHERE NOT tgisinternal"),
+            "functions": q(
+                "SELECT p.proname FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace "
+                "WHERE n.nspname = 'public'"),
             "cp_cols": q(
                 "SELECT column_name FROM information_schema.columns "
                 "WHERE table_name='concept_progress'"),
@@ -115,15 +131,25 @@ def _inspect(url: str) -> dict:
 def _objects(label: str, st: dict, group: dict, *, present: bool, tag: str) -> bool:
     """Assert every object in one migration's group is present (or absent)."""
     ok = True
-    for key in ("tables", "types", "indexes", "triggers"):
-        for obj in group[key]:
+    for key in ("tables", "types", "indexes", "triggers", "functions"):
+        for obj in group.get(key, ()):
             if (obj in st[key]) is not present:
                 print(f"  ✗ {label}: {obj} {'missing' if present else 'still present'}")
                 ok = False
+    fns = group.get("functions", ())
     print(f"  {'✓' if ok else '✗'} {label}: {tag} "
           f"{len(group['tables'])} tables · {len(group['types'])} enums · "
-          f"{len(group['indexes'])} indexes · {len(group['triggers'])} triggers "
+          f"{len(group['indexes'])} indexes · {len(group['triggers'])} triggers"
+          f"{f' · {len(fns)} functions' if fns else ''} "
           f"{'present' if present else 'absent'}")
+    return ok
+
+
+def _shared_trigger_fn_survives(label: str, st: dict) -> bool:
+    """`update_updated_at()` is 0001's and EVERY table's trigger depends on it.
+    0011 drops a function of its own, so this asserts it dropped only its own."""
+    ok = "update_updated_at" in st["functions"]
+    print(f"  {'✓' if ok else '✗'} {label}: 0001's update_updated_at() still present")
     return ok
 
 
@@ -151,32 +177,51 @@ def main() -> int:
     cfg = _alembic(scratch_url)
     ok = True
     try:
-        print("→ upgrade head (0001 → 0010)")
+        print("→ upgrade head (0001 → 0011)")
         command.upgrade(cfg, "head")
         st = _inspect(scratch_url)
         ok &= _objects("after upgrade head", st, _E2, present=True, tag="E2")
         ok &= _objects("after upgrade head", st, _E3, present=True, tag="E3")
+        ok &= _objects("after upgrade head", st, _E5, present=True, tag="E5")
         ok &= _reps_columns("after upgrade head", st, derived=True)
 
-        # SINGLE-STEP reversibility of the migration under test: 0010 must remove
-        # exactly its own objects and leave 0009's evidence layer untouched.
-        print("→ downgrade 0009 (0010 only)")
+        # SINGLE-STEP reversibility of the migration under test (E3's precedent):
+        # 0011 must remove exactly its own objects — including its own trigger
+        # FUNCTION — and leave E3's rubric layer and E2's evidence layer alone.
+        print("→ downgrade 0010 (0011 only)")
+        command.downgrade(cfg, "0010")
+        st = _inspect(scratch_url)
+        ok &= _objects("after downgrade 0010", st, _E5, present=False, tag="E5")
+        ok &= _objects("after downgrade 0010", st, _E3, present=True, tag="E3 untouched")
+        ok &= _objects("after downgrade 0010", st, _E2, present=True, tag="E2 untouched")
+        ok &= _shared_trigger_fn_survives("after downgrade 0010", st)
+
+        print("→ upgrade head again (0011 re-applies)")
+        command.upgrade(cfg, "head")
+        st = _inspect(scratch_url)
+        ok &= _objects("after re-upgrade", st, _E5, present=True, tag="E5")
+
+        # SINGLE-STEP reversibility of 0010, still asserted (E3's own proof).
+        print("→ downgrade 0009 (0011 + 0010)")
         command.downgrade(cfg, "0009")
         st = _inspect(scratch_url)
+        ok &= _objects("after downgrade 0009", st, _E5, present=False, tag="E5")
         ok &= _objects("after downgrade 0009", st, _E3, present=False, tag="E3")
         ok &= _objects("after downgrade 0009", st, _E2, present=True, tag="E2 untouched")
         ok &= _reps_columns("after downgrade 0009", st, derived=True)
 
-        print("→ upgrade head again (0010 re-applies)")
+        print("→ upgrade head again (0010 + 0011 re-apply)")
         command.upgrade(cfg, "head")
         st = _inspect(scratch_url)
         ok &= _objects("after re-upgrade", st, _E3, present=True, tag="E3")
+        ok &= _objects("after re-upgrade", st, _E5, present=True, tag="E5")
 
-        print("→ downgrade 0008 (0010 + 0009)")
+        print("→ downgrade 0008 (0011 + 0010 + 0009)")
         command.downgrade(cfg, "0008")
         st = _inspect(scratch_url)
         ok &= _objects("after downgrade 0008", st, _E2, present=False, tag="E2")
         ok &= _objects("after downgrade 0008", st, _E3, present=False, tag="E3")
+        ok &= _objects("after downgrade 0008", st, _E5, present=False, tag="E5")
         ok &= _reps_columns("after downgrade 0008", st, derived=False)
 
         print("→ upgrade head again")
@@ -184,6 +229,7 @@ def main() -> int:
         st = _inspect(scratch_url)
         ok &= _objects("after re-upgrade", st, _E2, present=True, tag="E2")
         ok &= _objects("after re-upgrade", st, _E3, present=True, tag="E3")
+        ok &= _objects("after re-upgrade", st, _E5, present=True, tag="E5")
         ok &= _reps_columns("after re-upgrade", st, derived=True)
 
         print("→ downgrade base (full teardown)")

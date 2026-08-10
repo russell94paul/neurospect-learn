@@ -731,3 +731,80 @@ export interface SelfCheckFinding {
   text: string;
   checked: boolean;
 }
+
+// ============================================================
+// Pre-commitment ledger + calibration (Phase E5)
+// ============================================================
+
+/** A directional call. `neutral` is a real call — "stand aside" — not "unsure",
+ * and it is scored like any other (ict-course T-04 names standing aside). */
+export type PredictionBias = 'long' | 'short' | 'neutral';
+
+/**
+ * One call, committed BEFORE the reveal and scored against it.
+ *
+ * There is no update or delete shape for this, deliberately: the call is frozen by
+ * a DB trigger and the table has no `is_deleted` column, because a ratio whose
+ * denominator can shrink is trivially gameable (Alembic `0011`).
+ *
+ * Every `*_correct` field is COMPUTED per read and is `null` until the reveal — not
+ * `false`. Nothing is scored before its outcome is known.
+ */
+export interface Prediction {
+  id: string;
+  drill_ref: string;
+  session_label: string;
+  instrument: string | null;
+
+  bias: PredictionBias;
+  dol: string;
+  entry_model: EntryModel;
+  target: string;
+  /** SERVER-stamped. The whole anti-cheat value rests on this not being ours. */
+  committed_at: string;
+
+  resolved_at: string | null;
+  outcome_bias: PredictionBias | null;
+  dol_hit: boolean | null;
+  model_played_out: boolean | null;
+  target_hit: boolean | null;
+  resolution_notes: string | null;
+  evidence_id: string | null;
+
+  resolved: boolean;
+  bias_correct: boolean | null;
+  dol_correct: boolean | null;
+  entry_model_correct: boolean | null;
+  target_correct: boolean | null;
+  /** Interval between commitment and reveal. Surfaced, never judged. */
+  seconds_to_reveal: number | null;
+}
+
+export interface ComponentScore {
+  key: string;
+  label: string;
+  correct: number;
+  resolved: number;
+  /** `null` when nothing has resolved — NEVER 0. A zero from an instrument that has
+   * seen nothing is not a measurement. */
+  accuracy: number | null;
+}
+
+/**
+ * Informational feedback (design §6). NOTHING in the app gates on any of this, and
+ * M6's exit bar grades commitment rather than correctness — so this must never be
+ * rendered as progress, a target or a score to raise.
+ */
+export interface Calibration {
+  committed: number;
+  resolved: number;
+  unresolved: number;
+  /** Published beside the accuracy always: resolving only your winners is the one
+   * remaining way to bias the measure, so the gap is shown rather than hidden. */
+  resolution_rate: number | null;
+  accuracy: number | null;
+  components: ComponentScore[];
+  tape_drills_total: number;
+  tape_drills_committed: number;
+  tape_drills_resolved: number;
+}

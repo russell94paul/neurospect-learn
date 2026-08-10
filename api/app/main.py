@@ -14,6 +14,7 @@ from app.routers.journal import router as journal_router
 from app.routers.learning import router as learning_router
 from app.routers.missed_trades import router as missed_trades_router
 from app.routers.planner import router as planner_router
+from app.routers.predictions import router as predictions_router
 from app.routers.rubrics import router as rubrics_router
 from app.services import ai_grade_queue
 
@@ -64,6 +65,11 @@ app.include_router(evidence_router)
 # Rubric API (E3 — the drill's own bar, PROJECTED from the wiki; READ-ONLY, so no
 # rubric text can ever be authored in the app)
 app.include_router(rubrics_router)
+
+# Pre-commitment ledger + calibration (E5 — a call committed BEFORE the reveal, and
+# how often it matched. No PATCH, no DELETE: a call that can be edited or dropped
+# proves nothing. Grades ict_course M6, which emptied `stages.STAGE_UNWIRED`)
+app.include_router(predictions_router)
 
 # Learning API (progress, derived stage exit-bars, drills)
 app.include_router(learning_router)

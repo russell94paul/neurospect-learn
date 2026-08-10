@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent } from '@/components/ui/card';
 import { DrillCard } from '@/components/drills/drill-card';
+import { CalibrationPanel } from '@/components/predictions/calibration-panel';
 
 const TRACKS: { key: string | undefined; label: string }[] = [
   { key: undefined, label: 'All' },
@@ -37,6 +38,10 @@ export function DrillsPage() {
           </Button>
         ))}
       </div>
+
+      {/* E5 — informational only, and it renders NOTHING until a call exists, so an
+          untouched account is not shown an empty score to fill (§6). */}
+      <CalibrationPanel />
 
       {drillsQuery.isLoading && (
         <div className="space-y-3">

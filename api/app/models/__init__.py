@@ -12,6 +12,7 @@ from app.models.gate_attestation import GateAttestation
 from app.models.journal_entry import JournalEntry
 from app.models.missed_trade import MissedTrade
 from app.models.plan_item import PlanItem
+from app.models.prediction import Prediction
 from app.models.rubric import Rubric, RubricItem
 from app.models.study_preferences import StudyPreferences
 from app.models.track_stage import TrackStage
@@ -30,6 +31,7 @@ __all__ = [
     "JournalEntry",
     "MissedTrade",
     "PlanItem",
+    "Prediction",
     "Rubric",
     "RubricItem",
     "StudyPreferences",

@@ -436,6 +436,13 @@ async def load_stage_evidence(
         )
     ).scalar_one()
 
+    # E5 — the pre-commitment ledger that grades ict_course M6. Imported locally
+    # to keep the module import graph acyclic (`routers/predictions` imports
+    # `services/stages`, and `routers/planner` already imports from here).
+    from app.routers.predictions import load_tape_coverage
+
+    tape_reads = await load_tape_coverage(db, user_id)
+
     cleared: tuple[str, ...] = ()
     if with_gate:
         concepts, ladder = await load_concepts_and_ladder(db, user_id)
@@ -455,6 +462,7 @@ async def load_stage_evidence(
         missed_logged=int(missed_logged or 0),
         cleared_models=cleared,
         gate_computed=with_gate,
+        tape_reads=tape_reads,
     )
 
 

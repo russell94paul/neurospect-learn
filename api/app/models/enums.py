@@ -197,6 +197,23 @@ class EvidenceKind(str, Enum):
     TAPE_READ = "tape_read"             # a narrated live/delayed session read
 
 
+class PredictionBias(str, Enum):
+    """A directional call, committed BEFORE the reveal (Phase E5).
+
+    `neutral` is FIRST-CLASS, not a fallback for "unsure": "no directional
+    conviction, stand aside" is the correct read on several of the tape sessions
+    (ict-course T-04's Fed-speaker day names standing aside explicitly), and
+    forcing a long/short call there would train the opposite of the lesson.
+
+    Scored against `predictions.outcome_bias` — the same vocabulary on both sides,
+    so the comparison is an equality rather than an interpretation.
+    """
+
+    LONG = "long"
+    SHORT = "short"
+    NEUTRAL = "neutral"
+
+
 class RubricVariant(str, Enum):
     """Which drill variant a rubric item belongs to, tagged by the WIKI'S OWN
     glyph (Phase E3): ✋ hand-marking (do first — trains the eye) · 🛠

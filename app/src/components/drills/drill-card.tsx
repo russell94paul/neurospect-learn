@@ -4,7 +4,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useUpdateDrill } from '@/lib/learning';
 import { EvidenceCapture } from '@/components/evidence/evidence-capture';
+import { PredictionCommit } from '@/components/predictions/prediction-commit';
 import { RepCounter } from '@/components/progress/rep-counter';
+import { isTapeStudyDrill } from '@/lib/predictions';
 import type { DrillOut } from '@/types/api';
 
 const TRACK_LABELS: Record<string, string> = {
@@ -77,6 +79,14 @@ export function DrillCard({ drill }: { drill: DrillOut }) {
           evidenced={drill.reps_evidenced}
           legacy={drill.reps_legacy}
         />
+
+        {/* E5 — the tape drills (T-01…T-14) are the only ones whose honest form
+            REQUIRES a call before the reveal, so the ledger appears only there.
+            It sits ABOVE the capture on purpose: the call comes first, and a
+            surface that reads top-to-bottom teaches that order. */}
+        {isTapeStudyDrill(drill.drill_ref) && (
+          <PredictionCommit drillRef={drill.drill_ref} className="border-t pt-3" />
+        )}
 
         <EvidenceCapture
           subject={{ subject_type: 'drill', drill_ref: drill.drill_ref }}
