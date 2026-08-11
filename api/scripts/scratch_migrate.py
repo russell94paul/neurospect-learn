@@ -102,6 +102,16 @@ _E5 = {
     "triggers": ("trg_predictions_freeze_the_call", "trg_predictions_updated_at"),
     "functions": ("predictions_freeze_the_call",),
 }
+# E6 (`0012`) — declared rest days. Owns a trigger FUNCTION of its own, so the same
+# rule as E5 applies: `0012` must drop `rest_days_declared_in_advance` and must NOT
+# drop `update_updated_at()`, nor E5's `predictions_freeze_the_call`.
+_E6 = {
+    "tables": ("rest_days",),
+    "types": (),
+    "indexes": ("ux_rest_days_user_date",),
+    "triggers": ("trg_rest_days_declared_in_advance", "trg_rest_days_updated_at"),
+    "functions": ("rest_days_declared_in_advance",),
+}
 
 
 def _inspect(url: str) -> dict:
@@ -177,51 +187,72 @@ def main() -> int:
     cfg = _alembic(scratch_url)
     ok = True
     try:
-        print("→ upgrade head (0001 → 0011)")
+        print("→ upgrade head (0001 → 0012)")
         command.upgrade(cfg, "head")
         st = _inspect(scratch_url)
         ok &= _objects("after upgrade head", st, _E2, present=True, tag="E2")
         ok &= _objects("after upgrade head", st, _E3, present=True, tag="E3")
         ok &= _objects("after upgrade head", st, _E5, present=True, tag="E5")
+        ok &= _objects("after upgrade head", st, _E6, present=True, tag="E6")
         ok &= _reps_columns("after upgrade head", st, derived=True)
 
         # SINGLE-STEP reversibility of the migration under test (E3's precedent):
-        # 0011 must remove exactly its own objects — including its own trigger
-        # FUNCTION — and leave E3's rubric layer and E2's evidence layer alone.
-        print("→ downgrade 0010 (0011 only)")
+        # 0012 must remove exactly its own objects — including its own trigger
+        # FUNCTION — and leave E5's ledger, E3's rubrics and E2's evidence alone.
+        print("→ downgrade 0011 (0012 only)")
+        command.downgrade(cfg, "0011")
+        st = _inspect(scratch_url)
+        ok &= _objects("after downgrade 0011", st, _E6, present=False, tag="E6")
+        ok &= _objects("after downgrade 0011", st, _E5, present=True, tag="E5 untouched")
+        ok &= _objects("after downgrade 0011", st, _E3, present=True, tag="E3 untouched")
+        ok &= _objects("after downgrade 0011", st, _E2, present=True, tag="E2 untouched")
+        ok &= _shared_trigger_fn_survives("after downgrade 0011", st)
+
+        print("→ upgrade head again (0012 re-applies)")
+        command.upgrade(cfg, "head")
+        st = _inspect(scratch_url)
+        ok &= _objects("after re-upgrade", st, _E6, present=True, tag="E6")
+
+        # SINGLE-STEP reversibility of 0011, still asserted (E5's own proof).
+        print("→ downgrade 0010 (0012 + 0011)")
         command.downgrade(cfg, "0010")
         st = _inspect(scratch_url)
+        ok &= _objects("after downgrade 0010", st, _E6, present=False, tag="E6")
         ok &= _objects("after downgrade 0010", st, _E5, present=False, tag="E5")
         ok &= _objects("after downgrade 0010", st, _E3, present=True, tag="E3 untouched")
         ok &= _objects("after downgrade 0010", st, _E2, present=True, tag="E2 untouched")
         ok &= _shared_trigger_fn_survives("after downgrade 0010", st)
 
-        print("→ upgrade head again (0011 re-applies)")
+        print("→ upgrade head again (0011 + 0012 re-apply)")
         command.upgrade(cfg, "head")
         st = _inspect(scratch_url)
         ok &= _objects("after re-upgrade", st, _E5, present=True, tag="E5")
+        ok &= _objects("after re-upgrade", st, _E6, present=True, tag="E6")
 
         # SINGLE-STEP reversibility of 0010, still asserted (E3's own proof).
-        print("→ downgrade 0009 (0011 + 0010)")
+        print("→ downgrade 0009 (0012 + 0011 + 0010)")
         command.downgrade(cfg, "0009")
         st = _inspect(scratch_url)
+        ok &= _objects("after downgrade 0009", st, _E6, present=False, tag="E6")
         ok &= _objects("after downgrade 0009", st, _E5, present=False, tag="E5")
         ok &= _objects("after downgrade 0009", st, _E3, present=False, tag="E3")
         ok &= _objects("after downgrade 0009", st, _E2, present=True, tag="E2 untouched")
         ok &= _reps_columns("after downgrade 0009", st, derived=True)
 
-        print("→ upgrade head again (0010 + 0011 re-apply)")
+        print("→ upgrade head again (0010 + 0011 + 0012 re-apply)")
         command.upgrade(cfg, "head")
         st = _inspect(scratch_url)
         ok &= _objects("after re-upgrade", st, _E3, present=True, tag="E3")
         ok &= _objects("after re-upgrade", st, _E5, present=True, tag="E5")
+        ok &= _objects("after re-upgrade", st, _E6, present=True, tag="E6")
 
-        print("→ downgrade 0008 (0011 + 0010 + 0009)")
+        print("→ downgrade 0008 (0012 + 0011 + 0010 + 0009)")
         command.downgrade(cfg, "0008")
         st = _inspect(scratch_url)
         ok &= _objects("after downgrade 0008", st, _E2, present=False, tag="E2")
         ok &= _objects("after downgrade 0008", st, _E3, present=False, tag="E3")
         ok &= _objects("after downgrade 0008", st, _E5, present=False, tag="E5")
+        ok &= _objects("after downgrade 0008", st, _E6, present=False, tag="E6")
         ok &= _reps_columns("after downgrade 0008", st, derived=False)
 
         print("→ upgrade head again")
@@ -230,6 +261,7 @@ def main() -> int:
         ok &= _objects("after re-upgrade", st, _E2, present=True, tag="E2")
         ok &= _objects("after re-upgrade", st, _E3, present=True, tag="E3")
         ok &= _objects("after re-upgrade", st, _E5, present=True, tag="E5")
+        ok &= _objects("after re-upgrade", st, _E6, present=True, tag="E6")
         ok &= _reps_columns("after re-upgrade", st, derived=True)
 
         print("→ downgrade base (full teardown)")

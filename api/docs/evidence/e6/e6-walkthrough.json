@@ -1,0 +1,146 @@
+{
+  "results": [
+    {
+      "step": "empty strip: 5 signals, all \"not measured\"",
+      "ok": true,
+      "detail": "5 signals"
+    },
+    {
+      "step": "empty strip: NO count of any kind is painted",
+      "ok": true,
+      "detail": "no \"0 of N\", no \"0 captures\""
+    },
+    {
+      "step": "empty strip: says so in words",
+      "ok": true,
+      "detail": "the summary line is absent, replaced by an explicit absence"
+    },
+    {
+      "step": "empty strip: states it gates nothing",
+      "ok": true
+    },
+    {
+      "step": "measured strip: bulk marking counts 2 of 2 captures",
+      "ok": true
+    },
+    {
+      "step": "measured strip: pacing measured on 1 gap (the two uploads were seconds apart)",
+      "ok": true
+    },
+    {
+      "step": "measured strip: back-dating found the 9-day-old assertion",
+      "ok": true
+    },
+    {
+      "step": "measured strip: every threshold is printed (60s, 24h)",
+      "ok": true
+    },
+    {
+      "step": "measured strip: the implicated subject is named",
+      "ok": true
+    },
+    {
+      "step": "measured strip: still no percentage, no progress bar, no target",
+      "ok": true
+    },
+    {
+      "step": "the Readiness-to-Live Gate did NOT move while every signal lit up",
+      "ok": true,
+      "detail": "cleared 0 → 0"
+    },
+    {
+      "step": "rest days: the past is not offered (min = today)",
+      "ok": true
+    },
+    {
+      "step": "rest days: the SERVER refuses a back-dated declaration (422)",
+      "ok": true,
+      "detail": "A rest day must be declared in advance — 2026-08-08 has alre"
+    },
+    {
+      "step": "rest days: a booked day renders with when it was declared",
+      "ok": true
+    },
+    {
+      "step": "rest days: no edit or delete affordance on the row",
+      "ok": true
+    },
+    {
+      "step": "today: BOTH figures render — the marked adherence and the evidence-backed run",
+      "ok": true,
+      "detail": "Adherence 0% 0 done · 4 pending · of 4 Backed by evidence 1 day in a row · 1 day with a capture"
+    },
+    {
+      "step": "today: declaring 3 more rest days did NOT raise the evidence streak",
+      "ok": true,
+      "detail": "1 → 1"
+    },
+    {
+      "step": "console: 0 errors across the whole walk",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "console_messages": [
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    }
+  ]
+}

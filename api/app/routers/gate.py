@@ -20,11 +20,15 @@ supply credit. Confluence tags are study-only and unread here.
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import select, text
+from sqlalchemy import func, select, text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.deps import get_current_user, get_db
+from app.models.concept import Concept
+from app.models.concept_progress import ConceptProgress
+from app.models.drill_progress import DrillProgress
+from app.models.evidence import EvidenceAsset, EvidenceGrade
 from app.models.gate_attestation import GateAttestation
 from app.models.journal_entry import JournalEntry
 from app.models.user import User
@@ -37,7 +41,8 @@ from app.schemas.gate import (
     GateRequirement,
     ModelReadiness,
 )
-from app.services import expectancy, gate
+from app.schemas.honesty import HonestyOut, HonestySignal
+from app.services import expectancy, gate, honesty
 from app.routers.learning import TRACK_LABELS, load_concepts_and_ladder
 
 router = APIRouter(
@@ -173,6 +178,175 @@ async def get_gate(
         credit_track=track,
     )
     return _out(result)
+
+
+# ---------------------------------------------------------------------------
+# GET /api/gate/honesty — the E6 honesty strip
+#
+# A SEPARATE RESOURCE, NOT A FIELD ON `GateOut`, and that is the design rather
+# than a routing convenience. `GET /api/gate` builds its verdict from exactly
+# three inputs (concepts · expectancy · attestations); keeping the signals out of
+# that payload means `services/gate.py` has no honesty value in scope to read, so
+# "these gate nothing" is enforced by what is reachable rather than by a rule
+# someone has to remember. It is the §E2 argument (`reps` DERIVED, not guarded)
+# and the §E5 argument (a trigger, not router discipline) applied once more.
+#
+# It also keeps `/api/gate` byte-identical to the STEP-0 baseline (sha256
+# `27ff7157…`, unchanged across E2 · E3 · E4 · E5), which is the workstream's
+# loudest no-regression signal and is worth more than a nested field.
+#
+# §5 asks for these to RENDER as a strip on `/gate` — the page does that; see
+# app/src/pages/gate.tsx.
+# ---------------------------------------------------------------------------
+
+_SUBJECT_LABELS = {"journal_entry": "journal entry", "missed_trade": "missed trade"}
+
+
+async def _load_captures(db: AsyncSession, user_id) -> list[honesty.Capture]:
+    """This user's live evidence, plus every grading pass written over it.
+
+    `created_at` (the server's upload clock) is loaded alongside the user-asserted
+    `captured_at` on purpose: the pacing signal must measure the former, or a
+    signal about pacing could be silenced by asserting a different capture time.
+    """
+    rows = (
+        await db.execute(
+            select(
+                EvidenceAsset.id,
+                EvidenceAsset.subject_type,
+                EvidenceAsset.subject_drill_ref,
+                EvidenceAsset.concept_id,
+                EvidenceAsset.journal_entry_id,
+                EvidenceAsset.missed_trade_id,
+                EvidenceAsset.created_at,
+                EvidenceAsset.captured_at,
+                EvidenceAsset.reps_claimed,
+                Concept.title,
+            )
+            .outerjoin(Concept, Concept.id == EvidenceAsset.concept_id)
+            .where(
+                EvidenceAsset.user_id == user_id,
+                EvidenceAsset.is_deleted.is_(False),
+            )
+        )
+    ).all()
+
+    grade_rows = (
+        await db.execute(
+            select(EvidenceGrade.evidence_id, EvidenceGrade.grader, EvidenceGrade.state).where(
+                EvidenceGrade.user_id == user_id,
+                EvidenceGrade.is_deleted.is_(False),
+            )
+        )
+    ).all()
+
+    graders: dict = {}
+    grade_count: dict = {}
+    flagged_count: dict = {}
+    for evidence_id, grader, state in grade_rows:
+        g = grader.value if hasattr(grader, "value") else str(grader)
+        s = state.value if hasattr(state, "value") else str(state)
+        graders.setdefault(evidence_id, set()).add(g)
+        grade_count[evidence_id] = grade_count.get(evidence_id, 0) + 1
+        if s in honesty.FLAGGED_STATES:
+            flagged_count[evidence_id] = flagged_count.get(evidence_id, 0) + 1
+
+    out: list[honesty.Capture] = []
+    for (
+        ev_id, subject_type, drill_ref, concept_id, journal_id, missed_id,
+        created_at, captured_at, reps_claimed, concept_title,
+    ) in rows:
+        st = subject_type.value if hasattr(subject_type, "value") else str(subject_type)
+        key_part = drill_ref or concept_id or journal_id or missed_id
+        label = (
+            drill_ref
+            or concept_title
+            or _SUBJECT_LABELS.get(st, st)
+        )
+        out.append(
+            honesty.Capture(
+                subject=f"{st}:{key_part}",
+                subject_label=str(label),
+                created_at=created_at,
+                captured_at=captured_at,
+                reps_claimed=reps_claimed,
+                graders=frozenset(graders.get(ev_id, ())),
+                grade_count=grade_count.get(ev_id, 0),
+                flagged_count=flagged_count.get(ev_id, 0),
+            )
+        )
+    return out
+
+
+async def _load_rep_split(db: AsyncSession, user_id) -> tuple[int, int]:
+    """(reps_legacy, reps_evidenced) across every subject.
+
+    `legacy_reps` is what was claimed BEFORE the evidence layer existed; `0009`
+    froze it and E2 kept it visible precisely so this phase could report it. It is
+    the one part of the rep count that has no evidence behind it and never will.
+    """
+    legacy_concept = (
+        await db.execute(
+            select(func.coalesce(func.sum(ConceptProgress.legacy_reps), 0)).where(
+                ConceptProgress.user_id == user_id,
+                ConceptProgress.is_deleted.is_(False),
+            )
+        )
+    ).scalar_one()
+    legacy_drill = (
+        await db.execute(
+            select(func.coalesce(func.sum(DrillProgress.legacy_reps), 0)).where(
+                DrillProgress.user_id == user_id,
+                DrillProgress.is_deleted.is_(False),
+            )
+        )
+    ).scalar_one()
+    evidenced = (
+        await db.execute(
+            select(func.coalesce(func.sum(EvidenceAsset.reps_claimed), 0)).where(
+                EvidenceAsset.user_id == user_id,
+                EvidenceAsset.is_deleted.is_(False),
+            )
+        )
+    ).scalar_one()
+    return int(legacy_concept) + int(legacy_drill), int(evidenced)
+
+
+@router.get("/gate/honesty", response_model=HonestyOut)
+async def get_honesty(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """The five §5 signals, computed on every read and stored nowhere.
+
+    READ-ONLY BY CONSTRUCTION: there is no companion write endpoint, nothing to
+    dismiss and nothing to acknowledge, because a signal a user can switch off is
+    not a record of anything. None of these figures reaches `compute_readiness` —
+    the gate's verdict is unchanged and unchangeable by anything here.
+    """
+    captures = await _load_captures(db, current_user.id)
+    reps_legacy, reps_evidenced = await _load_rep_split(db, current_user.id)
+    result = honesty.compute(
+        captures, reps_legacy=reps_legacy, reps_evidenced=reps_evidenced
+    )
+    return HonestyOut(
+        signals=[
+            HonestySignal(
+                key=s.key,
+                label=s.label,
+                status=s.status,
+                count=s.count,
+                population=s.population,
+                measured_what=s.measured_what,
+                detail=s.detail,
+                subjects=list(s.subjects),
+            )
+            for s in result.signals
+        ],
+        captures=result.captures,
+        reps_legacy=result.reps_legacy,
+        reps_evidenced=result.reps_evidenced,
+    )
 
 
 # ---------------------------------------------------------------------------

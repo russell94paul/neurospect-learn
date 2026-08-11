@@ -4,6 +4,7 @@ import { usePreferences, useUpdatePreferences } from '@/lib/planner';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AvailabilityForm } from '@/components/planner/availability-form';
+import { RestDays } from '@/components/planner/rest-days';
 import type { PreferencesIn } from '@/types/api';
 
 /** /plan/setup — availability & preferences form. On save, recomputes the plan
@@ -42,6 +43,13 @@ export function PlanSetupPage() {
           saveError={update.isError ? (update.error as Error).message : null}
         />
       )}
+
+      {/* Declared rest days (E6). Saved on their own, NOT through the preferences
+          form above — the form rewrites its whole row on every save, and a rest
+          day has to be append-only and timestamped to mean anything. Deliberately
+          NOT `blackout_dates`, which is a scheduling input that accepts past
+          dates; see components/planner/rest-days.tsx and Alembic `0012`. */}
+      <RestDays />
     </div>
   );
 }

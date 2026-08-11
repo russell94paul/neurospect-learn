@@ -19,6 +19,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import and_, select, text, update
+from sqlalchemy.exc import DBAPIError
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -28,22 +29,27 @@ from app.models.concept_progress import ConceptProgress
 from app.models.drill import Drill
 from app.models.drill_progress import DrillProgress
 from app.models.enums import PlanActivity, PlanItemStatus
+from app.models.evidence import EvidenceAsset
 from app.models.plan_item import PlanItem
+from app.models.rest_day import RestDay
 from app.models.study_preferences import StudyPreferences
 from app.models.track_stage import TrackStage
 from app.models.user import User
 from app.schemas.planner import (
     AdherenceOut,
+    ConsistencyOut,
     PaceOut,
     PlanItemOut,
     PlanItemPatch,
     PlanRangeOut,
     PreferencesIn,
     PreferencesOut,
+    RestDayIn,
+    RestDayOut,
     TodayOut,
 )
 from app.routers.learning import load_evidence_reps, load_stage_evidence
-from app.services import scheduler, stages
+from app.services import consistency, scheduler, stages
 
 router = APIRouter(
     prefix="/api",
@@ -263,7 +269,70 @@ def _pace_out(prefs_view: scheduler.PrefsView, result: scheduler.ScheduleResult)
     )
 
 
-async def _adherence(db: AsyncSession, user_id, today: date, result: scheduler.ScheduleResult) -> AdherenceOut:
+def _zone(tz: str):
+    try:
+        return ZoneInfo(tz)
+    except (ZoneInfoNotFoundError, ValueError):
+        return timezone.utc
+
+
+async def _consistency(
+    db: AsyncSession, user_id, today: date, tz: str, marked_dates: frozenset[date]
+) -> ConsistencyOut:
+    """The shipped streak, re-derived from EVIDENCE instead of from a click (E6).
+
+    `evidence_assets.created_at` is the server's upload clock and is what the
+    streak walks. The user-asserted `captured_at` is deliberately NOT used: a
+    streak that read an asserted timestamp could be extended by asserting one,
+    which is the same class of hole E2 closed when it stopped `reps` being writable.
+
+    Rest days come from `rest_days` and NEVER from `study_preferences.blackout_dates`.
+    Blackout dates are a scheduling input that `PUT /api/preferences` will happily
+    accept for a day already past, so honouring them here would build precisely the
+    retroactive streak freeze §6 rejects. See Alembic `0012`.
+    """
+    zone = _zone(tz)
+    ev_rows = (
+        await db.execute(
+            select(EvidenceAsset.created_at).where(
+                EvidenceAsset.user_id == user_id,
+                EvidenceAsset.is_deleted.is_(False),
+            )
+        )
+    ).all()
+    evidence_dates = frozenset(
+        ts.astimezone(zone).date() for (ts,) in ev_rows if ts is not None
+    )
+
+    rest_rows = (
+        await db.execute(select(RestDay.rest_date).where(RestDay.user_id == user_id))
+    ).all()
+    rest_dates = frozenset(d for (d,) in rest_rows)
+
+    c = consistency.compute(
+        today=today,
+        evidence_dates=evidence_dates,
+        rest_dates=rest_dates,
+        marked_dates=marked_dates,
+    )
+    return ConsistencyOut(
+        evidenced_days=c.evidenced_days,
+        evidence_streak=c.evidence_streak,
+        rest_days_in_streak=c.rest_days_in_streak,
+        last_evidence_date=c.last_evidence_date,
+        days_marked_without_evidence=c.days_marked_without_evidence,
+        rest_days_declared=c.rest_days_declared,
+        rest_days_upcoming=c.rest_days_upcoming,
+    )
+
+
+async def _adherence(
+    db: AsyncSession,
+    user_id,
+    today: date,
+    result: scheduler.ScheduleResult,
+    tz: str = "UTC",
+) -> AdherenceOut:
     rows = (
         await db.execute(
             select(PlanItem.scheduled_date, PlanItem.status).where(
@@ -305,10 +374,20 @@ async def _adherence(db: AsyncSession, user_id, today: date, result: scheduler.S
         d -= timedelta(days=1)
         first = False
 
+    # E6 — the same consistency, derived from evidence. Published BESIDE the
+    # marked figures above, never replacing them: E2's `reps` / `reps_evidenced` /
+    # `reps_legacy` idiom, so the gap between the claim and the record is visible
+    # rather than folded away. Nothing above is recomputed, so no shipped number moves.
+    marked_dates = frozenset(
+        d for d, sts in by_date.items()
+        if any(s in (PlanItemStatus.DONE, PlanItemStatus.PARTIAL) for s in sts)
+    )
+
     return AdherenceOut(
         total=total, done=done, partial=partial, skipped=skipped, pending=pending,
         adherence_pct=pct, current_streak=streak,
         days_behind=result.days_behind, carried_over=result.carried_over,
+        consistency=await _consistency(db, user_id, today, tz, marked_dates),
     )
 
 
@@ -440,7 +519,7 @@ async def get_plan_today(
     return TodayOut(
         date=today, active_track=prefs.active_track, plan_version=prefs.plan_version,
         items=items,
-        adherence=await _adherence(db, current_user.id, today, result),
+        adherence=await _adherence(db, current_user.id, today, result, prefs.timezone),
         pace=_pace_out(pview, result),
     )
 
@@ -569,7 +648,7 @@ async def regenerate_plan(
 
     return TodayOut(
         date=today, active_track=prefs.active_track, plan_version=new_version, items=items,
-        adherence=await _adherence(db, current_user.id, today, result),
+        adherence=await _adherence(db, current_user.id, today, result, prefs.timezone),
         pace=_pace_out(pview, result),
     )
 
@@ -701,3 +780,102 @@ async def patch_plan_item(
         if d is not None:
             dtitles[item.drill_ref] = d.title
     return _item_from_row(item, cmeta, dtitles)
+
+
+# ===========================================================================
+# GET | POST /api/rest-days  — declared rest days (Phase E6)
+#
+# THERE IS NO PATCH AND NO DELETE, and that is the design rather than an
+# omission — the same call `routers/predictions.py` made, for the same reason.
+# A rest day's only effect is that it does not BREAK an evidence streak, so the
+# record is worth reading only if the declared set is the set actually committed
+# to in advance. An editable rest day could be slid onto a day you later turn out
+# to have missed, and a deletable one lets the set be curated after the fact.
+# Alembic `0012` makes both structurally impossible (a freeze trigger, and no
+# `is_deleted` column), so this router cannot regress the property by accident.
+# Pinned by a test that fails if either verb is ever added.
+# ===========================================================================
+
+
+def _rest_day_out(row: RestDay) -> RestDayOut:
+    return RestDayOut(
+        id=row.id,
+        rest_date=row.rest_date,
+        reason=row.reason,
+        declared_at=row.declared_at,
+        # Surfaced so a same-day declaration reads as one. The trigger blocks the
+        # PAST outright; how far ahead of that is judgement, and §5's rule for
+        # judgement-shaped things is to show them, not to gate on them.
+        days_declared_ahead=(row.rest_date - row.declared_at.astimezone(timezone.utc).date()).days,
+    )
+
+
+@router.get("/rest-days", response_model=list[RestDayOut])
+async def list_rest_days(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    rows = (
+        await db.execute(
+            select(RestDay)
+            .where(RestDay.user_id == current_user.id)
+            .order_by(RestDay.rest_date.desc())
+        )
+    ).scalars().all()
+    return [_rest_day_out(r) for r in rows]
+
+
+@router.post("/rest-days", response_model=RestDayOut, status_code=status.HTTP_201_CREATED)
+async def declare_rest_day(
+    body: RestDayIn,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Book a day off, ahead of time.
+
+    The in-advance rule is enforced by `trg_rest_days_declared_in_advance`, not
+    here — the router only translates the refusal into an HTTP status. Checking it
+    in Python as well would be the guard-that-must-be-remembered shape §E2 argued
+    against; the value of the DB check is that a future endpoint cannot bypass it.
+    """
+    today = _today_in((await _load_prefs(db, current_user.id) or StudyPreferences()).timezone or "UTC")
+    if body.rest_date < today:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=(
+                f"A rest day must be declared in advance — {body.rest_date.isoformat()} has "
+                f"already passed (today is {today.isoformat()}). Booking a day off after the "
+                "fact is a streak freeze, and the streak is only worth reading because it "
+                "cannot be repaired retroactively."
+            ),
+        )
+
+    existing = (
+        await db.execute(
+            select(RestDay).where(
+                RestDay.user_id == current_user.id,
+                RestDay.rest_date == body.rest_date,
+            )
+        )
+    ).scalar_one_or_none()
+    if existing is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                f"{body.rest_date.isoformat()} is already declared a rest day "
+                f"(booked {existing.declared_at.date().isoformat()})."
+            ),
+        )
+
+    row = RestDay(user_id=current_user.id, rest_date=body.rest_date, reason=body.reason)
+    db.add(row)
+    try:
+        await db.commit()
+    except DBAPIError as exc:  # the trigger fired (a race, or a clock disagreement)
+        await db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="A rest day must be declared in advance.",
+        ) from exc
+    await db.refresh(row)
+    return _rest_day_out(row)

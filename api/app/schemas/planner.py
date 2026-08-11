@@ -94,6 +94,30 @@ class PlanItemPatch(BaseModel):
 # ---------------------------------------------------------------------------
 
 
+class ConsistencyOut(BaseModel):
+    """The EVIDENCE-BACKED counterparts of the self-reported figures beside them
+    (Phase E6). Computed from `evidence_assets` + `rest_days`, never stored, and
+    no new currency: §6 forbids XP/badges/points, so nothing here is a new score —
+    these are the shipped surfaces re-derived from a source a click cannot move.
+
+    Published BESIDE the marked figures rather than replacing them, which is E2's
+    idiom for exactly this (`reps` ships beside `reps_evidenced`/`reps_legacy` so
+    the gap is visible rather than folded away)."""
+
+    evidenced_days: int = 0
+    evidence_streak: int = 0
+    #: Of the streak above, how many days were DECLARED REST DAYS rather than
+    #: worked. Surfaced because the app cannot tell booked leave from a pre-emptive
+    #: excuse, so it shows the composition instead of judging it.
+    rest_days_in_streak: int = 0
+    last_evidence_date: date | None = None
+    #: Days marked done in the planner with no evidence captured at all — the gap
+    #: between the claim and the record. Surfaced, never deducted.
+    days_marked_without_evidence: int = 0
+    rest_days_declared: int = 0
+    rest_days_upcoming: int = 0
+
+
 class AdherenceOut(BaseModel):
     total: int = 0          # items scheduled on/before today
     done: int = 0
@@ -104,6 +128,34 @@ class AdherenceOut(BaseModel):
     current_streak: int = 0             # consecutive fully-cleared days ending today
     days_behind: int = 0                # distinct past dates with pending items
     carried_over: int = 0               # past pending items re-queued today
+    #: E6 — the same consistency, derived from evidence instead of from a click.
+    consistency: ConsistencyOut = Field(default_factory=ConsistencyOut)
+
+
+# ---------------------------------------------------------------------------
+# Declared rest days (Phase E6) — booked IN ADVANCE, never after the fact
+# ---------------------------------------------------------------------------
+
+
+class RestDayIn(BaseModel):
+    """Declare a day off. There is deliberately NO `declared_at` field — the
+    server owns that clock, and a rest day for a day that has already passed is
+    refused by `rest_days`' own trigger (Alembic `0012`), not by this schema.
+    §6 rejects the retroactive streak freeze: a day off booked after you missed a
+    day is not a day off."""
+
+    rest_date: date
+    reason: str | None = Field(default=None, max_length=500)
+
+
+class RestDayOut(BaseModel):
+    id: uuid.UUID
+    rest_date: date
+    reason: str | None = None
+    declared_at: datetime      # SERVER-stamped, frozen after insert
+    #: How many days ahead it was booked. Surfaced so a same-day declaration is
+    #: visible as one — the trigger blocks the past, the surface shows the rest.
+    days_declared_ahead: int = 0
 
 
 class PaceOut(BaseModel):

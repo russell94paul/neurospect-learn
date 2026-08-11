@@ -252,6 +252,25 @@ export interface PlanItemPatch {
   done_qty?: number | null;
 }
 
+/** The EVIDENCE-BACKED counterparts of the self-reported figures (Phase E6).
+ *
+ * Published BESIDE `Adherence`'s marked figures rather than replacing them — the
+ * `reps` / `reps_evidenced` / `reps_legacy` idiom E2 established, so the gap
+ * between the claim and the record is visible instead of folded away. No new
+ * currency: §6 forbids XP/badges/points, so nothing here is a score. */
+export interface Consistency {
+  evidenced_days: number;
+  evidence_streak: number;
+  /** Of that streak, how many days were DECLARED REST DAYS rather than worked.
+   * Shown beside it because the app cannot tell booked leave from an excuse. */
+  rest_days_in_streak: number;
+  last_evidence_date: string | null;
+  /** Days marked done in the planner with no evidence at all — surfaced, never deducted. */
+  days_marked_without_evidence: number;
+  rest_days_declared: number;
+  rest_days_upcoming: number;
+}
+
 /** Accountability — surfaced, never hidden (north star). */
 export interface Adherence {
   total: number;
@@ -263,6 +282,46 @@ export interface Adherence {
   current_streak: number; // consecutive fully-cleared days ending today
   days_behind: number; // distinct past dates with pending items
   carried_over: number; // past pending items re-queued today
+  consistency: Consistency; // E6 — the same figures, derived from evidence
+}
+
+/** One declared rest day. Booked IN ADVANCE — `POST /api/rest-days` refuses a date
+ * that has already passed, and Alembic `0012`'s trigger refuses it again beneath
+ * that. There is deliberately NO update and NO delete. */
+export interface RestDay {
+  id: string;
+  rest_date: string;
+  reason: string | null;
+  declared_at: string; // SERVER-stamped, frozen after insert
+  days_declared_ahead: number;
+}
+
+/** One computed honesty signal (Phase E6).
+ *
+ * READ `status` BEFORE `count`. `count` is null whenever nothing could be
+ * measured — never 0. A zero from an instrument that has not been shown able to
+ * see is not a measurement, and rendering one would be a claim about the user. */
+export interface HonestySignal {
+  key: string;
+  label: string;
+  status: 'measured' | 'not_measured';
+  count: number | null;
+  population: number;
+  measured_what: string; // includes any threshold, so the figure can be discounted
+  detail: string;
+  subjects: string[];
+}
+
+/** GET /api/gate/honesty — the five §5 signals.
+ *
+ * Served SEPARATELY from `GateResponse` on purpose: the gate's verdict is built
+ * from three inputs and none of them is this, so "these gate nothing" is enforced
+ * by what is reachable rather than by a rule someone has to remember. */
+export interface HonestyStrip {
+  signals: HonestySignal[];
+  captures: number;
+  reps_legacy: number;
+  reps_evidenced: number;
 }
 
 /** ETA projection — PACING-ONLY (never advances a gate). */

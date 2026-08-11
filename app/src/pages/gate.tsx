@@ -16,6 +16,7 @@ import { useGate } from '@/lib/gate';
 import { TRACK_LABELS } from '@/lib/learning';
 import { GateSignal } from '@/components/gate/gate-signal';
 import { GateChecklist } from '@/components/gate/gate-checklist';
+import { HonestyStripCard } from '@/components/gate/honesty-strip';
 
 const ANY_TRACK = '__any__';
 
@@ -135,6 +136,12 @@ export function GatePage() {
               corroboration={gate.data.corroboration}
             />
           )}
+
+          {/* The E6 honesty strip, beside the attestations (§5). It is fetched
+              SEPARATELY from the verdict on purpose — nothing in it reaches
+              `compute_readiness`, so it cannot move the gate above even by
+              accident. See components/gate/honesty-strip.tsx. */}
+          <HonestyStripCard />
 
           {gate.data && gate.data.frontier.length > 0 && (
             <Card data-testid="gate-frontier">
