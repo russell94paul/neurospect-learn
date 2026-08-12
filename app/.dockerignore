@@ -1,0 +1,11 @@
+# node_modules is reinstalled from package-lock.json inside the image; copying the
+# host's Windows-built tree in would both bloat the context and break native deps.
+node_modules/
+dist/
+test-results/
+playwright-report/
+e2e/.auth/
+.env
+.env.local
+.env.*.local
+.claude/

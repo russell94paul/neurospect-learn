@@ -1,0 +1,109 @@
+# neurospect-learn — the local daily driver.  `docker compose up -d`
+#
+# WHAT THIS IS FOR, AND WHAT IT IS NOT
+# ------------------------------------
+# Decided 2026-08-12 (Paul): hosting is premature. He is the only user, every
+# drill is desktop TradingView bar-replay, and a public URL buys only the two
+# things not needed yet — a second person reaching it, and access away from the
+# desk. So the platform gets a one-command LOCAL instance instead, and the Render
+# + Cloudflare path (../render.yaml, and the runbook in the wiki) stays written,
+# proven and unused until there is someone to show it to.
+#
+# This stack RUNS the app. It does not develop it. Hot reload stays exactly as it
+# was — `uvicorn --reload` on :8000 and `npm run dev` on :5173 — and this stack
+# deliberately occupies NEITHER of those ports, so the daily driver and a dev
+# session can run side by side instead of fighting:
+#
+#     dev (unchanged)      API :8000   ·  UI :5173   ·  hot reload
+#     daily driver (here)  API :8001   ·  UI :5174   ·  built bundle
+#
+# Both talk to the SAME database on :5433, which is the point — one dataset.
+#
+# ⚠ THE DATABASE VOLUME IS NOT A FRESH ONE. `neurospect-learn-db` originally ran
+# from `docker run`, which gave it an ANONYMOUS volume. `pgdata` below is a named
+# volume the data was COPIED into (never moved), so the original anonymous volume
+# survives untouched as the rollback. See the wiki runbook §Local stack.
+
+name: neurospect-learn
+
+services:
+  db:
+    image: postgres:16                      # pinned to 16 to match the original container exactly
+    container_name: neurospect-learn-db     # same name the boot skill and every runbook already use
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5433:5432"                         # unchanged, so api/.env and every existing script still work
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # `api` waits on THIS, not on the port opening — Postgres binds the port
+      # before it can answer queries, and the migration step would race it.
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./api
+    environment:
+      # Container-to-container, so the host is `db` and the port is 5432 — NOT
+      # localhost:5433, which is only how the host reaches it.
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      # Left empty on purpose: config.py derives the psycopg2 URL Alembic needs
+      # from DATABASE_URL, and a second copy could only drift from it.
+      DATABASE_URL_SYNC: ""
+      JWT_SECRET: ${JWT_SECRET}
+      # Localhost-only stack, so debug login stays on and no Discord app is
+      # needed to get in. This also means the allowlist admits everyone — which
+      # is correct here and is exactly what it refuses to do when DEBUG=false.
+      DEBUG: "true"
+      CORS_ORIGINS: http://localhost:5174
+      # Evidence blobs land on the HOST (see the bind mount below), so they
+      # survive `docker compose down`, and the dev server on :8000 reads the very
+      # same files. This is why R2 is not needed locally: nothing here is ephemeral.
+      EVIDENCE_LOCAL_ROOT: /evidence
+      WIKI_CONTENT_ROOT: /wiki
+      AI_GRADING_ENABLED: "false"
+    volumes:
+      - ./.evidence-store:/evidence
+      # Read-only, and it is the wiki's own Rule #1 in mount form: the ingest and
+      # rubric-projection scripts must never write back to their source.
+      - ../neurospect-wiki:/wiki:ro
+    ports:
+      - "8001:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  app:
+    build:
+      context: ./app
+      args:
+        # Build-time, not runtime — Vite inlines these. The API URL is the HOST
+        # port, because it is the browser that makes the call, not the container.
+        VITE_API_URL: http://localhost:8001
+        VITE_DEBUG: "true"
+    ports:
+      - "5174:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+    # `external: true` because compose did NOT create this volume — the data was
+    # copied into it by hand from the old `docker run` container's anonymous
+    # volume. Declaring it external means compose treats it as someone else's
+    # property: it will refuse to create it, and — the reason this line exists —
+    # `docker compose down -v` will NOT delete it. Without this, one `down -v`
+    # destroys the seeded corpus AND every captured chart, i.e. the evidence
+    # every rep in the platform is derived from.
+    external: true
+    name: neurospect_learn_pgdata
