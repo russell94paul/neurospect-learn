@@ -90,6 +90,26 @@ async def _token(c, discord_id):
     return {"Authorization": f"Bearer {r.json()['access_token']}"}
 
 
+def _today() -> date:
+    """The app's notion of today — NOT the machine's.
+
+    Fixed 2026-08-11 (B3). These tests used `_today()`, which is the local
+    date of whatever machine runs them, while both clocks the code actually uses
+    are UTC-based: `study_preferences.timezone` defaults to `"UTC"` (so
+    `planner._today_in(tz)` yields the UTC date), and migration 0012's
+    `trg_rest_days_declared_in_advance` compares against
+    `(now() AT TIME ZONE 'UTC')::date`.
+
+    On a machine west of UTC the two disagree for the whole evening — this suite
+    went red at 17:00 Pacific every day, with `rest_days_upcoming` short by
+    exactly one because "tomorrow" locally was already today in UTC. Nothing was
+    wrong with the app; the tests were reading a different clock from the code
+    under test. Deployment makes this permanent rather than incidental: Render
+    runs UTC while Paul does not.
+    """
+    return datetime.now(timezone.utc).date()
+
+
 def _sig(payload: dict) -> dict:
     return {s["key"]: s for s in payload["signals"]}
 
@@ -235,7 +255,7 @@ async def test_legacy_reps_are_reported_as_the_unevidenced_remainder():
 async def test_a_rest_day_can_be_declared_for_tomorrow():
     async with await _client() as c:
         h = await _token(c, f"{_PREFIX}rest-ok")
-        tomorrow = date.today() + timedelta(days=1)
+        tomorrow = _today() + timedelta(days=1)
         r = await c.post("/api/rest-days", headers=h,
                          json={"rest_date": tomorrow.isoformat(), "reason": "travelling"})
         assert r.status_code == 201, r.text
@@ -250,7 +270,7 @@ async def test_a_rest_day_for_yesterday_is_refused():
     streak freeze, and the streak is only readable because it cannot be repaired."""
     async with await _client() as c:
         h = await _token(c, f"{_PREFIX}rest-past")
-        yesterday = date.today() - timedelta(days=1)
+        yesterday = _today() - timedelta(days=1)
         r = await c.post("/api/rest-days", headers=h,
                          json={"rest_date": yesterday.isoformat()})
         assert r.status_code == 422, r.text
@@ -262,7 +282,7 @@ async def test_the_client_cannot_supply_declared_at():
     async with await _client() as c:
         h = await _token(c, f"{_PREFIX}rest-clock")
         r = await c.post("/api/rest-days", headers=h, json={
-            "rest_date": (date.today() + timedelta(days=2)).isoformat(),
+            "rest_date": (_today() + timedelta(days=2)).isoformat(),
             "declared_at": "2020-01-01T00:00:00Z",
         })
         # Either refused outright, or accepted with the SERVER's timestamp — never
@@ -274,7 +294,7 @@ async def test_the_client_cannot_supply_declared_at():
 async def test_declaring_the_same_day_twice_is_a_conflict_not_a_duplicate():
     async with await _client() as c:
         h = await _token(c, f"{_PREFIX}rest-dupe")
-        day = (date.today() + timedelta(days=3)).isoformat()
+        day = (_today() + timedelta(days=3)).isoformat()
         assert (await c.post("/api/rest-days", headers=h, json={"rest_date": day})).status_code == 201
         again = await c.post("/api/rest-days", headers=h, json={"rest_date": day})
         assert again.status_code == 409
@@ -285,7 +305,7 @@ async def test_there_is_no_patch_and_no_delete_for_a_rest_day():
     slid onto a day you later turn out to have missed."""
     async with await _client() as c:
         h = await _token(c, f"{_PREFIX}rest-verbs")
-        day = (date.today() + timedelta(days=4)).isoformat()
+        day = (_today() + timedelta(days=4)).isoformat()
         created = await c.post("/api/rest-days", headers=h, json={"rest_date": day})
         assert created.status_code == 201
         rid = created.json()["id"]
@@ -307,7 +327,7 @@ async def test_the_trigger_is_what_blocks_a_back_dated_rest_day():
         user_id = (await db.execute(
             select(User.id).where(User.discord_id == f"{_PREFIX}rest-trigger")
         )).scalar_one()
-        past = date.today() - timedelta(days=5)
+        past = _today() - timedelta(days=5)
         insert = text(
             "INSERT INTO rest_days (user_id, rest_date) VALUES (:u, :d)"
         ).bindparams(u=user_id, d=past)
@@ -337,7 +357,7 @@ async def test_the_trigger_is_what_blocks_a_back_dated_rest_day():
 async def test_a_declared_rest_day_is_frozen_after_it_is_booked():
     async with await _client() as c:
         h = await _token(c, f"{_PREFIX}rest-frozen")
-        day = date.today() + timedelta(days=6)
+        day = _today() + timedelta(days=6)
         assert (await c.post(
             "/api/rest-days", headers=h, json={"rest_date": day.isoformat()}
         )).status_code == 201
@@ -349,7 +369,7 @@ async def test_a_declared_rest_day_is_frozen_after_it_is_booked():
         with pytest.raises(Exception) as exc:
             await db.execute(
                 text("UPDATE rest_days SET rest_date = :d WHERE user_id = :u")
-                .bindparams(d=date.today() - timedelta(days=1), u=user_id)
+                .bindparams(d=_today() - timedelta(days=1), u=user_id)
             )
             await db.commit()
         assert "frozen" in str(exc.value)
@@ -386,7 +406,7 @@ async def test_declaring_rest_days_does_not_raise_the_evidence_streak_end_to_end
 
         for n in range(1, 6):
             r = await c.post("/api/rest-days", headers=h, json={
-                "rest_date": (date.today() + timedelta(days=n)).isoformat()
+                "rest_date": (_today() + timedelta(days=n)).isoformat()
             })
             assert r.status_code == 201, r.text
 
@@ -402,7 +422,7 @@ async def test_blackout_dates_never_touch_the_evidence_streak():
     days are a separate, trigger-guarded table for exactly this reason."""
     async with await _client() as c:
         h = await _token(c, f"{_PREFIX}blackout")
-        yesterday = (date.today() - timedelta(days=1)).isoformat()
+        yesterday = (_today() - timedelta(days=1)).isoformat()
         r = await c.put("/api/preferences", headers=h, json={
             "timezone": "UTC", "mon_minutes": 60, "tue_minutes": 60, "wed_minutes": 60,
             "thu_minutes": 60, "fri_minutes": 60, "sat_minutes": 60, "sun_minutes": 60,

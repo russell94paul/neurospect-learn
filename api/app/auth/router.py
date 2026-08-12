@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth.allowlist import FORBIDDEN_DETAIL, is_allowed
 from app.auth.discord import exchange_code, get_discord_user
 from app.auth.jwt import create_access_token
 from app.config import settings
@@ -43,6 +44,14 @@ async def discord_token(body: DiscordTokenRequest, db: AsyncSession = Depends(ge
         )
 
     discord_id = discord_user["id"]
+
+    # Refuse BEFORE the upsert below, so a rejected stranger leaves no `users`
+    # row behind — a 403 that still writes a row is not a closed door.
+    if not is_allowed(discord_id):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail=FORBIDDEN_DETAIL
+        )
+
     username = discord_user.get("username")
     avatar_hash = discord_user.get("avatar")
     avatar_url = (

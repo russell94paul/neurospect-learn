@@ -6,6 +6,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth.allowlist import FORBIDDEN_DETAIL, is_allowed
 from app.auth.jwt import verify_token
 from app.database import AsyncSessionLocal
 from app.models.user import User
@@ -38,5 +39,11 @@ async def get_current_user(
 
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
+
+    # B3 — re-checked per request, not just at token issue: a 30-day JWT would
+    # otherwise outlive removal from the allowlist by a month. The row is already
+    # loaded, so this costs one string comparison and no extra query.
+    if not is_allowed(user.discord_id):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=FORBIDDEN_DETAIL)
 
     return user

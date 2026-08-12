@@ -1,7 +1,10 @@
+import json
 from pathlib import Path
+from typing import Annotated
 
 from dotenv import load_dotenv
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import field_validator
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 # E4 — make `.env` reach consumers that are NOT this settings object.
 # pydantic-settings reads `.env` into `Settings` and stops there; it never
@@ -69,8 +72,41 @@ class Settings(BaseSettings):
     discord_client_id: str = ""
     discord_client_secret: str = ""
 
+    # Who may hold an account (B3 — the app became publicly reachable). Empty
+    # means "everyone" on localhost and "nobody" in prod; see app/auth/allowlist.py
+    # for why that asymmetry is deliberate.
+    allowed_discord_ids: Annotated[list[str], NoDecode] = []
+
     # CORS — comma-separated / JSON list of allowed origins
-    cors_origins: list[str] = ["http://localhost:5173"]
+    cors_origins: Annotated[list[str], NoDecode] = ["http://localhost:5173"]
+
+    # B3 — measured, not assumed. pydantic-settings JSON-decodes a `list[str]`
+    # env var inside the settings SOURCE, before any validator runs, so all three
+    # of these killed the app at IMPORT — not a 4xx, a process that never serves:
+    #     CORS_ORIGINS=https://x.pages.dev   -> SettingsError (not JSON)
+    #     ALLOWED_DISCORD_IDS=111,222        -> SettingsError (not JSON)
+    #     ALLOWED_DISCORD_IDS=               -> SettingsError (empty is not JSON)
+    # The empty case is the dangerous one: `render.yaml` declares both as
+    # `sync: false`, which Render renders as an EMPTY dashboard field, so the
+    # single most likely first deploy would not boot. `NoDecode` hands the raw
+    # string here instead, and this accepts the JSON form the .env already uses,
+    # a bare comma-separated list, and blank-means-unset.
+    @field_validator("cors_origins", "allowed_discord_ids", mode="before")
+    @classmethod
+    def _tolerant_list(cls, v: object) -> object:
+        if not isinstance(v, str):
+            return v
+        raw = v.strip()
+        if not raw:
+            return []
+        if raw.startswith("["):
+            try:
+                return json.loads(raw)
+            except json.JSONDecodeError as exc:
+                raise ValueError(
+                    f"expected a JSON list or a comma-separated list, got {raw!r}"
+                ) from exc
+        return [part.strip() for part in raw.split(",") if part.strip()]
 
     # Debug mode — enables /auth/debug/token; never true in prod
     debug: bool = False

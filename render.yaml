@@ -1,0 +1,101 @@
+# Render Blueprint — neurospect-learn API + Postgres (Phase B3).
+#
+# Adapted from the proven neurospect-api deployment, NOT copied from it. The
+# differences are all deliberate and each one is a fact this repo established:
+#
+#   · `rootDir: api` — this is a monorepo (api/ + app/), where neurospect-api was
+#     a whole repo. The frontend is NOT deployed from here: `app/` goes to
+#     Cloudflare Pages with its root directory set to `app`.
+#
+#   · `plan: basic-256mb` on the database, not `starter`. `starter` is a LEGACY
+#     Postgres instance type — Render no longer creates new databases on it, so
+#     the old runbook's value would fail this Blueprint outright.
+#
+#   · `postgresMajorVersion: 16` matches the local Docker DB (postgres:16.13)
+#     exactly. Omitting it silently defaults to 18.
+#
+#   · `--workers 1`, where the old runbook ran gunicorn with `-w 2`. NOT a
+#     resource decision: `app/services/ai_grade_queue.py` serialises drains with
+#     a per-PROCESS `asyncio.Lock` and has no DB-level claim (no SELECT … FOR
+#     UPDATE SKIP LOCKED). Two workers would drain the same `pending` rows
+#     concurrently once AI_GRADING_ENABLED is on — duplicate advisory grades and
+#     duplicate Anthropic spend. One worker is also plenty for a single user.
+#     Raising this REQUIRES adding a DB-level claim first.
+#
+#   · Plain uvicorn rather than gunicorn + UvicornWorker. With one worker the
+#     process manager buys nothing, and uvicorn[standard] is already a dependency
+#     while gunicorn is not — so this drops a dependency instead of adding one.
+#
+#   · `alembic upgrade head` lives in `startCommand`, not `preDeployCommand`.
+#     `preDeployCommand` is valid Blueprint YAML but is NOT run for services
+#     created by hand in the dashboard — the pitfall the 2026-04-25 session hit.
+#     Putting migrations in the start command makes this file correct whether the
+#     service is created from the Blueprint or manually.
+#
+#   · `region: frankfurt`, where neurospect-api sits in `oregon`. Paul is the only
+#     user and he is in the UK; this is an interactive app used daily. The web
+#     service and its database MUST share a region.
+#
+# Secrets are `sync: false` — set them in the Render dashboard, never in this file.
+
+services:
+  - type: web
+    name: neurospect-learn-api
+    runtime: python
+    region: frankfurt
+    plan: starter
+    rootDir: api
+    buildCommand: pip install -r requirements.txt
+    # Migrations then serve. See the note above on why not preDeployCommand,
+    # and why the worker count is not a tuning knob.
+    startCommand: alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: neurospect-learn-db
+          property: connectionString
+      # DATABASE_URL_SYNC is deliberately absent: config.py derives the psycopg2
+      # URL from DATABASE_URL when it is unset, so Alembic needs no second var.
+      - key: JWT_SECRET
+        generateValue: true
+      # Never true in prod — it is what makes POST /auth/debug/token a 404, and
+      # what makes an unset ALLOWED_DISCORD_IDS fail CLOSED rather than open.
+      - key: DEBUG
+        value: "false"
+      # REQUIRED. Without it every login is 403 by design (fail-closed). JSON
+      # list of Discord user IDs, e.g. ["123456789012345678"].
+      - key: ALLOWED_DISCORD_IDS
+        sync: false
+      # JSON list, e.g. ["https://neurospect-learn.pages.dev"]. The code default
+      # is localhost-only and is correct for dev; prod MUST override it.
+      - key: CORS_ORIGINS
+        sync: false
+      - key: DISCORD_CLIENT_ID
+        sync: false
+      - key: DISCORD_CLIENT_SECRET
+        sync: false
+      # Evidence blobs. R2_ENDPOINT_URL being set is what switches storage.py off
+      # the LOCAL filesystem backend. It is NOT optional here: Render's disk is
+      # ephemeral, so the local backend would destroy every captured chart on each
+      # deploy while the evidence_assets rows survived — reps derived from
+      # evidence that no longer exists, failing silently.
+      - key: R2_ENDPOINT_URL
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: R2_BUCKET
+        sync: false
+      # Tier-3 advisory AI reader — off until deliberately enabled, and see the
+      # `--workers 1` note before scaling anything.
+      - key: AI_GRADING_ENABLED
+        value: "false"
+
+databases:
+  - name: neurospect-learn-db
+    plan: basic-256mb
+    postgresMajorVersion: 16
+    region: frankfurt

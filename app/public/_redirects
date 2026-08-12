@@ -1,0 +1,10 @@
+# Cloudflare Pages SPA fallback (Phase B3).
+#
+# React Router 7 owns every path below `/` on the client. Without this rule a
+# hard load or refresh of a deep route (/journal, /drills/aura%20D1-a,
+# /auth/callback) asks Pages for a file that does not exist and gets a 404 —
+# and /auth/callback is on that list, so Discord OAuth would fail on the redirect
+# back, i.e. at the first thing a new visitor does.
+#
+# Vite copies public/ verbatim into dist/, which is what Pages serves.
+/*    /index.html   200
