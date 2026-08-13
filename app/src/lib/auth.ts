@@ -47,9 +47,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(u);
         setTokenState(stored);
       })
-      .catch(() => {
-        localStorage.removeItem(TOKEN_KEY);
-        setTokenState(null);
+      .catch((err: unknown) => {
+        // Clear the token ONLY when the server actually rejects it. Every other
+        // failure — API down, container restarting, laptop asleep, DNS blip —
+        // says nothing about whether the token is valid, and discarding it on
+        // those logged the user out and destroyed the session for a transient
+        // network error. Found in S1 while asserting that /runner works with
+        // the API unreachable: the runner's content needs no API, but the shell
+        // evicted you before it could render.
+        //
+        // A genuine 401 is ALSO handled in lib/api.ts's afterResponse hook,
+        // which clears the token and redirects to /login. That path is the one
+        // that should own eviction; this catch only mirrors it so the state
+        // here is consistent within the same tick.
+        const status = (err as { response?: { status?: number } })?.response?.status;
+        if (status === 401 || status === 403) {
+          localStorage.removeItem(TOKEN_KEY);
+          setTokenState(null);
+          return;
+        }
+        // Transport / server failure: keep the token and stay signed in. `user`
+        // stays null, which UserMenu already renders as "no menu" rather than
+        // crashing, and API-backed pages show their own error states.
+        setTokenState(stored);
       })
       .finally(() => setIsLoading(false));
   }, []);

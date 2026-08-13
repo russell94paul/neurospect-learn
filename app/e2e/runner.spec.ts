@@ -239,22 +239,18 @@ test('prose is joined into paragraphs, not one fragment per source line', async 
   expect(longest, 'paragraphs look split per source line').toBeGreaterThan(160);
 });
 
-test('the runner CONTENT needs no API — but the app shell still logs you out', async ({ page }) => {
-  // Two separable claims, and only one of them holds. Written as one test
-  // because asserting the good half while staying silent about the bad half is
-  // how a half-true "renders offline" claim would have shipped.
+test('the runner renders with the API unreachable, and the session survives it', async ({ page }) => {
+  // Two claims. S1 shipped only the first as true and asserted the second as a
+  // known defect; the auth fix flipped it, so this test flipped with it.
   //
-  //  (a) TRUE  — the protocol content is a bundled wiki projection, so /api is
-  //              never touched to render it.
-  //  (b) FALSE — the runner is behind ProtectedLayout, and lib/auth.ts:50-53
-  //              clears the stored token on ANY `auth/me` failure, network
-  //              errors included. So an unreachable API does not just degrade
-  //              the runner, it BOUNCES YOU TO /login and discards the session.
+  //  (a) the protocol content is a bundled wiki projection, so /api is never
+  //      touched to render it;
+  //  (b) an unreachable API no longer evicts you. lib/auth.ts now clears the
+  //      token ONLY on a real 401/403 — a transport failure says nothing about
+  //      whether the token is valid.
   //
-  // (b) is a pre-existing defect in the auth shell, wider than this phase and
-  // security-adjacent, so S1 documents it rather than changing it. Fixing it
-  // means distinguishing 401/403 (token really is bad → clear it) from a
-  // transport failure (→ keep it). Flagged in the tracker for approval.
+  // The pairing is deliberate: (a) alone is a half-truth, because content that
+  // needs no API is worthless if the shell throws you to /login before it paints.
 
   // (a) — no /api traffic is needed to paint the protocol.
   const apiCalls: string[] = [];
@@ -268,13 +264,30 @@ test('the runner CONTENT needs no API — but the app shell still logs you out',
   expect(apiCalls, 'the runner should not need /api to render').toEqual([]);
   await shot(page, '11-no-api-traffic-narrow-400');
 
-  // (b) — the honest negative, asserted so a future "it works offline" claim fails here.
+  // (b) — API unreachable: stay signed in, and still paint the protocol.
   await page.route('**/auth/**', (route) => route.abort());
+  await page.goto('/runner');
+  await expect(page.getByRole('heading', { name: 'Runner', level: 1 })).toBeVisible();
+  await expect(page).not.toHaveURL(/\/login$/);
+  expect(
+    await page.evaluate(() => localStorage.getItem('neurospect_learn_token')),
+    'a transport failure must not discard the token'
+  ).not.toBeNull();
+  await expect(page.getByText('Confirmation — Sequential SMT')).toBeVisible();
+  await shot(page, '12-api-down-session-survives');
+});
+
+test('a real 401 DOES still evict — the fix must not become "never log out"', async ({ page }) => {
+  // The failure mode of the fix itself. Narrowing eviction to 401/403 is only
+  // correct if 401 still evicts; otherwise a genuinely revoked token would keep
+  // a dead session alive forever. Asserted as the paired negative.
+  await page.route('**/auth/me', (route) =>
+    route.fulfill({ status: 401, contentType: 'application/json', body: '{"detail":"Not authenticated"}' })
+  );
   await page.goto('/runner');
   await expect(page).toHaveURL(/\/login$/);
   expect(
     await page.evaluate(() => localStorage.getItem('neurospect_learn_token')),
-    'auth.ts discards the token on a transport failure — see the note above'
+    'a 401 must still clear the token'
   ).toBeNull();
-  await shot(page, '12-auth-shell-logs-you-out');
 });
