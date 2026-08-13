@@ -9,6 +9,7 @@ import { PathPage } from '@/pages/path';
 import { StageDetailPage } from '@/pages/stage-detail';
 import { DrillsPage } from '@/pages/drills';
 import { TodayPage } from '@/pages/today';
+import { RunnerPage } from '@/pages/runner';
 import { PlanPage } from '@/pages/plan';
 import { PlanSetupPage } from '@/pages/plan-setup';
 import { JournalPage } from '@/pages/journal';
@@ -83,6 +84,13 @@ const router = createBrowserRouter([
       {
         path: '/today',
         element: <TodayPage />,
+      },
+      // S1 — the Aura session runner. A new TOP-LEVEL section on purpose: every
+      // other page is a dashboard you read, this is a protocol you work, live,
+      // in a narrow window docked beside Tradezella.
+      {
+        path: '/runner',
+        element: <RunnerPage />,
       },
       {
         path: '/plan',

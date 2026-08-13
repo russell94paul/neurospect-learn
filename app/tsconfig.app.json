@@ -9,6 +9,9 @@
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    // S1 — the Aura runner imports its wiki projection (src/data/aura-runner.json)
+    // directly into the bundle, so the runner renders with the API down.
+    "resolveJsonModule": true,
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
