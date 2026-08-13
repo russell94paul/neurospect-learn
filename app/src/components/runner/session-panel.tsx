@@ -127,11 +127,18 @@ export function TradezellaPaste({ state }: { state: RunnerState }) {
       <CopyRow label="Session name" value={sessionName(state.startDate, state.span)} />
       <CopyRow label="Start date" value={toTradezellaDate(state.startDate)} />
       <CopyRow label="End date" value={toTradezellaDate(end, true)} />
-      <CopyRow label="Symbols" value="NQ, ES, YM, 6S" />
+      <CopyRow label="Symbols" value="NQ, ES, YM" />
       <p className="pt-0.5 text-[11px] leading-snug text-muted-foreground">
-        Four symbols of the five allowed. <strong className="text-foreground">Not</strong> MNQ or
-        MES — they are micro contracts of NQ and ES, so a divergence between them is impossible by
-        construction and the confirmation engine has nothing to read.
+        The indices triad (R16) — three of the five slots allowed.{' '}
+        <strong className="text-foreground">Not</strong> MNQ or MES: they are micro contracts of NQ
+        and ES, so their divergences carry no information (measured — one divergence in 56, at a
+        margin of zero) and the confirmation engine has nothing to read.
+      </p>
+      <p className="pt-0.5 text-[11px] leading-snug text-muted-foreground">
+        <strong className="text-foreground">6S</strong>, the Aura Asset, is a{' '}
+        <em>flagged</em> 4th leg (R17) and is not offered in Tradezella. Do not block on it — the
+        triad is the complete divergence set. If you substitute, note that 6S is quoted USD-per-CHF,
+        so <code>CHFUSD</code> matches and <code>USDCHF</code> is <strong>inverted</strong>.
       </p>
     </div>
   );

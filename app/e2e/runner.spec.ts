@@ -103,10 +103,13 @@ test('declaring a span produces the Tradezella paste block, incl. the symbol cor
   await expect(page.getByText('AURA · NQ · 2025-06-02→2025-07-02 · 1m')).toBeVisible();
   await expect(page.getByText('06/02/2025 00:00:00')).toBeVisible();
   await expect(page.getByText('07/02/2025 23:59:59')).toBeVisible();
-  await expect(page.getByText('NQ, ES, YM, 6S')).toBeVisible();
+  await expect(page.getByText('NQ, ES, YM')).toBeVisible();
 
-  // The finding from the probe, surfaced where it can change behaviour.
+  // The findings surfaced where they can change behaviour: the micro-contract
+  // trap, and the 6S inversion trap (USDCHF moves opposite to 6S, so a
+  // substitute chosen carelessly inverts every divergence read).
   await expect(page.getByText(/micro contracts of NQ and ES/)).toBeVisible();
+  await expect(page.getByText(/USDCHF/)).toBeVisible();
 
   expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0);
   await shot(page, '02-declared-narrow-400');

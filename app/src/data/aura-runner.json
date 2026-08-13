@@ -989,10 +989,9 @@
             "hardGate": false
           },
           {
-            "text": "**Symbols** — **maximum 5**, `OBSERVED` in the form's own hint. Enter the triad plus the Aura Asset: **`NQ`, `ES`, `YM`, `6S`**. That is 4, leaving one spare. **[R16, R17]**",
+            "text": "**Symbols** — **maximum 5**, `OBSERVED` in the form's own hint. Enter the indices triad: **`NQ`, `ES`, `YM`**. **[R16]** *(On the Aura Asset, see §The 6S problem below — do not block on it.)*",
             "ruleRefs": [
-              "R16",
-              "R17"
+              "R16"
             ],
             "hardGate": false
           },
@@ -1044,7 +1043,12 @@
           }
         ],
         "paras": [
-          "The existing session `NQ Macro Po3 - Asia Session` carries **`NQ`, `MNQ`, `ES`, `MES`**. `MNQ` is the micro contract of `NQ` and `MES` the micro of `ES` — they are the *same instrument at a different multiplier*. **Two of the four panes are duplicates, and a divergence between `NQ` and `MNQ` is impossible by construction.** The confirmation engine (R18) has nothing to read. Use `NQ` `ES` `YM` `6S`.",
+          "**Paul reports `6S` is not offered in Tradezella's symbol search.** *(Not independently verified: the in-session datafeed's `searchSymbols` is scoped to that session's own symbols — it returns the same four regardless of the query, including for a nonsense string — so a \"not found\" from it would have been a zero from an instrument that cannot see. Paul's observation stands; the catalogue was not checked.)*",
+          "**Start with the three-leg triad and do not wait.** R16 defines the indices triad as **ES / NQ / YM** — that is the complete divergence set, and R18's Sequential SMT operates on the triad. **R17 adds 6S as a *fourth* leg and is itself `flagged`**: dOoMeR calls the origin story his own speculation and rests the case on chart behaviour, not theory. So the Aura Asset is an enhancement, not a prerequisite, and the 5-symbol limit leaves room to add it later without losing anything.",
+          "**If a substitute is considered, two facts decide it — and the first is a trap:**",
+          "1. **Direction. `6S` is the CME Swiss Franc future, quoted USD per 1 CHF — i.e. it is `CHF/USD`.** `USD/CHF` is the **inverse** and moves the opposite way, and it is the conventional quote most feeds default to. Substituting `USDCHF` would invert every divergence read — plausible-looking and exactly wrong. Only a **USD-per-CHF** quote — i.e. `CHFUSD` — is directionally equivalent to 6S. 2. **⭐ Candle synchronisation — R17's ACTUAL stated criterion.** 6S was chosen over DXY *\"because DXY's candles aren't sync'd to the traded futures.\"* So the test a substitute must pass is **not** \"does it move the same\" but **\"do its daily/weekly candle boundaries align with the CME futures session?\"** A spot-forex feed can be directionally identical and still fail this, which would reintroduce precisely the defect R17 rejected DXY for. Spot forex and CME FX futures also differ by **carry/forward points** (a small, drifting basis) and futures carry **quarterly roll discontinuities**.",
+          "**How to settle it when it matters:** put the candidate on a chart beside `NQ` and compare *candle boundaries*, not just direction — the same `exportData` comparison used to test MNQ. Until that is done, treat any substitute as **UNVERIFIED** and run the three-leg triad.",
+          "The existing session `NQ Macro Po3 - Asia Session` carries **`NQ`, `MNQ`, `ES`, `MES`**. `MNQ` is the micro contract of `NQ` and `MES` the micro of `ES` — they are the *same instrument at a different multiplier*. **Two of the four panes are duplicates, and a divergence between `NQ` and `MNQ` is impossible by construction.** The confirmation engine (R18) has nothing to read. Use `NQ` `ES` `YM`.",
           "The span is configurable and that is deliberate — but declare it up front and keep the *sitting* honest.",
           "**Start at `1w`.** Twenty replayed days is four weekly sittings, which is a reachable B2 sample rather than an aspiration."
         ]
@@ -1053,7 +1057,7 @@
         "title": "2. Configure the chart — `OBSERVED`",
         "items": [
           {
-            "text": "Confirm the **4-pane multi-symbol layout** shows `NQ`, `ES`, `YM`, `6S` — one symbol per pane. The panes are what make SMT readable at a glance. **[R18]**",
+            "text": "Confirm the **multi-symbol layout** shows `NQ`, `ES`, `YM` — one symbol per pane. The panes are what make SMT readable at a glance. **[R18]**",
             "ruleRefs": [
               "R18"
             ],
@@ -1733,10 +1737,9 @@
         "title": "0. One-time chart setup",
         "items": [
           {
-            "text": "Four panes, one symbol each: **`NQ` `ES` `YM` `6S`**. **[R16, R17]**",
+            "text": "Panes, one symbol each: **`NQ` `ES` `YM`** — the indices triad. **[R16]** *(`6S`, the Aura Asset, is a flagged 4th leg and is not offered in Tradezella — see [[concepts/mastery/aura/tradezella-setup]] §The 6S problem. Do not block on it.)*",
             "ruleRefs": [
-              "R16",
-              "R17"
+              "R16"
             ],
             "hardGate": false
           },
@@ -1825,7 +1828,7 @@
             "hardGate": false
           },
           {
-            "text": "**M2 · SMT-qualify them.** Across `NQ` `ES` `YM` (+`6S`), mark which swings hold on all legs and which are swept on some. Recolour: qualified → yellow, unqualified → grey. **This is the filter everything downstream leans on.** **[R3]** ← hard gate",
+            "text": "**M2 · SMT-qualify them.** Across `NQ` `ES` `YM`, mark which swings hold on all legs and which are swept on some. Recolour: qualified → yellow, unqualified → grey. **This is the filter everything downstream leans on.** **[R3]** ← hard gate",
             "ruleRefs": [
               "R3"
             ],
@@ -1963,7 +1966,7 @@
         "tables": [],
         "paras": [
           "Session `NQ Macro Po3 - Asia Session` carries **99 shapes on the NQ pane** (94 rectangles, 3 vertical lines, 2 trend lines) and **zero on MNQ, ES and MES**. Two things follow:",
-          "- The markup habit already exists — this protocol is regularising it, not introducing it. - **All the markup is on one chart.** Sequential SMT is read *across* the triad (R18), so the comparison legs need marking too. That reinforces §0: the panes must be `NQ` `ES` `YM` `6S`, and each needs its swing points marked (M1–M2) or there is nothing to compare."
+          "- The markup habit already exists — this protocol is regularising it, not introducing it. - **All the markup is on one chart.** Sequential SMT is read *across* the triad (R18), so the comparison legs need marking too. That reinforces §0: the panes must be `NQ` `ES` `YM`, and each needs its swing points marked (M1–M2) or there is nothing to compare."
         ]
       },
       {
