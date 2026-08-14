@@ -129,12 +129,16 @@ the range extreme, sign-checked · R39/R43/R44 risk and R:R.
 
 ---
 
-## Deliverable 3 (drawing computed levels on the chart) — NOT DONE
+## Deliverable 3 (drawing computed levels on the chart) — ✅ DONE 2026-08-13
 
-`createShape` / `createMultipointShape` are available and the mechanism is proven, but
-drawing writes shapes into **Paul's live session `831607`**, which he would then have
-to clean up. The boot prompt marks this optional. Left undone pending his say-so rather
-than mutating his practice environment unasked.
+Drawn at Paul's explicit request. **8 shapes on the NQ pane**, each labelled with its rule
+ID and an `[S1c]` marker so a computed level can never be mistaken for a hand read.
+Verified by reading every shape back through the chart API, and proved to persist across a
+full page navigation. See **`chart-shapes-drawn.md`** for the level table, the shape IDs,
+and a removal snippet that deletes only these and nothing of Paul's.
+
+⚠️ **Delete them before marking this day by hand** — pre-drawn levels turn a markup rep into
+a tracing exercise.
 
 ## What was touched, and what was not
 

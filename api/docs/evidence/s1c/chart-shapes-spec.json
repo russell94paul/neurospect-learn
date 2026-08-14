@@ -1,0 +1,90 @@
+{
+  "record": "2025-05-30 NQ SHORT (S1c computed)",
+  "chart": "NQ (pane 0)",
+  "shapes": [
+    {
+      "rule": "R4",
+      "kind": "hline",
+      "price": 21562.25,
+      "time": 1747747800,
+      "text": "R4 range high 21562.25 [S1c]",
+      "color": "#FFFFFF",
+      "width": 2,
+      "style": 0
+    },
+    {
+      "rule": "R4",
+      "kind": "hline",
+      "price": 20727.0,
+      "time": 1748007000,
+      "text": "R4 range low 20727.00 [S1c]",
+      "color": "#FFFFFF",
+      "width": 2,
+      "style": 0
+    },
+    {
+      "rule": "R5",
+      "kind": "hline",
+      "price": 21144.62,
+      "time": 1748007000,
+      "text": "R5 EQ 21144.63 - premium above [S1c]",
+      "color": "#9E9E9E",
+      "width": 1,
+      "style": 2
+    },
+    {
+      "rule": "R3",
+      "kind": "hline",
+      "price": 21562.25,
+      "time": 1747747800,
+      "text": "R3 SMT-qualified high @05-20 - ES/YM did NOT take [S1c]",
+      "color": "#FFEB3B",
+      "width": 2,
+      "style": 0
+    },
+    {
+      "rule": "R33",
+      "kind": "hline",
+      "price": 21567.5,
+      "time": 1748606700,
+      "text": "R33 stop 21567.50 (risk 225.75) [S1c]",
+      "color": "#F44336",
+      "width": 2,
+      "style": 0
+    },
+    {
+      "rule": "R30",
+      "kind": "hline",
+      "price": 21341.75,
+      "time": 1748606700,
+      "text": "R30 entry 21341.75 - 5m iFVG retest 08:05 [S1c]",
+      "color": "#4CAF50",
+      "width": 2,
+      "style": 0
+    },
+    {
+      "rule": "R35",
+      "kind": "hline",
+      "price": 20727.0,
+      "time": 1748606700,
+      "text": "R35 target 20727.00 - 2.7R [S1c]",
+      "color": "#4CAF50",
+      "width": 2,
+      "style": 2
+    }
+  ],
+  "box": {
+    "rule": "R30",
+    "kind": "rect",
+    "p1": {
+      "time": 1748564100,
+      "price": 21343.25
+    },
+    "p2": {
+      "time": 1748606700,
+      "price": 21341.75
+    },
+    "text": "R30 5m iFVG [S1c]",
+    "color": "#2196F3"
+  }
+}
