@@ -127,7 +127,7 @@ export function TradezellaPaste({ state }: { state: RunnerState }) {
       <CopyRow label="Session name" value={sessionName(state.startDate, state.span)} />
       <CopyRow label="Start date" value={toTradezellaDate(state.startDate)} />
       <CopyRow label="End date" value={toTradezellaDate(end, true)} />
-      <CopyRow label="Symbols" value="NQ, ES, YM" />
+      <CopyRow label="Symbols" value="NQ, ES, YM, CHFUSD" />
       <p className="pt-0.5 text-[11px] leading-snug text-muted-foreground">
         The indices triad (R16) — three of the five slots allowed.{' '}
         <strong className="text-foreground">Not</strong> MNQ or MES: they are micro contracts of NQ
@@ -135,10 +135,11 @@ export function TradezellaPaste({ state }: { state: RunnerState }) {
         margin of zero) and the confirmation engine has nothing to read.
       </p>
       <p className="pt-0.5 text-[11px] leading-snug text-muted-foreground">
-        <strong className="text-foreground">6S</strong>, the Aura Asset, is a{' '}
-        <em>flagged</em> 4th leg (R17) and is not offered in Tradezella. Do not block on it — the
-        triad is the complete divergence set. If you substitute, note that 6S is quoted USD-per-CHF,
-        so <code>CHFUSD</code> matches and <code>USDCHF</code> is <strong>inverted</strong>.
+        <code>CHFUSD</code> stands in for <strong className="text-foreground">6S</strong>, the Aura
+        Asset — a <em>flagged</em> 4th leg (R17), added <em>alongside</em> the triad, never replacing
+        YM. 6S is quoted USD-per-CHF, and CHFUSD prints ~1.21 (a franc costs $1.21), so it matches;{' '}
+        <code>USDCHF</code> prints ~0.82 and is <strong>inverted</strong> — it would reverse every
+        divergence read.
       </p>
     </div>
   );
