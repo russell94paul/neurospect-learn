@@ -1,0 +1,473 @@
+[
+  {
+    "day": "2025-05-01",
+    "kind": "REJECTION",
+    "bias": null,
+    "failing_rule": "DATA",
+    "lines": [
+      {
+        "rule": "DATA",
+        "text": "only 0 bars of 5m data in this ET day - not a tradeable session in this export (holiday, weekend, or outside the loaded window)"
+      }
+    ],
+    "unresolved": [],
+    "branches": []
+  },
+  {
+    "day": "2025-05-02",
+    "kind": "REJECTION",
+    "bias": null,
+    "failing_rule": "DATA",
+    "lines": [
+      {
+        "rule": "DATA",
+        "text": "only 0 bars of 5m data in this ET day - not a tradeable session in this export (holiday, weekend, or outside the loaded window)"
+      }
+    ],
+    "unresolved": [],
+    "branches": []
+  },
+  {
+    "day": "2025-05-05",
+    "kind": "REJECTION",
+    "bias": null,
+    "failing_rule": "R3",
+    "lines": [
+      {
+        "rule": "R3",
+        "text": "no SMT-qualified swing on the daily cycle in the 60-bar lookback - unqualified swings are provisional and not tradeable"
+      }
+    ],
+    "unresolved": [],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-06",
+    "kind": "REJECTION",
+    "bias": null,
+    "failing_rule": "R3",
+    "lines": [
+      {
+        "rule": "R3",
+        "text": "no SMT-qualified swing on the daily cycle in the 60-bar lookback - unqualified swings are provisional and not tradeable"
+      }
+    ],
+    "unresolved": [],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-07",
+    "kind": "REJECTION",
+    "bias": null,
+    "failing_rule": "R3",
+    "lines": [
+      {
+        "rule": "R3",
+        "text": "no SMT-qualified swing on the daily cycle in the 60-bar lookback - unqualified swings are provisional and not tradeable"
+      }
+    ],
+    "unresolved": [],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-08",
+    "kind": "REJECTION",
+    "bias": null,
+    "failing_rule": "R3",
+    "lines": [
+      {
+        "rule": "R3",
+        "text": "no SMT-qualified swing on the daily cycle in the 60-bar lookback - unqualified swings are provisional and not tradeable"
+      }
+    ],
+    "unresolved": [],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-09",
+    "kind": "REJECTION",
+    "bias": null,
+    "failing_rule": "R3",
+    "lines": [
+      {
+        "rule": "R3",
+        "text": "no SMT-qualified swing on the daily cycle in the 60-bar lookback - unqualified swings are provisional and not tradeable"
+      }
+    ],
+    "unresolved": [],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-12",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R35",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R3",
+        "text": "SMT-qualified low 19,749.50 @ 2025-05-02 09:30 ET - NQ took it 05-07 09:30 by 283.0 ticks; ES:TOOK(+20.0t)  YM:DID-NOT-TAKE(+29.0t)"
+      },
+      {
+        "rule": "R18",
+        "text": "daily-cycle SMT diverging on YM -> bias LONG  (knowable 2025-05-10 09:30 ET, age 1.6d, 0 earlier same-cycle SMT(s) retired per R7)"
+      },
+      {
+        "rule": "R18",
+        "text": "nested 240m SMT @ 2025-05-06 18:00 ET level 19,799.50, diverging on YM - adjacent cycles agree"
+      },
+      {
+        "rule": "R35",
+        "text": "target 20,276.75 is already taken - it lies behind entry 20,821.25 for a LONG. There is no draw on liquidity left in this direction"
+      }
+    ],
+    "unresolved": [],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-13",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R6",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R6",
+        "text": "range INVALIDATED - candle close above the boundary at 20,948.75 on 2025-05-12 09:30 ET. R6: only a close beyond a boundary breaks a range, and this one closed. R7: wait for the next Sequential SMT to anchor a new range"
+      }
+    ],
+    "unresolved": [],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-14",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R6",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R6",
+        "text": "range INVALIDATED - candle close above the boundary at 20,948.75 on 2025-05-12 09:30 ET. R6: only a close beyond a boundary breaks a range, and this one closed. R7: wait for the next Sequential SMT to anchor a new range"
+      }
+    ],
+    "unresolved": [],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-15",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R6",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R6",
+        "text": "range INVALIDATED - candle close above the boundary at 20,948.75 on 2025-05-12 09:30 ET. R6: only a close beyond a boundary breaks a range, and this one closed. R7: wait for the next Sequential SMT to anchor a new range"
+      }
+    ],
+    "unresolved": [],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-16",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R6",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R6",
+        "text": "range INVALIDATED - candle close above the boundary at 20,948.75 on 2025-05-12 09:30 ET. R6: only a close beyond a boundary breaks a range, and this one closed. R7: wait for the next Sequential SMT to anchor a new range"
+      }
+    ],
+    "unresolved": [],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-19",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R6",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R6",
+        "text": "range INVALIDATED - candle close above the boundary at 20,948.75 on 2025-05-12 09:30 ET. R6: only a close beyond a boundary breaks a range, and this one closed. R7: wait for the next Sequential SMT to anchor a new range"
+      }
+    ],
+    "unresolved": [
+      "R9 - the largest expansive move is dead but a smaller candidate is still live: 21,192.00-21,529.75 (337.75 pts, move 2025-05-15 09:30 ET -> 2025-05-15 09:30 ET). R9 says overlapping ranges are acceptable and must not be forced; the engine will NOT switch to the one that happens to yield a trade. Zoom out and decide by hand"
+    ],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-20",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R6",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R6",
+        "text": "range INVALIDATED - candle close above the boundary at 20,948.75 on 2025-05-12 09:30 ET. R6: only a close beyond a boundary breaks a range, and this one closed. R7: wait for the next Sequential SMT to anchor a new range"
+      }
+    ],
+    "unresolved": [
+      "R9 - the largest expansive move is dead but a smaller candidate is still live: 21,192.00-21,529.75 (337.75 pts, move 2025-05-15 09:30 ET -> 2025-05-15 09:30 ET). R9 says overlapping ranges are acceptable and must not be forced; the engine will NOT switch to the one that happens to yield a trade. Zoom out and decide by hand"
+    ],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-21",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R6",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R6",
+        "text": "range INVALIDATED - candle close above the boundary at 20,948.75 on 2025-05-12 09:30 ET. R6: only a close beyond a boundary breaks a range, and this one closed. R7: wait for the next Sequential SMT to anchor a new range"
+      }
+    ],
+    "unresolved": [
+      "R9 - the largest expansive move is dead but a smaller candidate is still live: 21,192.00-21,529.75 (337.75 pts, move 2025-05-15 09:30 ET -> 2025-05-15 09:30 ET). R9 says overlapping ranges are acceptable and must not be forced; the engine will NOT switch to the one that happens to yield a trade. Zoom out and decide by hand"
+    ],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-22",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R6",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R6",
+        "text": "range INVALIDATED - candle close above the boundary at 20,948.75 on 2025-05-12 09:30 ET. R6: only a close beyond a boundary breaks a range, and this one closed. R7: wait for the next Sequential SMT to anchor a new range"
+      }
+    ],
+    "unresolved": [
+      "R9 - the largest expansive move is dead but a smaller candidate is still live: 21,112.50-21,562.25 (449.75 pts, move 2025-05-19 09:30 ET -> 2025-05-20 09:30 ET). R9 says overlapping ranges are acceptable and must not be forced; the engine will NOT switch to the one that happens to yield a trade. Zoom out and decide by hand"
+    ],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-23",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R6",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R6",
+        "text": "range INVALIDATED - candle close above the boundary at 20,948.75 on 2025-05-12 09:30 ET. R6: only a close beyond a boundary breaks a range, and this one closed. R7: wait for the next Sequential SMT to anchor a new range"
+      }
+    ],
+    "unresolved": [
+      "R9 - the largest expansive move is dead but a smaller candidate is still live: 21,112.50-21,562.25 (449.75 pts, move 2025-05-19 09:30 ET -> 2025-05-20 09:30 ET). R9 says overlapping ranges are acceptable and must not be forced; the engine will NOT switch to the one that happens to yield a trade. Zoom out and decide by hand"
+    ],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-26",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R6",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R6",
+        "text": "range INVALIDATED - candle close above the boundary at 20,948.75 on 2025-05-12 09:30 ET. R6: only a close beyond a boundary breaks a range, and this one closed. R7: wait for the next Sequential SMT to anchor a new range"
+      }
+    ],
+    "unresolved": [],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-27",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R6",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R6",
+        "text": "range INVALIDATED - candle close above the boundary at 20,948.75 on 2025-05-12 09:30 ET. R6: only a close beyond a boundary breaks a range, and this one closed. R7: wait for the next Sequential SMT to anchor a new range"
+      }
+    ],
+    "unresolved": [],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-28",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R6",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R6",
+        "text": "range INVALIDATED - candle close above the boundary at 20,948.75 on 2025-05-12 09:30 ET. R6: only a close beyond a boundary breaks a range, and this one closed. R7: wait for the next Sequential SMT to anchor a new range"
+      }
+    ],
+    "unresolved": [
+      "R9 - the largest expansive move is dead but a smaller candidate is still live: 20,727.00-21,562.25 (835.25 pts, move 2025-05-20 09:30 ET -> 2025-05-23 09:30 ET). R9 says overlapping ranges are acceptable and must not be forced; the engine will NOT switch to the one that happens to yield a trade. Zoom out and decide by hand"
+    ],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-29",
+    "kind": "REJECTION",
+    "bias": "LONG",
+    "failing_rule": "R6",
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 19,103.75-20,276.75  (expansive move 2025-04-30 09:30 ET -> 2025-05-02 09:30 ET, 1,173.00 pts)"
+      },
+      {
+        "rule": "R6",
+        "text": "range INVALIDATED - candle close above the boundary at 20,948.75 on 2025-05-12 09:30 ET. R6: only a close beyond a boundary breaks a range, and this one closed. R7: wait for the next Sequential SMT to anchor a new range"
+      }
+    ],
+    "unresolved": [
+      "R9 - the largest expansive move is dead but a smaller candidate is still live: 20,727.00-21,562.25 (835.25 pts, move 2025-05-20 09:30 ET -> 2025-05-23 09:30 ET). R9 says overlapping ranges are acceptable and must not be forced; the engine will NOT switch to the one that happens to yield a trade. Zoom out and decide by hand"
+    ],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg"
+    ]
+  },
+  {
+    "day": "2025-05-30",
+    "kind": "SETUP",
+    "bias": "SHORT",
+    "failing_rule": null,
+    "lines": [
+      {
+        "rule": "R4",
+        "text": "range 20,727.00-21,562.25  (expansive move 2025-05-20 09:30 ET -> 2025-05-23 09:30 ET, 835.25 pts)"
+      },
+      {
+        "rule": "R3",
+        "text": "SMT-qualified high 21,562.25 @ 2025-05-20 09:30 ET - NQ took it 05-28 09:30 by 21.0 ticks; ES:DID-NOT-TAKE(+141.0t)  YM:DID-NOT-TAKE(+234.0t)"
+      },
+      {
+        "rule": "R18",
+        "text": "daily-cycle SMT diverging on ES, YM -> bias SHORT  (knowable 2025-05-29 09:30 ET, age 0.6d, 1 earlier same-cycle SMT(s) retired per R7)"
+      },
+      {
+        "rule": "R24",
+        "text": "Sequential SKIP - 240m did NOT confirm, 15m did @ 2025-05-29 14:45 ET (diverging on CHFUSD)"
+      },
+      {
+        "rule": "R5",
+        "text": "entry in PREMIUM (0.74 of range)"
+      },
+      {
+        "rule": "R30",
+        "text": "5m iFVG 21,341.75-21,343.25 (formed 05-29 20:15, inverted 05-29 20:30), retested 08:05"
+      },
+      {
+        "rule": "R12",
+        "text": "liquidity inside the gap 21,342.00 @ 03:55 - this is the precise target, not the gap boundary"
+      },
+      {
+        "rule": "R33",
+        "text": "stop 21,567.50  \u00b7  risk 225.75 pts (invalidation = the swept high extreme of the qualifying D SMT @ 2025-05-20 09:30 ET)"
+      },
+      {
+        "rule": "R35",
+        "text": "target 20,727.00 (range extreme)  \u00b7  2.7R"
+      },
+      {
+        "rule": "R43",
+        "text": "risk expressed in R: 1R = 225.75 pts; expectancy needs win% AND R:R together (R44)"
+      }
+    ],
+    "unresolved": [],
+    "branches": [
+      "R17  CHFUSD REFUSED at D \u2014 cycles do not correspond (different exchange day bucketing); not treated as a leg",
+      "R31 (soft) - entry 08:05 is BEFORE 09:30 ET. dOoMeR prefers waiting for the 9:30 open on these; the engine reports the branch and does not resolve it",
+      "R24 - this is a Sequential SKIP, not a clean nesting",
+      "R17 (flagged) - the 15m confirmation diverges on CHFUSD ALONE, with no index leg agreeing. R17 is a flagged rule and this leg's tick size is the least reliably measured of the four, so its noise floor is the softest. Treat this confirmation as the weakest link in the chain and verify it by hand",
+      "R34 - stop is 225.75 pts, over 25% of the 835.25-pt range. R34's answer is the same idea on a correlated leg with a tighter equivalent gap (e.g. YM instead of ES) - not taken automatically, because which leg is a judgement call",
+      "R19 - probabilistic, not guaranteed. Never treat as certain"
+    ]
+  }
+]
