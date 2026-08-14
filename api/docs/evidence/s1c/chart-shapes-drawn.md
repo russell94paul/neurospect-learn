@@ -1,5 +1,17 @@
 # S1c — computed levels drawn on the chart (deliverable 3)
 
+> ## 🗑️ REMOVED 2026-08-13 at Paul's request — and the markup was REJECTED on quality
+> All 8 shapes were deleted; **0 shapes on all four panes**, verified after a full navigation.
+> This page is kept as the record of what was drawn and **why the approach was wrong**.
+>
+> **Paul's finding:** *"you drew horizontal lines across the whole chart, not just in the area
+> where the FVG was… the marking up has to be more refined and clear."* An infinite
+> `horizontal_line` asserts that a level applies at all times, which **contradicts R6** (a range
+> dies at a close beyond it) and **R7**. The engine already computes every boundary needed for
+> bounded shapes — gap `formed_time`/`inverted_time`, the range's `move_to`, R6's `broken_by`
+> timestamp — so the data was there and simply not used. Canonical fix:
+> `neurospect-wiki concepts/mastery/aura/chart-markup.md` **§0b — Markup primitives**.
+
 Drawn 2026-08-13 at Paul's explicit request onto **Tradezella session `831607`, NQ pane
 (chart 0)**. Every shape carries its rule ID and an **`[S1c]`** suffix, so a level on this
 chart can never be mistaken for a hand read.
