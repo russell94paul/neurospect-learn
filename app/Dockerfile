@@ -33,6 +33,9 @@ RUN npm run build
 FROM nginx:alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Included by BOTH server blocks in nginx.conf (:80 open, :8080 Basic-auth), so
+# the bundle and the /_api proxy are defined exactly once.
+COPY nginx-common.conf /etc/nginx/snippets/app-common.conf
 COPY --from=build /src/dist /usr/share/nginx/html
 
 EXPOSE 80

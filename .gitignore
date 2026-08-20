@@ -29,3 +29,12 @@ venv/
 # Evidence blobs written by the local storage backend (user data, not source —
 # and chart captures are private). Override with EVIDENCE_LOCAL_ROOT.
 .evidence-store/
+
+# Cloudflare-tunnel Basic-auth credential (the gate on the public URL) and the
+# plaintext copy of it. Neither belongs in git.
+.tunnel-htpasswd
+.tunnel-auth.txt
+
+# cloudflared quick-tunnel logs.
+.tunnel.log
+.tunnel.out.log

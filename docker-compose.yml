@@ -85,12 +85,34 @@ services:
     build:
       context: ./app
       args:
-        # Build-time, not runtime — Vite inlines these. The API URL is the HOST
-        # port, because it is the browser that makes the call, not the container.
-        VITE_API_URL: http://localhost:8001
+        # Build-time, not runtime — Vite inlines these.
+        #
+        # RELATIVE, and that is the whole trick behind remote access (2026-08-20).
+        # nginx reverse-proxies /_api/ to the api container, so the browser talks
+        # to whatever origin it loaded the page from. The SAME build therefore
+        # works on localhost:5174, on the LAN, and behind a trycloudflare.com
+        # hostname that changes every time the quick tunnel restarts. An absolute
+        # URL would have to be rebaked on each restart AND added to CORS_ORIGINS.
+        #
+        # It resolves through ky's `baseUrl` (api.ts), and every one of the 41 call
+        # sites passes a prefix-less input ('api/journal', 'auth/me'), so they
+        # extend the base rather than replacing its path. A leading slash on any
+        # future call site would escape the /_api prefix — that is the one rule
+        # this value imposes on the codebase.
+        VITE_API_URL: /_api
         VITE_DEBUG: "true"
     ports:
+      # :5174 — the daily driver, no password, exactly as before.
       - "5174:80"
+      # :5175 — the Basic-auth listener the Cloudflare tunnel points at. Bound to
+      # 127.0.0.1 rather than 0.0.0.0: cloudflared runs on this host, so nothing
+      # else ever needs to reach it, and the password gate should not be the only
+      # thing standing between this port and the LAN.
+      - "127.0.0.1:5175:8080"
+    volumes:
+      # The tunnel's Basic-auth credential. Host file, not an image layer — see
+      # nginx.conf. Regenerate with: htpasswd -B .tunnel-htpasswd <user>
+      - ./.tunnel-htpasswd:/etc/nginx/.htpasswd:ro
     depends_on:
       api:
         condition: service_healthy
