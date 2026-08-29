@@ -1,0 +1,101 @@
+/* ── §01 the guided runner ──────────────────────────────────────────────────
+   One spatial system with the rest of the page: same tokens, same rhythm. The
+   rail is the protocol's own order; the stage is one session executing it.     */
+.runner{display:grid;gap:0;border:1px solid var(--line);border-radius:var(--r);
+  background:var(--surface);overflow:hidden;min-width:0}
+@media(min-width:940px){.runner{grid-template-columns:246px 1fr}}
+
+.rail{border-bottom:1px solid var(--line);padding:12px 0 14px;background:var(--sunk);
+  max-height:none;overflow:auto;min-width:0}
+@media(min-width:940px){.rail{border-bottom:0;border-right:1px solid var(--line);
+  max-height:760px;position:sticky;top:0}}
+.railph{font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted);margin:14px 0 6px;padding:0 16px}
+.railph:first-child{margin-top:2px}
+.rstep{display:grid;grid-template-columns:16px 30px 1fr auto;gap:9px;align-items:center;
+  width:100%;text-align:left;background:none;border:0;cursor:pointer;color:var(--ink-2);
+  font:inherit;font-size:13.5px;padding:6px 16px;line-height:1.3;
+  transition:background .14s ease-out,color .14s ease-out}
+.rstep:hover{background:var(--surface);color:var(--ink)}
+.rdot{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--line);
+  transition:background .16s ease-out,border-color .16s ease-out}
+.rid{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);font-weight:600}
+.rt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rgate{color:var(--qual);font-size:9px}
+.rstep.done .rdot{background:var(--qual);border-color:var(--qual)}
+.rstep.skipped .rdot{border-color:var(--muted);border-style:dashed}
+.rstep.active{background:var(--surface);color:var(--ink)}
+.rstep.active .rdot{border-color:var(--qual);box-shadow:0 0 0 3px var(--qual-soft)}
+.rstep.active .rt{font-weight:600}
+.rstep.active .rid{color:var(--qual)}
+
+.stage{min-width:0;display:flex;flex-direction:column}
+.stagebar{display:flex;align-items:center;gap:12px;padding:11px 18px;
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.views{display:flex;gap:0;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.vbtn{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;background:none;
+  border:0;color:var(--muted);padding:5px 11px;cursor:pointer;
+  transition:background .14s ease-out,color .14s ease-out}
+.vbtn+.vbtn{border-left:1px solid var(--line)}
+.vbtn:hover{color:var(--ink)}
+.vbtn.sel{background:var(--qual);color:var(--surface)}
+.stagelab{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted)}
+
+.chartwrap{background:var(--sunk);border-bottom:1px solid var(--line);
+  overflow-x:auto;min-width:0}
+.chart{display:none}
+.chart.on{display:block}
+.chart svg{display:block;min-width:680px;width:100%;height:auto}
+/* the reveal: a step's markup is absent until that step is reached */
+.mstep{opacity:0;transition:opacity .34s cubic-bezier(.22,.61,.36,1)}
+.mstep.shown{opacity:1}
+.mstep.justnow.shown{opacity:1}
+@media (prefers-reduced-motion:reduce){.mstep{transition:none}}
+
+.stepcard{padding:18px 20px 4px;min-width:0}
+.scardhd{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 11px}
+.sph{font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted)}
+.sid{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--qual)}
+.stepcard h3{font-family:Archivo,sans-serif;font-size:20px;font-weight:700;
+  letter-spacing:-.018em;margin:0;color:var(--ink);flex:1 1 auto;min-width:0}
+.artpill{font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;padding:2px 7px;border-radius:2px;border:1px solid currentColor}
+.artpill.drawn{color:var(--gap)}
+.artpill.notrec{color:var(--muted);border-style:dashed}
+.artpill.unres{color:var(--stop);border-style:dashed}
+.artpill.act{color:var(--muted)}
+.sdo{font-size:16.5px;line-height:1.55;color:var(--ink);margin:0 0 13px;max-width:70ch}
+.sdo code{font-size:14px;background:var(--sunk);padding:1px 5px;border-radius:2px}
+.smeta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+.sprim{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--gap);
+  border:1px solid var(--gap);border-radius:2px;padding:4px 9px}
+.srules{display:flex;gap:5px;flex-wrap:wrap}
+.swarn{font-size:14.5px;line-height:1.5;color:var(--ink-2);margin:0 0 14px;
+  padding:11px 14px;border-left:2px solid var(--stop);background:var(--sunk);
+  border-radius:0 var(--r) var(--r) 0;max-width:74ch}
+.ssays,.sgap{font-size:15px;line-height:1.55;color:var(--ink-2);margin:0 0 14px;
+  padding:13px 15px;border:1px solid var(--line);border-radius:var(--r);max-width:74ch}
+.sgap{border-style:dashed;background:var(--sunk)}
+.ssayshd{display:block;font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:0 0 7px}
+.sdecide{font-size:15px;color:var(--ink-2);margin:0 0 14px}
+
+.runctl{display:flex;gap:9px;flex-wrap:wrap;padding:4px 20px 0;align-items:center}
+.runmark{font-family:Archivo,sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;
+  background:var(--qual);color:var(--surface);border:1px solid var(--qual);border-radius:2px;
+  padding:8px 15px;transition:opacity .14s ease-out}
+.runmark:hover{opacity:.88}
+.runmark.ismarked{background:transparent;color:var(--qual)}
+.reset:disabled{opacity:.4;cursor:default}
+.runprog{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);
+  padding:0 20px 18px;margin:11px 0 0}
+.runprog b{color:var(--ink)}
+
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin:16px 0 0;font-size:13px;color:var(--muted)}
+.lgd{display:flex;gap:7px;align-items:center}
+.sw{width:11px;height:11px;border-radius:2px;border:1px solid currentColor;flex:none}
+.sw.drawn{background:var(--gap);border-color:var(--gap)}
+.sw.notrec{border-color:var(--muted);border-style:dashed}
+.sw.unres{border-color:var(--stop);border-style:dashed}
+.sw.act{border-color:var(--muted);background:var(--sunk)}

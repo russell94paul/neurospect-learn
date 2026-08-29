@@ -1,0 +1,844 @@
+<title>The Aura Protocol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* ── tokens ──────────────────────────────────────────────────────────────────
+   The palette is not invented. concepts/mastery/aura/chart-markup.md §0 fixes a
+   colour convention for this model — yellow = the SMT-qualified swing (the
+   load-bearing filter), blue = gaps / PD arrays, grey dashed = zones, green and
+   red = execution. The page inherits the system it teaches.                  */
+:root{
+  --ground:#eef0f6; --surface:#fbfcfe; --sunk:#e3e7f1; --line:#c9d0e2;
+  --ink:#111726; --ink-2:#3d4863; --muted:#69748f;
+  --qual:#8a6608; --qual-soft:#f2e6c2;
+  --gap:#2f5f9e; --gap-soft:#dde7f6;
+  --stop:#a83f2b; --targ:#1f6b48;
+  --up:#2f6b4f; --dn:#9c4433;
+  --shadow:0 1px 2px rgba(17,23,38,.06),0 8px 24px -12px rgba(17,23,38,.20);
+  --r:3px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0b101b; --surface:#121926; --sunk:#0d131f; --line:#26314a;
+    --ink:#e4eaf6; --ink-2:#b4bfd7; --muted:#8492af;
+    --qual:#e5bd52; --qual-soft:#38300f;
+    --gap:#7fb0e8; --gap-soft:#15263c;
+    --stop:#e08670; --targ:#63c295;
+    --up:#4f9d78; --dn:#c8664f;
+    --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px -14px rgba(0,0,0,.85);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0b101b; --surface:#121926; --sunk:#0d131f; --line:#26314a;
+  --ink:#e4eaf6; --ink-2:#b4bfd7; --muted:#8492af;
+  --qual:#e5bd52; --qual-soft:#38300f;
+  --gap:#7fb0e8; --gap-soft:#15263c;
+  --stop:#e08670; --targ:#63c295;
+  --up:#4f9d78; --dn:#c8664f;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px -14px rgba(0,0,0,.85);
+}
+
+*{box-sizing:border-box}
+body{background:var(--ground); color:var(--ink);
+  font:400 17px/1.62 "Source Serif 4",Georgia,"Times New Roman",serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+.col{max-width:68ch}
+h1,h2,h3,h4,.dsp{font-family:Archivo,"Helvetica Neue",Arial,sans-serif;text-wrap:balance}
+.mono,code,kbd{font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+a{color:var(--gap)}
+p{margin:0 0 1em}
+:focus-visible{outline:2px solid var(--gap);outline-offset:2px}
+
+/* ── masthead ──────────────────────────────────────────────────────────────*/
+.mast{padding:62px 0 38px}
+.eyebrow{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:700;
+  letter-spacing:.19em;text-transform:uppercase;color:var(--muted);margin:0 0 18px}
+h1{font-size:clamp(40px,7.4vw,76px);font-weight:800;letter-spacing:-.034em;
+  line-height:.93;margin:0 0 22px}
+h1 em{font-style:normal;color:var(--qual)}
+.thesis{font-size:clamp(18px,2.2vw,21px);line-height:1.5;color:var(--ink-2);max-width:58ch;margin:0}
+
+.honesty{margin:36px 0 0;border:1px solid var(--line);border-left:3px solid var(--qual);
+  background:var(--surface);border-radius:var(--r);padding:19px 21px;max-width:80ch}
+.honesty h2{font-size:11.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--qual);margin:0 0 13px;font-family:Archivo,sans-serif}
+.honesty ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.honesty li{font-size:15.5px;line-height:1.5;color:var(--ink-2);padding-left:21px;position:relative}
+.honesty li::before{content:"";position:absolute;left:2px;top:.6em;width:7px;height:7px;
+  border:1.5px solid var(--qual);border-radius:50%}
+.honesty b{color:var(--ink);font-weight:600}
+
+/* ── sections ──────────────────────────────────────────────────────────────*/
+section{padding:62px 0;border-top:1px solid var(--line)}
+.shead{display:flex;align-items:baseline;gap:14px;margin:0 0 10px}
+.snum{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--muted);
+  letter-spacing:.06em;flex:none}
+h2.stitle{font-size:clamp(27px,4vw,38px);font-weight:700;letter-spacing:-.024em;margin:0}
+.sdek{color:var(--muted);font-size:16px;max-width:66ch;margin:0 0 30px}
+.sdek b{color:var(--ink-2);font-weight:600}
+
+/* ── rule chips ────────────────────────────────────────────────────────────*/
+.rc{display:inline-flex;align-items:center;font-family:"IBM Plex Mono",monospace;
+  font-size:11.5px;font-weight:600;line-height:1;padding:3px 6px;border-radius:2px;
+  border:1px solid var(--qual);background:var(--qual-soft);color:var(--qual);
+  cursor:help;vertical-align:1px;white-space:nowrap;
+  transition:background .14s ease-out,color .14s ease-out}
+.rc:hover,.rc:focus-visible{background:var(--qual);color:var(--surface)}
+.rc.soft{border-style:dashed;background:transparent}
+.rc.soft::after{content:"*"}
+.rc.hl{box-shadow:0 0 0 3px var(--qual-soft)}
+.pop{position:fixed;z-index:80;max-width:min(430px,calc(100vw - 28px));
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);padding:15px 17px;font-size:14.5px;line-height:1.52;
+  color:var(--ink-2)}
+.pop .pid{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+  letter-spacing:.09em;color:var(--qual);text-transform:uppercase;display:block;margin:0 0 8px}
+.pop .pnote{display:block;margin-top:11px;padding-top:10px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--muted);font-style:italic}
+.pop b{color:var(--ink);font-weight:600}
+
+/* ── checklist ─────────────────────────────────────────────────────────────*/
+.phases{display:grid;gap:11px}
+.ph{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.ph.gate{border-left:3px solid var(--qual)}
+.phb{display:flex;align-items:center;gap:13px;width:100%;text-align:left;cursor:pointer;
+  padding:15px 18px;background:none;border:0;color:inherit;font:inherit}
+.phb:hover{background:var(--sunk)}
+.phi{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--muted);
+  width:1.5em;flex:none}
+.pht{font-family:Archivo,sans-serif;font-size:16.5px;font-weight:600;letter-spacing:-.012em;
+  flex:1;min-width:0}
+.phm{font-size:12px;color:var(--muted);font-family:"IBM Plex Mono",monospace;flex:none;
+  font-variant-numeric:tabular-nums}
+.meter{width:60px;height:4px;background:var(--sunk);border-radius:2px;flex:none;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--qual);border-radius:2px;
+  transition:width .8s cubic-bezier(.16,.84,.44,1)}
+.chev{width:10px;height:10px;border-right:1.8px solid var(--muted);border-bottom:1.8px solid var(--muted);
+  transform:rotate(45deg);flex:none;transition:transform .2s cubic-bezier(.22,.61,.36,1)}
+.ph.open .chev{transform:rotate(-135deg)}
+.phbody{padding:0 18px 17px;border-top:1px solid var(--line)}
+.ph:not(.open) .phbody{display:none}
+.items{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:11px}
+.items li{display:flex;gap:11px;align-items:flex-start;font-size:15.5px;line-height:1.5}
+.items input{appearance:none;width:17px;height:17px;flex:none;margin-top:2px;cursor:pointer;
+  border:1.5px solid var(--line);border-radius:2px;background:var(--surface);
+  transition:background .14s ease-out,border-color .14s ease-out}
+.items input:hover{border-color:var(--qual)}
+.items input:checked{background:var(--qual);border-color:var(--qual)}
+.items input:checked::after{content:"";display:block;width:4.5px;height:8.5px;margin:1.2px auto;
+  border-right:2px solid var(--surface);border-bottom:2px solid var(--surface);transform:rotate(42deg)}
+.items label{cursor:pointer;color:var(--ink-2)}
+.items input:checked+label{color:var(--muted)}
+.gatetag{display:inline-block;font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--qual);border:1px solid var(--qual);
+  padding:1px 5px;border-radius:2px;margin-left:5px;vertical-align:1.5px}
+.reset{font-family:Archivo,sans-serif;font-size:12.5px;font-weight:600;color:var(--muted);
+  background:none;border:1px solid var(--line);border-radius:2px;padding:6px 11px;cursor:pointer;
+  transition:color .14s ease-out,border-color .14s ease-out}
+.reset:hover{color:var(--ink);border-color:var(--muted)}
+.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:22px 0 0}
+.tally{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);
+  font-variant-numeric:tabular-nums}
+
+/* ── decision tree ─────────────────────────────────────────────────────────*/
+.tree{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:22px 22px 24px}
+.trail{display:grid;gap:0;margin:0 0 4px}
+.step{display:grid;grid-template-columns:22px 1fr;gap:0 13px;padding-bottom:16px;position:relative}
+.step:not(:last-child)::before{content:"";position:absolute;left:10.5px;top:20px;bottom:-2px;
+  width:1px;background:var(--line)}
+.dot{width:21px;height:21px;border-radius:50%;border:1.5px solid var(--qual);background:var(--surface);
+  display:grid;place-items:center;font-family:"IBM Plex Mono",monospace;font-size:10px;
+  font-weight:600;color:var(--qual);z-index:1}
+.step.softstep .dot{border-style:dashed}
+.step.leaf .dot{background:var(--qual);color:var(--surface)}
+.step.aside .dot{background:var(--surface);border-width:2.5px}
+.qz{font-family:Archivo,sans-serif;font-size:16px;font-weight:600;line-height:1.4;margin:1px 0 0}
+.ans{font-size:14.5px;color:var(--muted);margin:4px 0 0}
+.ans b{color:var(--ink-2);font-weight:600}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0 2px}
+.opt{font-family:Archivo,sans-serif;font-size:14px;font-weight:500;text-align:left;
+  background:var(--surface);border:1px solid var(--line);border-radius:2px;color:var(--ink);
+  padding:9px 13px;cursor:pointer;
+  transition:border-color .14s ease-out,background .14s ease-out}
+.opt:hover{border-color:var(--qual);background:var(--qual-soft)}
+.opt .why{display:block;font-size:11.5px;color:var(--muted);font-weight:400;margin-top:3px;
+  font-family:"IBM Plex Mono",monospace}
+.opt.softopt{border-style:dashed}
+.leafcard{border:1px solid var(--gap);border-left:3px solid var(--gap);background:var(--gap-soft);
+  border-radius:var(--r);padding:16px 18px;margin:4px 0 0}
+.leafcard.standaside{border-color:var(--qual);border-left-color:var(--qual);background:var(--qual-soft)}
+.leafcard h4{font-family:Archivo,sans-serif;font-size:17px;font-weight:700;margin:0 0 7px;
+  letter-spacing:-.014em;color:var(--ink)}
+.leafcard p{font-size:15px;margin:0;color:var(--ink-2)}
+.leafkind{font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--gap);display:block;margin:0 0 6px}
+.leafcard.standaside .leafkind{color:var(--qual)}
+.nohard{margin:20px 0 0;padding:13px 15px;border:1px dashed var(--line);border-radius:var(--r);
+  font-size:13.5px;color:var(--muted);line-height:1.5}
+.nohard b{color:var(--ink-2);font-weight:600}
+.map{margin:26px 0 0;border-top:1px solid var(--line);padding-top:20px}
+.map[hidden]{display:none}
+.map h4{font-family:Archivo,sans-serif;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 15px}
+.gaterow{display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:baseline;
+  padding:9px 0;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--ink-2)}
+.gaterow:last-child{border-bottom:0}
+.gaterow .gl{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted)}
+
+/* ── figures ───────────────────────────────────────────────────────────────*/
+figure{margin:0 0 30px}
+.figbox{overflow-x:auto;background:var(--sunk);border:1px solid var(--line);border-radius:var(--r)}
+figure svg{display:block;min-width:620px;width:100%;height:auto}
+figcaption{font-size:14px;color:var(--muted);line-height:1.5;margin:11px 0 0;max-width:74ch}
+figcaption b{color:var(--ink-2);font-weight:600}
+.figlabel{font-family:Archivo,sans-serif;font-size:11px;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;margin:0 0 9px;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.figlabel .bad{color:var(--stop)}
+.figlabel .good{color:var(--targ)}
+.basis{font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:600;letter-spacing:.08em;
+  border:1px solid var(--line);color:var(--muted);padding:1px 5px;border-radius:2px}
+.twin{display:grid;gap:26px;margin:0 0 8px}
+/* grid & flex items default to min-width:auto, so the 620px-min chart SVGs would
+   force the whole page wider than a narrow viewport. This is the fix. */
+.twin>figure,.phases>*,.tree,.step>div{min-width:0}
+.figbox{min-width:0;max-width:100%}
+@media(min-width:900px){.twin.side{grid-template-columns:1fr 1fr}
+  .twin.side figure svg{min-width:0}
+  .twin.side .figbox{overflow-x:hidden}}
+/* chart marks — all theme-token driven */
+.wk{stroke-width:1}
+.wk.up,.bd.up{stroke:var(--up)} .bd.up{fill:var(--up)}
+.wk.dn,.bd.dn{stroke:var(--dn)} .bd.dn{fill:var(--dn)}
+.bd{stroke-width:.6}
+.grid{stroke:var(--line);stroke-width:.6;opacity:.65}
+.grid.v{stroke-dasharray:2 4}
+.ax{fill:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:9.5px}
+.ax.mid{text-anchor:middle}
+.gapline{stroke:var(--gap);stroke-width:1;opacity:.85}
+.gapline.bear{stroke:var(--stop)}
+.gapbox{fill:var(--gap);fill-opacity:.20;stroke:var(--gap);stroke-width:.8}
+.gapbox.bear{fill:var(--stop);stroke:var(--stop)}
+.gapbox.live{stroke-dasharray:3 3}
+.gapbox.inv{fill:none;stroke:var(--qual);stroke-width:1.2;stroke-dasharray:4 3}
+.mark{stroke:var(--qual);stroke-width:1;stroke-dasharray:2 3;opacity:.9}
+.lab{fill:var(--qual);font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600}
+
+.rstep.na{opacity:.45}
+.rstep.na .rt{text-decoration:line-through;text-decoration-color:var(--muted)}
+.rstep.na .rdot{border-style:dotted}
+.branchbox{margin:0 0 14px;padding:14px 15px;border:1px dashed var(--qual);
+  border-radius:var(--r);background:var(--qual-soft)}
+.branchbox .opts{margin:9px 0 0}
+.asidenote,.takennote{font-size:14.5px;line-height:1.5;color:var(--ink-2);margin:12px 0 0;
+  padding-top:11px;border-top:1px solid var(--line)}
+.runmark:disabled{opacity:.5;cursor:default}
+/* ── §01 the guided runner ──────────────────────────────────────────────────
+   One spatial system with the rest of the page: same tokens, same rhythm. The
+   rail is the protocol's own order; the stage is one session executing it.     */
+.runner{display:grid;gap:0;border:1px solid var(--line);border-radius:var(--r);
+  background:var(--surface);overflow:hidden;min-width:0}
+@media(min-width:940px){.runner{grid-template-columns:246px 1fr}}
+
+.rail{border-bottom:1px solid var(--line);padding:12px 0 14px;background:var(--sunk);
+  max-height:none;overflow:auto;min-width:0}
+@media(min-width:940px){.rail{border-bottom:0;border-right:1px solid var(--line);
+  max-height:760px;position:sticky;top:0}}
+.railph{font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted);margin:14px 0 6px;padding:0 16px}
+.railph:first-child{margin-top:2px}
+.rstep{display:grid;grid-template-columns:16px 30px 1fr auto;gap:9px;align-items:start;
+  width:100%;text-align:left;background:none;border:0;cursor:pointer;color:var(--ink-2);
+  font:inherit;font-size:13.5px;padding:6px 16px;line-height:1.3;
+  transition:background .14s ease-out,color .14s ease-out}
+.rstep:hover{background:var(--surface);color:var(--ink)}
+.rdot{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--line);margin-top:4px;
+  transition:background .16s ease-out,border-color .16s ease-out}
+.rid{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);font-weight:600;padding-top:1px}
+.rt{min-width:0;overflow-wrap:anywhere}
+.rgate{color:var(--qual);font-size:9px}
+.rstep.done .rdot{background:var(--qual);border-color:var(--qual)}
+.rstep.skipped .rdot{border-color:var(--muted);border-style:dashed}
+.rstep.active{background:var(--surface);color:var(--ink)}
+.rstep.active .rdot{border-color:var(--qual);box-shadow:0 0 0 3px var(--qual-soft)}
+.rstep.active .rt{font-weight:600}
+.rstep.active .rid{color:var(--qual)}
+
+.stage{min-width:0;display:flex;flex-direction:column}
+.stagebar{display:flex;align-items:center;gap:12px;padding:11px 18px;
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.views{display:flex;gap:0;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.vbtn{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;background:none;
+  border:0;color:var(--muted);padding:5px 11px;cursor:pointer;
+  transition:background .14s ease-out,color .14s ease-out}
+.vbtn+.vbtn{border-left:1px solid var(--line)}
+.vbtn:hover{color:var(--ink)}
+.vbtn.sel{background:var(--qual);color:var(--surface)}
+.stagelab{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted)}
+
+.chartwrap{background:var(--sunk);border-bottom:1px solid var(--line);
+  overflow-x:auto;min-width:0}
+.chart{display:none}
+.chart.on{display:block}
+.chart svg{display:block;min-width:680px;width:100%;height:auto}
+/* the reveal: a step's markup is absent until that step is reached */
+.mstep{opacity:0;transition:opacity .34s cubic-bezier(.22,.61,.36,1)}
+.mstep.shown{opacity:1}
+.mstep.justnow.shown{opacity:1}
+@media (prefers-reduced-motion:reduce){.mstep{transition:none}}
+
+.stepcard{padding:18px 20px 4px;min-width:0}
+.scardhd{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 11px}
+.sph{font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted)}
+.sid{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--qual)}
+.stepcard h3{font-family:Archivo,sans-serif;font-size:20px;font-weight:700;
+  letter-spacing:-.018em;margin:0;color:var(--ink);flex:1 1 auto;min-width:0}
+.artpill{font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;padding:2px 7px;border-radius:2px;border:1px solid currentColor}
+.artpill.drawn{color:var(--gap)}
+.artpill.notrec{color:var(--muted);border-style:dashed}
+.artpill.unres{color:var(--stop);border-style:dashed}
+.artpill.act{color:var(--muted)}
+.sdo{font-size:16.5px;line-height:1.55;color:var(--ink);margin:0 0 13px;max-width:70ch}
+.sdo code{font-size:14px;background:var(--sunk);padding:1px 5px;border-radius:2px}
+.smeta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+.sprim{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--gap);
+  border:1px solid var(--gap);border-radius:2px;padding:4px 9px}
+.srules{display:flex;gap:5px;flex-wrap:wrap}
+.swarn{font-size:14.5px;line-height:1.5;color:var(--ink-2);margin:0 0 14px;
+  padding:11px 14px;border-left:2px solid var(--stop);background:var(--sunk);
+  border-radius:0 var(--r) var(--r) 0;max-width:74ch}
+.ssays,.sgap{font-size:15px;line-height:1.55;color:var(--ink-2);margin:0 0 14px;
+  padding:13px 15px;border:1px solid var(--line);border-radius:var(--r);max-width:74ch}
+.sgap{border-style:dashed;background:var(--sunk)}
+.ssayshd{display:block;font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:0 0 7px}
+.sdecide{font-size:15px;color:var(--ink-2);margin:0 0 14px}
+
+.runctl{display:flex;gap:9px;flex-wrap:wrap;padding:4px 20px 0;align-items:center}
+.runmark{font-family:Archivo,sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;
+  background:var(--qual);color:var(--surface);border:1px solid var(--qual);border-radius:2px;
+  padding:8px 15px;transition:opacity .14s ease-out}
+.runmark:hover{opacity:.88}
+.runmark.ismarked{background:transparent;color:var(--qual)}
+.reset:disabled{opacity:.4;cursor:default}
+.runprog{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);
+  padding:0 20px 18px;margin:11px 0 0}
+.runprog b{color:var(--ink)}
+
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin:16px 0 0;font-size:13px;color:var(--muted)}
+.lgd{display:flex;gap:7px;align-items:center}
+.sw{width:11px;height:11px;border-radius:2px;border:1px solid currentColor;flex:none}
+.sw.drawn{background:var(--gap);border-color:var(--gap)}
+.sw.notrec{border-color:var(--muted);border-style:dashed}
+.sw.unres{border-color:var(--stop);border-style:dashed}
+.sw.act{border-color:var(--muted);background:var(--sunk)}
+
+/* marked-up worked examples — every stroke is a rule, coloured by chart-markup.md §0 */
+.mk{fill:none;stroke-width:1.3}
+line.mk-ink{stroke:var(--ink)}   line.mk-muted{stroke:var(--muted)}
+line.mk-qual{stroke:var(--qual);stroke-width:1.6}
+line.mk-stop{stroke:var(--stop);stroke-width:1.6}
+line.mk-targ{stroke:var(--targ);stroke-width:1.6}
+line.mk-gap{stroke:var(--gap)}
+line.mk-dash{stroke-dasharray:6 4}
+line.mk-dot{stroke-dasharray:1.5 3;stroke-width:1.8}
+line.mk-ray{stroke-dasharray:none}
+rect.mk{stroke-width:.9}
+rect.mk-gap{fill:var(--gap);fill-opacity:.30;stroke:var(--gap);stroke-width:1.1}
+rect.mk-muted{fill:var(--muted);fill-opacity:.07;stroke:var(--muted);stroke-dasharray:5 4}
+rect.mk-traded{fill:var(--qual);fill-opacity:.55;stroke:var(--qual);stroke-width:2.2}
+.mk-cap{stroke-width:1.8}
+.mk-lead{stroke-width:1.2}
+.lv{font-family:"IBM Plex Mono",monospace;font-size:9.5px;fill:var(--muted)}
+.lv-ink{fill:var(--ink)} .lv-qual{fill:var(--qual)} .lv-stop{fill:var(--stop)}
+.lv-targ{fill:var(--targ)} .lv-gap{fill:var(--gap)} .lv-muted{fill:var(--muted)}
+.lv-traded{font-weight:600;fill:var(--qual)}
+
+/* worked-example cards */
+.wx{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);
+  margin:0 0 30px;overflow:hidden}
+.wx.machine{border-left:3px solid var(--qual)}
+.wxhd{padding:18px 22px 0}
+.wxkind{font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--qual);margin:0 0 8px;display:flex;gap:8px;
+  align-items:center;flex-wrap:wrap}
+.wxkind .corpus{color:var(--gap)}
+.wx h3{font-family:Archivo,sans-serif;font-size:21px;font-weight:700;letter-spacing:-.018em;
+  margin:0 0 8px;color:var(--ink)}
+.wx .lede{font-size:15.5px;color:var(--ink-2);margin:0 0 16px;max-width:70ch}
+.wxbody{padding:0 22px 20px}
+.wxfig{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:var(--sunk);overflow-x:auto;min-width:0}
+.wxfig svg{display:block;min-width:660px;width:100%;height:auto}
+.wxnote{font-size:13.5px;color:var(--muted);padding:11px 22px;line-height:1.5;
+  border-bottom:1px solid var(--line);background:var(--sunk)}
+.wxnote b{color:var(--ink-2);font-weight:600}
+.ledger{width:100%;border-collapse:collapse;font-size:14px;margin:4px 0 0}
+.ledger td{padding:7px 10px 7px 0;border-bottom:1px solid var(--line);vertical-align:top;
+  color:var(--ink-2)}
+.ledger tr:last-child td{border-bottom:0}
+.ledger td:first-child{white-space:nowrap;color:var(--muted);width:1%;padding-right:18px}
+.ledger .num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+  color:var(--ink);font-size:13.5px}
+.pathline{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin:14px 0 0;
+  font-family:Archivo,sans-serif;font-size:12.5px}
+.pathline .pstep{border:1px solid var(--line);border-radius:2px;padding:3px 8px;color:var(--ink-2)}
+.pathline .pstep.soft{border-style:dashed}
+.pathline .pstep.end{border-color:var(--gap);color:var(--gap);font-weight:600}
+.pathline .pstep.aside{border-color:var(--qual);color:var(--qual);font-weight:600}
+.pathline .arw{color:var(--muted)}
+.flags{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+.flags li{font-size:14px;line-height:1.5;color:var(--ink-2);padding-left:19px;position:relative}
+.flags li::before{content:"";position:absolute;left:0;top:.55em;width:6px;height:6px;
+  border-radius:1px;background:var(--qual)}
+.verdict{margin:16px 0 0;padding:14px 16px;border:1px dashed var(--qual);border-radius:var(--r);
+  background:var(--qual-soft)}
+.verdict b{color:var(--ink)}
+.verdict .vv{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
+  color:var(--qual);letter-spacing:.06em;display:block;margin:0 0 6px}
+
+/* schematic diagrams */
+.sch{stroke:currentColor;color:var(--ink-2)}
+.sch .band{stroke:none}
+.sch text{fill:currentColor;font-family:"IBM Plex Mono",monospace;font-size:11px}
+.sch .hd{font-family:Archivo,sans-serif;font-size:12px;font-weight:700;fill:var(--ink)}
+.sch .accent{stroke:var(--qual)} .sch .accentf{fill:var(--qual)}
+.sch .dim{opacity:.5}
+
+/* ── card ──────────────────────────────────────────────────────────────────*/
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:0;overflow:hidden}
+.tier{border-bottom:1px solid var(--line);padding:16px 20px}
+.tier:last-child{border-bottom:0}
+.tierhd{display:flex;align-items:baseline;gap:10px;margin:0 0 10px;flex-wrap:wrap}
+.tiern{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--muted)}
+.tiert{font-family:Archivo,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em}
+.who{font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;padding:2px 6px;border-radius:2px;border:1px solid currentColor}
+.who.tz{color:var(--gap)} .who.you{color:var(--qual)}
+.fields{display:flex;flex-wrap:wrap;gap:7px;margin:0}
+.fld{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-2);
+  background:var(--sunk);border-radius:2px;padding:4px 8px}
+.tiernote{font-size:14px;color:var(--muted);margin:10px 0 0;line-height:1.5}
+
+/* ── footer ────────────────────────────────────────────────────────────────*/
+footer{padding:44px 0 60px;color:var(--muted);font-size:14px;line-height:1.6}
+footer .src{font-family:"IBM Plex Mono",monospace;font-size:12px;display:grid;gap:5px;margin:14px 0 0}
+footer b{color:var(--ink-2);font-weight:600}
+
+/* ── motion — reveal only; page is fully readable with no JS ───────────────*/
+.rv{opacity:1;transform:none}
+.js .rv{opacity:0;transform:translateY(9px);
+  transition:opacity .5s cubic-bezier(.22,.61,.36,1),transform .5s cubic-bezier(.22,.61,.36,1)}
+.js .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .js .rv,.js .rv.in{opacity:1 !important;transform:none !important;transition:none !important}
+  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;scroll-behavior:auto !important}
+}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">dOoMeR Sequential-SMT model · session protocol</p>
+  <h1>The Aura<br>Protocol</h1>
+  <p class="thesis">Every rule, in the order you actually meet them — from the pre-market
+  checks through the entry decision to what you draw on the chart. Built to be run the same
+  way twice, until it is automatic.</p>
+
+  <div class="honesty">
+    <h2>What this page is not</h2>
+    <ul>
+      <li><b>It claims no edge.</b> No hit rate, no win rate, no expectancy appears anywhere,
+      because none has been established. The strategy in <code class="mono">rules.md</code> has
+      never actually been backtested against its own quality rules — enforcing them takes the
+      sample to <b>n&nbsp;=&nbsp;0</b>.</li>
+      <li><b>No price data here is invented.</b> Every candle is a real exported bar from
+      Tradezella session 831607. Every gap is definitional arithmetic on those bars, reproducible
+      by anyone holding the same export.</li>
+      <li><b>No range, SMT, bias or target is drawn on a real chart.</b> Those detectors were
+      found wrong on 15 Aug 2026 and are still under repair, so they appear here only as
+      schematics of the rule — never as a claim about a specific day.</li>
+      <li><b>dOoMeR's hedges survive.</b> Where he states a preference rather than a rule it
+      renders as a <span class="rc soft">soft</span> branch and stays one. A decision tree
+      wants to turn every hedge into a gate; this one is built to refuse.</li>
+    </ul>
+  </div>
+</header>
+
+<section id="run">
+  <div class="shead"><span class="snum">01</span><h2 class="stitle">Work a session</h2></div>
+  <p class="sdek">Nineteen steps, in the order the protocol runs them — set the chart up, frame the
+  higher timeframe, draw down to the entry, decide, manage, review. <b>At each step you are told
+  what to draw and which tool to draw it with</b>, and the chart beside it shows that step
+  performed on a real session. Mark it on your own chart, tick it, move on.</p>
+
+  <div class="runner">
+    <aside class="rail" id="rail" aria-label="Session steps"></aside>
+
+    <div class="stage">
+      <div class="stagebar">
+        <div class="views" role="group" aria-label="Chart view">
+          <button class="vbtn" data-view="htf" type="button">HTF · 60m</button>
+          <button class="vbtn" data-view="ltf" type="button">LTF · 5m</button>
+        </div>
+        <span class="stagelab" id="stageLab"></span>
+      </div>
+      <div class="chartwrap" id="chartWrap">
+        <div class="chart" data-v="htf">__GUIDED_HTF__</div>
+        <div class="chart" data-v="ltf">__GUIDED_LTF__</div>
+      </div>
+      <p class="wxnote" id="stageNote"></p>
+
+      <div class="stepcard" id="stepCard"></div>
+
+      <div class="runctl">
+        <button class="reset" id="runPrev" type="button">← Back</button>
+        <button class="runmark" id="runMark" type="button">Mark it, next →</button>
+        <button class="reset" id="runSkip" type="button">Skip without marking</button>
+        <button class="reset" id="runReset" type="button">Start over</button>
+      </div>
+      <p class="runprog"><span id="runProg"></span></p>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span class="lgd"><i class="sw drawn"></i>Drawn — the engine emitted this shape and it is on the chart</span>
+    <span class="lgd"><i class="sw notrec"></i>Not recorded — a real step the engine emitted nothing for</span>
+    <span class="lgd"><i class="sw unres"></i>Unresolved — the rulebook contradicts itself here</span>
+    <span class="lgd"><i class="sw act"></i>Action — you do it, there is nothing to draw</span>
+  </div>
+</section>
+
+<section id="session">
+  <div class="shead"><span class="snum">02</span><h2 class="stitle">The session, top to bottom</h2></div>
+  <p class="sdek">Eight phases, worked in order. A <b>hard gate</b> is a question whose wrong
+  answer ends the trade — it is surfaced, never enforced: the page will let you tick past it and
+  will keep showing you that you did. Ticks are yours alone and are kept in this browser.</p>
+
+  <div class="phases" id="phases"></div>
+
+  <div class="toolbar">
+    <button class="reset" id="resetTicks" type="button">Clear every tick</button>
+    <span class="tally" id="tally"></span>
+  </div>
+</section>
+
+<section id="decide">
+  <div class="shead"><span class="snum">03</span><h2 class="stitle">The entry decision</h2></div>
+  <p class="sdek">The model is already an if-then machine — <i>"a great way to eliminate your
+  impulses… is to think like a machine."</i> Answer each node and the path you took builds
+  downward. The seven hard gates below are taken verbatim from the engine's own
+  <code class="mono">HARD_GATES</code> list, in the order it evaluates them, so the tree and the
+  code cannot drift apart.</p>
+
+  <div class="tree">
+    <div class="trail" id="trail"></div>
+    <div class="nohard">
+      <b>This tree never ticks a rule for you.</b> Answering a node highlights the rules that just
+      came into scope in §01 — it does not check them. A box you did not consciously tick is not
+      adherence, and manufacturing it would corrupt the only honest measurement here.
+    </div>
+    <div class="toolbar">
+      <button class="reset" id="treeReset" type="button">Start the decision again</button>
+      <button class="reset" id="mapToggle" type="button" aria-expanded="false">Show the full map</button>
+    </div>
+    <div class="map" id="fullmap" hidden>
+      <h4>Every gate, in evaluation order</h4>
+      <div id="mapGates"></div>
+      <h4 style="margin-top:22px">Where the path can end</h4>
+      <div id="mapLeaves"></div>
+    </div>
+  </div>
+</section>
+
+<section id="markup">
+  <div class="shead"><span class="snum">04</span><h2 class="stitle">What you draw is a claim</h2></div>
+  <p class="sdek">A drawn object's <b>time extent</b> asserts when the level applied. Get the
+  primitive wrong and the drawing contradicts the rule it depicts — which is why the machine
+  markup was rejected in August, and why this is the one section worth reading before you draw
+  anything at all.</p>
+
+  <div class="twin side">
+    <figure>
+      <p class="figlabel"><span class="bad">Drawn as horizontal lines</span>
+        <span class="basis">MEASURED BARS</span></p>
+      <div class="figbox">__SVG_LINES__</div>
+      <figcaption>The same 15 gaps, each drawn as two infinite horizontal lines — 30 lines that
+      never stop. This is what got rejected: <b>an infinite line asserts "this level applies at
+      all times."</b> For this model that is usually false, and it contradicts R6, R7 and R12
+      directly.</figcaption>
+    </figure>
+    <figure>
+      <p class="figlabel"><span class="good">Bounded to where it applied</span>
+        <span class="basis">MEASURED BARS</span></p>
+      <div class="figbox">__SVG_BOUNDED__</div>
+      <figcaption>Identical data. Each gap is a rectangle from the bar that formed it to the bar
+      that mitigated it; a gap still live at the right edge is dashed and stops there rather than
+      running on. <b>Terminating a drawing where the rule says the level died is the visual form
+      of R6</b> — and it is what makes the chart re-readable a week later.</figcaption>
+    </figure>
+  </div>
+  <p class="sdek" style="margin-top:4px">NQ 5-minute, Tuesday 27 May 2025, 08:00–16:00 New York.
+  96 real bars; 15 gaps of 4 ticks or more, found by the 3-candle definition alone.</p>
+
+  <figure style="margin-top:34px">
+    <p class="figlabel">A gap's whole life <span class="basis">MEASURED BARS</span></p>
+    <div class="figbox">__SVG_IFVG__</div>
+    <figcaption>One bearish gap, from formation to the close that ran through it. Solid box while
+    it is an FVG; the dashed amber box is the same price region <b>after price closed through it —
+    it is now an inverse FVG</b>, and R30's preferred entry. The distinction is a close, not a
+    wick, exactly as R6 defines invalidation.</figcaption>
+  </figure>
+
+  <div class="twin" style="margin-top:34px">
+    <figure>
+      <p class="figlabel">Range anatomy <span class="basis">SCHEMATIC · NOT A CHART</span></p>
+      <div class="figbox">__SVG_RANGE__</div>
+      <figcaption>Discount, equilibrium, premium — <b>and nothing else.</b> This model uses the
+      0 / 0.5 / 1 levels only; the 0.25 and 0.75 quadrants belong to the ICT order-flow material
+      and are a flagged divergence here. Drawn as a schematic because the range detector is under
+      repair — no real range is claimed.</figcaption>
+    </figure>
+    <figure>
+      <p class="figlabel">The four gaps <span class="basis">SCHEMATIC · NOT A CHART</span></p>
+      <div class="figbox">__SVG_GAPFAM__</div>
+      <figcaption>FVG, iFVG, NWOG, NDOG — the only four this model names. No BPR, no
+      volume-imbalance vocabulary. <b>The target is the liquidity resting inside the gap</b>, not
+      the gap's boundary; that internal level is the precise draw.</figcaption>
+    </figure>
+  </div>
+
+  <figure style="margin-top:34px">
+    <p class="figlabel">Markup order — what gates what <span class="basis">SCHEMATIC</span></p>
+    <div class="figbox">__SVG_CHAIN__</div>
+    <figcaption>The markup is a dependency chain, not a list: a range you cannot anchor makes the
+    zones meaningless, and a zone you cannot place makes the gap inside it unreadable. <b>Each
+    step names the primitive to draw it with</b> — the primitive is part of the meaning.</figcaption>
+  </figure>
+</section>
+
+<section id="examples">
+  <div class="shead"><span class="snum">05</span><h2 class="stitle">Worked examples</h2></div>
+  <p class="sdek">One real week, marked up level by level, plus four of dOoMeR's own documented
+  trades walked through the tree. <b>The week is SELECTED, not sampled</b> — it was chosen because
+  it contains the single qualifying setup found across a month, so it says nothing about how often
+  setups occur. Four of its five days are the model telling you to sit on your hands, which is the
+  honest shape of a real week.</p>
+
+  <article class="wx machine">
+    <div class="wxhd">
+      <p class="wxkind"><span>Machine-generated · your review is the instrument</span></p>
+      <h3>Mon 26 – Thu 29 May: four stand-asides that are one finding</h3>
+      <p class="lede">Every one of these four days rejects at the same gate against the
+      <em>same dead range</em>. The week does not contain four lessons. It contains one.</p>
+    </div>
+    <div class="wxfig">__WX_DEAD__</div>
+    __WXNOTE_DEAD__
+    <p class="wxnote"><b>Read the right-hand end of the range lines.</b> The range boundaries stop
+    on 12 May — they are bounded segments, not infinite lines, because that is the day the range
+    died. The red level above them is the daily close that killed it.</p>
+    <div class="wxbody">
+      <table class="ledger">
+        <tr><td>Range</td><td><span class="num">19,103.75 – 20,276.75</span>, anchored 30 Apr __R4__</td></tr>
+        <tr><td>Qualifying swing</td><td>SMT-qualified low <span class="num">19,749.50</span> __R3__</td></tr>
+        <tr><td>Killed by</td><td>a daily candle <b>closing above</b> <span class="num">20,948.75</span> on <b>12 May</b> — a wick through would not have counted __R6__</td></tr>
+        <tr><td>Consequence</td><td>from 13 May there is no live range to trade. The model says wait for the next Sequential SMT to anchor a new one __R7__ — which is exactly what the 20 May SMT then did, producing Friday's trade below.</td></tr>
+        <tr><td>Memorial Day</td><td>Mon 26 May ran <span class="num">48</span> five-minute bars against <span class="num">84</span> on a normal day. It made <b>no difference</b> — the range was already dead, so the short session never got a chance to matter.</td></tr>
+      </table>
+      <div class="pathline" data-path="dead"></div>
+      <div class="verdict">
+        <span class="vv">⚠ This is the read your judgement is most needed on</span>
+        Across the wider month the engine stood aside on <b>21 of 22 days</b>, and this one gate
+        accounted for <b>13</b> of them. Nothing available can tell us whether that is correct —
+        re-reading the rulebook cannot settle it and running more unmarked days cannot settle it.
+        <b>If R6 is being applied too strictly, this is where it shows.</b>
+      </div>
+    </div>
+  </article>
+
+  <article class="wx machine">
+    <div class="wxhd">
+      <p class="wxkind"><span>Machine-generated · your review is the instrument</span></p>
+      <h3>Fri 30 May: the one entry — where it sits in the range</h3>
+      <p class="lede">A new range anchored on 20 May, and a short taken in its premium. This is the
+      higher-timeframe frame; the five-minute execution is the next figure.</p>
+    </div>
+    <div class="wxfig">__WX_HTF__</div>
+    __WXNOTE_HTF__
+    <p class="wxnote">The range boundaries are <b>rays</b> here, not bounded segments — this range
+    was still live at the right edge, so the drawing runs on. That difference between this figure
+    and the one above is the whole of §03 in one comparison.</p>
+    <div class="wxbody">
+      <table class="ledger">
+        <tr><td>Bias</td><td><b>SHORT</b> __R18__</td></tr>
+        <tr><td>Range</td><td><span class="num">20,727.00 – 21,562.25</span> — 835.25 pts, the expansive move 20 May → 23 May __R4__</td></tr>
+        <tr><td>Driving SMT</td><td>swing high <span class="num">21,562.25</span> @ 20 May 09:30. NQ took it by <span class="num">21</span> ticks; <b>ES missed by 141, YM by 234</b> — that divergence is the signal __R3__</td></tr>
+        <tr><td>Knowable from</td><td>29 May 09:30 ET — derived from bars, not the calendar, so no lookahead __R18__</td></tr>
+        <tr><td>Confirmation</td><td><b>Sequential Skip</b> — 4H did not confirm; 15m did, @ 29 May 14:45 __R24__</td></tr>
+        <tr><td>Entry</td><td><span class="num">21,341.75</span> @ <b>08:05 ET</b>, retest of a 5m iFVG __R30__</td></tr>
+        <tr><td>Position</td><td><b>premium</b>, 0.74 of the range — the correct side for a short __R32__</td></tr>
+        <tr><td>Stop</td><td><span class="num">21,567.50</span>, the swept high of the qualifying SMT · risk <span class="num">225.75</span> pts __R33__</td></tr>
+        <tr><td>Target</td><td><span class="num">20,727.00</span>, the range extreme · <b>2.7R planned</b> __R35__</td></tr>
+      </table>
+      <div class="pathline" data-path="friday"></div>
+    </div>
+  </article>
+
+  <article class="wx machine">
+    <div class="wxhd">
+      <p class="wxkind"><span>Machine-generated · your review is the instrument</span></p>
+      <h3>Fri 30 May: the execution, and the fourteen it did not take</h3>
+      <p class="lede">Every blue box is an inverse FVG in premium that qualified on size. Only the
+      solid amber one was traded. Seeing the rejected candidates beside the taken one is most of
+      what makes the read reviewable.</p>
+    </div>
+    <div class="wxfig">__WX_LTF__</div>
+    __WXNOTE_LTF__
+    <p class="wxnote"><b>Neither the stop nor the target is on this chart, and that is worth
+    sitting with.</b> The stop is <span class="num">225.75</span> points away — <b>wider than this
+    entire day&#39;s range</b> — and the target is roughly 615 points below the entry. Drawing either
+    would flatten every box above into a hairline. One resolution cannot hold both a month-long range
+    and a five-minute gap; that is the cascade problem, not a rendering bug, and it is the same fact
+    the 27%-of-range flag is pointing at.</p>
+    <div class="wxfig">__WX_ZOOM__</div>
+    __WXNOTE_ZOOM__
+    <p class="wxnote"><b>The gap&#39;s whole life, formation to entry.</b> It forms at 20:30 the evening before and
+    is retested at 08:05 the next morning. The traded zone is
+    <span class="num">21,341.75&nbsp;–&nbsp;21,343.25</span> — <b>1.5 points, six ticks.</b> That is
+    the width of the thing being retested, and on the day view above it is about two pixels tall.
+    The precision this model asks for is not rhetorical.</p>
+    <div class="wxbody">
+      <p style="font-size:15.5px;color:var(--ink-2);margin:4px 0 0">What the record flags <b>on its
+      own face</b> — reported, never resolved into a clean answer:</p>
+      <ul class="flags">
+        <li><b>This is not the first retest.</b> Price first returned to the inverted zone at 29 May
+        <b>20:40</b>, outside the 08:00–16:00 entry window, so the 08:05 touch taken here is a later
+        one. __R30__ does not say whether a re-tested iFVG is still valid, and the entry window is
+        what made the earlier touch invisible.</li>
+        <li><b>The entry is before 09:30.</b> dOoMeR prefers waiting for the open, particularly
+        while consistency is still developing. __R31__ is soft — but a strict 09:30 filter would
+        <b>delete this trade entirely</b>.</li>
+        <li><b>The 15m confirmation diverges on CHFUSD alone</b>, with no index leg agreeing, on the
+        leg whose tick size is the least reliably measurable of the four. __R17__ is itself flagged;
+        this is the weakest link in the chain.</li>
+        <li><b>The stop is 27% of the range</b>, over the declared 25% flag. __R34__'s answer is the
+        same idea on a correlated leg with a tighter gap — not taken automatically.</li>
+        <li><b>No weekly-cycle SMT</b> in the lookback, so this lacks __R18__'s canonical
+        weekly-with-daily-inside structure. Daily→4H still satisfies it, but this is the weaker form.
+        A measured zero, not a blind spot.</li>
+        <li><b>Neither range extreme was swept on every triad leg</b>, and a materially different
+        all-legs-swept candidate exists for each. __R8__ prefers the all-legs-swept extreme; the
+        engine reports both and does not re-anchor. The rulebook contradicts itself here.</li>
+      </ul>
+      <div class="verdict">
+        <span class="vv">Outcome · UNRESOLVED-AT-DATA-EDGE</span>
+        The trade ran <b>1.20R in favour</b> and <b>0.41R against</b>, and then the bars stopped —
+        the replay is parked at 30 May 16:59 ET, confirmed at 1-minute resolution on all three
+        futures legs. <b>Neither the stop nor the target was reached.</b> This is a measurement gap,
+        not a breakeven and not a loss, and it must never enter a win rate.
+      </div>
+    </div>
+  </article>
+
+  <article class="wx">
+    <div class="wxhd">
+      <p class="wxkind"><span class="corpus">From the corpus · dOoMeR's own documented trades</span></p>
+      <h3>Four real trades, and the branch each one took</h3>
+      <p class="lede">These are his, not the engine's — which makes them the most trustworthy
+      examples on this page. <b>They carry no price levels, so none are drawn.</b> The corpus
+      records the read and the reasoning, not the numbers, and inventing numbers to fill a chart
+      would teach geometry that never happened.</p>
+    </div>
+    <div class="wxbody"><div id="corpusTrades"></div></div>
+  </article>
+</section>
+
+<section id="card">
+  <div class="shead"><span class="snum">06</span><h2 class="stitle">The per-trade card</h2></div>
+  <p class="sdek">Five tiers of data. The point of the split is knowing <b>what not to re-type</b>:
+  Tradezella already captures Tier 1 from the trade itself. The tier that carries the value is the
+  one no tool can fill in for you.</p>
+  <div class="card" id="cardTiers"></div>
+  <div class="toolbar">
+    <button class="reset" id="copyCard" type="button">Copy the blank card</button>
+    <span class="tally" id="copyMsg"></span>
+  </div>
+</section>
+
+<footer>
+  <div class="col">
+    <p><b>Sources.</b> Every rule on this page is quoted from the wiki, hedges intact, and every
+    bar is a real export. Nothing here is machine-inferred market structure.</p>
+    <div class="src">
+      <span>rules · concepts/mastery/aura/rules.md</span>
+      <span>phases · concepts/mastery/aura/checklist.md</span>
+      <span>primitives · concepts/mastery/aura/chart-markup.md §0b</span>
+      <span>gates · api/scripts/aura_setup_engine.py → HARD_GATES / SOFT_BRANCHES</span>
+      <span>bars · api/docs/evidence/s1e/bars/ · Tradezella session 831607</span>
+      <span>figures · api/scripts/aura_figure_pack.py</span>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+document.documentElement.classList.add('js');
+const RULES = __RULES_JSON__;
+const STILL = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ── rule chips ───────────────────────────────────────────────────────────*/
+function md(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')
+          .replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>')
+          .replace(/\*([^*]+)\*/g,'<i>$1</i>')
+          .replace(/`([^`]+)`/g,'<code>$1</code>');
+}
+function chip(id){
+  const r = RULES[String(id)];
+  if(!r) return 'R'+id;
+  const soft = r.s || r.f;
+  return '<button class="rc'+(soft?' soft':'')+'" data-r="'+id+'" type="button" '+
+         'aria-label="Rule '+id+'">R'+id+'</button>';
+}
+function chips(ids){ return ids.map(chip).join(' '); }
+
+const pop = document.createElement('div');
+pop.className = 'pop'; pop.hidden = true; pop.setAttribute('role','tooltip');
+document.body.appendChild(pop);
+let popFor = null;
+function showPop(btn){
+  const id = btn.dataset.r, r = RULES[id];
+  if(!r) return;
+  let note = '';
+  if(r.s) note = 'Stated as a preference, not a gate. Preserved as stated — not hardened.';
+  else if(r.f) note = 'Flagged in the source: dOoMeR marks his own uncertainty here.';
+  pop.innerHTML = '<span class="pid">Rule '+id+(r.s?' · soft':(r.f?' · flagged':''))+'</span>'+
+                  md(r.t) + (note?'<span class="pnote">'+note+'</span>':'');
+  pop.hidden = false;
+  const b = btn.getBoundingClientRect();
+  const w = Math.min(430, innerWidth-28), h = pop.offsetHeight;
+  let left = Math.min(Math.max(12, b.left), innerWidth-w-12);
+  let top  = b.bottom + 9;
+  if(top + h > innerHeight - 10) top = Math.max(10, b.top - h - 9);
+  pop.style.left = left+'px'; pop.style.top = top+'px'; pop.style.width = w+'px';
+  popFor = btn;
+}
+function hidePop(){ pop.hidden = true; popFor = null; }
+document.addEventListener('pointerover', e=>{
+  const b = e.target.closest('.rc'); if(b && b!==popFor) showPop(b);
+});
+document.addEventListener('pointerout', e=>{
+  if(e.target.closest('.rc') && !pop.contains(e.relatedTarget)) hidePop();
+});
+document.addEventListener('focusin', e=>{ const b=e.target.closest('.rc'); if(b) showPop(b); });
+document.addEventListener('focusout', e=>{ if(e.target.closest('.rc')) hidePop(); });
+addEventListener('scroll', ()=>{ if(popFor) hidePop(); }, {passive:true});
+addEventListener('keydown', e=>{ if(e.key==='Escape') hidePop(); });
+</script>

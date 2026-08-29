@@ -1,0 +1,44 @@
+<section id="run">
+  <div class="shead"><span class="snum">01</span><h2 class="stitle">Work a session</h2></div>
+  <p class="sdek">Nineteen steps, in the order the protocol runs them — set the chart up, frame the
+  higher timeframe, draw down to the entry, decide, manage, review. <b>At each step you are told
+  what to draw and which tool to draw it with</b>, and the chart beside it shows that step
+  performed on a real session. Mark it on your own chart, tick it, move on.</p>
+
+  <div class="runner">
+    <aside class="rail" id="rail" aria-label="Session steps"></aside>
+
+    <div class="stage">
+      <div class="stagebar">
+        <div class="views" role="group" aria-label="Chart view">
+          <button class="vbtn" data-view="htf" type="button">HTF · 60m</button>
+          <button class="vbtn" data-view="ltf" type="button">LTF · 5m</button>
+        </div>
+        <span class="stagelab" id="stageLab"></span>
+      </div>
+      <div class="chartwrap" id="chartWrap">
+        <div class="chart" data-v="htf">__GUIDED_HTF__</div>
+        <div class="chart" data-v="ltf">__GUIDED_LTF__</div>
+      </div>
+      <p class="wxnote" id="stageNote"></p>
+
+      <div class="stepcard" id="stepCard"></div>
+
+      <div class="runctl">
+        <button class="reset" id="runPrev" type="button">← Back</button>
+        <button class="runmark" id="runMark" type="button">Mark it, next →</button>
+        <button class="reset" id="runSkip" type="button">Skip without marking</button>
+        <button class="reset" id="runReset" type="button">Start over</button>
+      </div>
+      <p class="runprog"><span id="runProg"></span></p>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span class="lgd"><i class="sw drawn"></i>Drawn — the engine emitted this shape and it is on the chart</span>
+    <span class="lgd"><i class="sw notrec"></i>Not recorded — a real step the engine emitted nothing for</span>
+    <span class="lgd"><i class="sw unres"></i>Unresolved — the rulebook contradicts itself here</span>
+    <span class="lgd"><i class="sw act"></i>Action — you do it, there is nothing to draw</span>
+  </div>
+</section>
+
