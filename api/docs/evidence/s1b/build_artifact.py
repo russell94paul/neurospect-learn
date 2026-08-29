@@ -155,7 +155,9 @@ src = io.open(SCR / "aura-protocol.src.html", encoding="utf-8").read()
 part2 = io.open(SCR / "aura-protocol.part2.js", encoding="utf-8").read()
 part3 = io.open(SCR / "aura-protocol.part3.js", encoding="utf-8").read()
 part4 = io.open(SCR / "aura-protocol.part4.js", encoding="utf-8").read()
-src = src.replace("</script>", part2 + part3 + part4 + "\n</script>")
+part5 = io.open(SCR / "aura-protocol.part5.js", encoding="utf-8").read()
+# part5 (tools) before part4 (the runner), which calls mountTools()
+src = src.replace("</script>", part2 + part3 + part5 + part4 + "\n</script>")
 
 # __R##__ written in prose becomes a real rule chip; soft/flagged is read from the
 # rulebook, never assigned by hand.

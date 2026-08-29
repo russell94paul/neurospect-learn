@@ -1,0 +1,18 @@
+const l=await (await fetch("http://127.0.0.1:9338/json/list")).json();
+const pg=l.find(x=>x.type==="page"); const ws=new WebSocket(pg.webSocketDebuggerUrl);
+let id=0; const p=new Map();
+const send=(m,q={})=>new Promise(r=>{const i=++id;p.set(i,r);ws.send(JSON.stringify({id:i,method:m,params:q}))});
+ws.onmessage=e=>{const m=JSON.parse(e.data); if(m.id&&p.has(m.id)){p.get(m.id)(m.result);p.delete(m.id)}};
+await new Promise(r=>ws.onopen=r);
+await send("Page.enable"); await send("Runtime.enable");
+const ev=async x=>(await send("Runtime.evaluate",{expression:x,returnByValue:true})).result?.value;
+await send("Page.navigate",{url:"http://127.0.0.1:8901/aura-protocol.html"});
+await new Promise(r=>setTimeout(r,2200));
+const set=async v=>ev(`(()=>{const n=document.querySelector('[data-t="rr"][data-k="win"]');n.value='${v}';n.dispatchEvent(new Event('input',{bubbles:true}));return 1})()`);
+const last2=async()=>ev(`[...document.querySelectorAll('[data-out="rr"] .ttab tr')].slice(-2).map(r=>[...r.cells].map(c=>c.textContent).join(' | ')).join('   //   ')`);
+console.log('blank win rate :', await ev(`document.querySelectorAll('[data-out="rr"] .ttab tr').length`), 'rows (expect 5 — no expectancy)');
+await set('40'); console.log('at 40%         :', await last2());
+await set('20'); console.log('at 20%         :', await last2());
+console.log('caveat present :', await ev(`!!document.querySelector('[data-out="rr"] .toolwarn')`));
+console.log('rows now       :', await ev(`document.querySelectorAll('[data-out="rr"] .ttab tr').length`), '(expect 7)');
+ws.close(); process.exit(0);

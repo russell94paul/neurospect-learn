@@ -267,3 +267,60 @@ per-step `<g data-mi>` layers toggled by class, so per-frame work is zero.
 - **`impeccable`'s detector has not been run** over the finished page — the skill lists it as an
   optional additive static pass and it needs `htmlparser2`/`css-select`/`css-tree`/`domutils`
   installed to avoid a degraded regex fallback.
+
+---
+
+# Update — §06 Tools (2026-08-29)
+
+Paul: *"Can you add more in app tools traders might want to know or asks a specific steps?"*
+
+Six calculators, each implementing a rule that was otherwise just a sentence. They appear in the
+standalone §06 **and** inside the guided run at the step that reaches for them
+(`PRE → breakers`, `M5 → zone`, `M11 → stoprange, rr`, `D0 → zone, rr`,
+`SIZE → size, breakers, rr`, `MAN/EXIT → fromhere`).
+
+| Tool | Rules | What it makes operational |
+|---|---|---|
+| Position sizer | R39 R43 R33 | Sizes off **total capital, broker + savings** — not the broker balance. That is the trap R39 exists to name. |
+| R:R + break-even win rate | R44 R32 | `1 ÷ (1 + R:R)`. Optional win-rate input computes R44's expectancy in full. |
+| Where in the range | R5 R32 | Only 0 / 0.5 / 1. It will not print the 0.25 / 0.75 quadrants. |
+| Risk from here | R45 | "Free trade" is a lie — recomputed from **current price**, never entry. |
+| Is the stop too wide? | R34 R33 | Stop as a share of range, flagged over 25%. |
+| Circuit breakers & drawdown | R40 R41 R42 R49 | **R42's computable test**: ten straight losses, compounded — over 20% means per-trade risk is too high. |
+
+## Why this closes part of the measured gap
+
+`risk-management.md` is the **largest page in the corpus** (3,411 words) and the guided run reduced
+it to a single tick. **R38, R42, R44 and R46 were cited nowhere.** Three of the four are now
+implemented rather than merely quoted; R38 and R46 remain uncovered.
+
+## Verified — the strongest check available
+
+Three tools **independently reproduce numbers the S1d engine published weeks ago**, from inputs
+typed into the form rather than read from its output:
+
+| Tool | Computes | Tracker published |
+|---|---|---|
+| R:R | **2.72 : 1** | "2.7R PLANNED" |
+| Where in the range | **73.6%** | "PREMIUM, 0.74 of range" |
+| Stop vs range | **27.0%** | "27% of the range, over the declared 25% flag" |
+| Position sizer | **225.75 pts** | "risk 225.75 pts" |
+
+Expectancy arithmetic checked at two points and is internally consistent with its own break-even:
+`40% → +0.489R`, `20% → −0.255R`, break-even `26.9%` — the sign flips either side of it. With the
+win-rate field blank the tool emits **five rows and no expectancy at all**.
+
+Warnings fire only when they should: stop >25% (yes at 27.0%), one contract exceeding 1R, risk %
+outside 1–2, wrong half of the range for the direction, daily stop outside 2–3R, and R42's ten-loss
+test (**2.5% → −22.4% warns; 2.0% → −18.3% does not**).
+
+`verify-tools.mjs` and `verify-expectancy.mjs` in this folder. No console errors; no horizontal
+overflow.
+
+## The honesty line these tools must not cross
+
+They are **arithmetic on this page's own rulebook, not advice and not evidence.** The expectancy
+tool is the one that could mislead, so it: only appears when *you* supply a win rate, prints the
+formula it used, states that it assumes every win lands at target and every loss at stop, and says
+explicitly that **no win rate has been established for this model**. It computes from your number;
+it never supplies one.

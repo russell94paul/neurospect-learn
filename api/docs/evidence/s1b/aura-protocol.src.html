@@ -235,6 +235,38 @@ figcaption b{color:var(--ink-2);font-weight:600}
 .asidenote,.takennote{font-size:14.5px;line-height:1.5;color:var(--ink-2);margin:12px 0 0;
   padding-top:11px;border-top:1px solid var(--line)}
 .runmark:disabled{opacity:.5;cursor:default}
+/* ── tools — arithmetic on the rules, attached to the step that needs it ──*/
+.tool{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);
+  padding:15px 17px;margin:0 0 12px}
+.toolhd{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap;margin:0 0 8px}
+.toolhd h4{font-family:Archivo,sans-serif;font-size:16px;font-weight:700;margin:0;
+  letter-spacing:-.014em;color:var(--ink)}
+.toolwhy{font-size:14.5px;line-height:1.5;color:var(--ink-2);margin:0 0 13px;max-width:72ch}
+.tfs{display:grid;gap:9px;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));margin:0 0 13px}
+.tf{display:flex;flex-direction:column;gap:4px;min-width:0}
+.tf span{font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.04em;
+  color:var(--muted)}
+.tf input,.tf select{font-family:"IBM Plex Mono",monospace;font-size:13.5px;
+  background:var(--sunk);border:1px solid var(--line);border-radius:2px;color:var(--ink);
+  padding:7px 9px;min-width:0;width:100%}
+.tf input:focus,.tf select:focus{outline:2px solid var(--gap);outline-offset:-1px;
+  border-color:var(--gap)}
+.ttab{width:100%;border-collapse:collapse;font-size:14px}
+.ttab td{padding:6px 10px 6px 0;border-bottom:1px solid var(--line);color:var(--ink-2);
+  vertical-align:baseline}
+.ttab tr:last-child td{border-bottom:0}
+.ttab .tv{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--ink);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.ttab .thow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);
+  text-align:right}
+.toolwarn{font-size:14px;line-height:1.5;color:var(--ink-2);margin:11px 0 0;
+  padding:10px 13px;border-left:2px solid var(--stop);background:var(--sunk);
+  border-radius:0 var(--r) var(--r) 0}
+.toolwarn b{color:var(--ink)}
+.toolempty{font-size:13.5px;color:var(--muted);margin:0}
+.steptools{margin:16px 0 0;padding-top:15px;border-top:1px solid var(--line)}
+.steptools>.ssayshd{margin-bottom:10px}
+
 /* ── §01 the guided runner ──────────────────────────────────────────────────
    One spatial system with the rest of the page: same tokens, same rhythm. The
    rail is the protocol's own order; the stage is one session executing it.     */
@@ -759,8 +791,17 @@ footer b{color:var(--ink-2);font-weight:600}
   </article>
 </section>
 
+<section id="tools">
+  <div class="shead"><span class="snum">06</span><h2 class="stitle">Tools</h2></div>
+  <p class="sdek">Six calculators, each implementing a rule that is otherwise just a sentence.
+  They also appear inside <a href="#run">§01</a> at the step that reaches for them. <b>Arithmetic on
+  this page's own rulebook — nothing here claims an edge</b>, and where a number would have to be
+  measured the tool asks you for it rather than inventing one. Values persist in this browser.</p>
+  <div id="allTools"></div>
+</section>
+
 <section id="card">
-  <div class="shead"><span class="snum">06</span><h2 class="stitle">The per-trade card</h2></div>
+  <div class="shead"><span class="snum">07</span><h2 class="stitle">The per-trade card</h2></div>
   <p class="sdek">Five tiers of data. The point of the split is knowing <b>what not to re-type</b>:
   Tradezella already captures Tier 1 from the trade itself. The tier that carries the value is the
   one no tool can fill in for you.</p>
