@@ -176,8 +176,8 @@ export function JournalForm({
                 'rounded px-4 py-1.5 text-sm font-medium capitalize transition-colors',
                 mode === m
                   ? m === 'live'
-                    ? 'bg-[color:var(--chart-live)] text-white'
-                    : 'bg-[color:var(--chart-backtest)] text-white'
+                    ? 'bg-chart-live text-success-on-emphasis'
+                    : 'bg-chart-backtest text-success-on-emphasis'
                   : 'text-muted-foreground hover:text-foreground'
               )}
             >

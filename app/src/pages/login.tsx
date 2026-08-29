@@ -4,7 +4,8 @@ import { useAuth } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
+import { Wordmark } from '@/components/brand/wordmark';
 import { Separator } from '@/components/ui/separator';
 
 export function LoginPage() {
@@ -34,11 +35,20 @@ export function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Neurospect Learn</CardTitle>
-          <CardDescription>ICT Mastery — course, drills & progress</CardDescription>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background p-4">
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="bg-grid" />
+        <div
+          className="bg-glow left-1/2 top-0 h-96 w-96 -translate-x-1/2 opacity-25"
+          style={{ background: 'var(--primary)' }}
+        />
+      </div>
+      <Card className="relative w-full max-w-sm">
+        <CardHeader className="items-center text-center">
+          <Wordmark size="lg" />
+          <CardDescription className="pt-1">
+            Evidence-gated ICT mastery — course, drills, journal &amp; gate
+          </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {hasDiscordClientId && (

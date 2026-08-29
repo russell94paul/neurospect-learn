@@ -16,7 +16,7 @@ import type {
 
 function MetIcon({ met }: { met: boolean }) {
   return met ? (
-    <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+    <Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />
   ) : (
     <Circle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
   );
@@ -44,7 +44,7 @@ function RequirementRow({ req }: { req: GateRequirement }) {
           )}
         </div>
         {req.detail && (
-          <p className={cn('text-xs', req.met ? 'text-muted-foreground' : 'text-amber-600 dark:text-amber-400')}>
+          <p className={cn('text-xs', req.met ? 'text-muted-foreground' : 'text-warning')}>
             {req.detail}
           </p>
         )}
@@ -144,7 +144,7 @@ export function GateChecklist({
             variant={model.cleared ? 'default' : 'outline'}
             className={cn(
               'text-[11px]',
-              model.cleared && 'border-transparent bg-emerald-600 text-white hover:bg-emerald-600'
+              model.cleared && 'border-transparent bg-success-emphasis text-success-on-emphasis hover:bg-success-emphasis'
             )}
           >
             {model.cleared ? 'cleared' : 'blocked'}
@@ -164,7 +164,7 @@ export function GateChecklist({
                 <span
                   className={cn(
                     'text-xs tabular-nums',
-                    met ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'
+                    met ? 'text-success' : 'text-muted-foreground'
                   )}
                 >
                   {metCount}/{reqs.length}

@@ -85,7 +85,7 @@ export function StageDetailPage() {
               <p className="mt-1 text-sm text-muted-foreground">{stageData.summary}</p>
             )}
             {stageData.watch_only && (
-              <p className="mt-1 text-sm text-amber-600 dark:text-amber-500">
+              <p className="mt-1 text-sm text-warning">
                 Frontier — study &amp; watch only; never gate-eligible.
               </p>
             )}

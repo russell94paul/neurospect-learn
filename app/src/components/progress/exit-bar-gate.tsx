@@ -21,14 +21,14 @@ export function ExitBarGate({ stage }: { stage: StageOut }) {
           the StageDetail page shows a separate "Locked" notice for ordering. */}
       <div className="flex flex-wrap items-center gap-2 text-sm font-medium">
         {stage.met ? (
-          <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+          <span className="inline-flex items-center gap-1 text-success">
             <Check className="h-4 w-4" /> Exit bar met
           </span>
         ) : (
           <span className="text-muted-foreground">Exit bar not met</span>
         )}
         {stage.attest_pending && !stage.met && (
-          <span className="inline-flex items-center gap-1 text-xs text-amber-600 dark:text-amber-500">
+          <span className="inline-flex items-center gap-1 text-xs text-warning">
             <ClipboardCheck className="h-3 w-3" /> attestation pending on the{' '}
             <Link to="/gate" className="underline decoration-dotted hover:text-foreground">
               Gate
@@ -81,14 +81,14 @@ function RequirementRow({ req: r }: { req: Requirement }) {
 function Icon({ req: r }: { req: Requirement }) {
   const cls = 'mt-0.5 h-4 w-4 shrink-0';
   if (r.met) {
-    return <Check className={cn(cls, 'text-emerald-600 dark:text-emerald-400')} />;
+    return <Check className={cn(cls, 'text-success')} />;
   }
   if (r.derived) {
     // Objectively unmet, not "pending a declaration" — show the evidence glyph.
     return <Sigma className={cn(cls, 'text-muted-foreground/60')} />;
   }
   if (r.attest) {
-    return <ClipboardCheck className={cn(cls, 'text-amber-600 dark:text-amber-500')} />;
+    return <ClipboardCheck className={cn(cls, 'text-warning')} />;
   }
   return <X className={cn(cls, 'text-muted-foreground/50')} />;
 }

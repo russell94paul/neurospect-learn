@@ -56,7 +56,7 @@ function Verdict({ ok, label }: { ok: boolean | null; label: string }) {
     <span
       className={cn(
         'inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs',
-        ok ? 'bg-emerald-500/10 text-emerald-600' : 'bg-muted text-muted-foreground'
+        ok ? 'bg-success-emphasis/10 text-success' : 'bg-muted text-muted-foreground'
       )}
     >
       {ok ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}

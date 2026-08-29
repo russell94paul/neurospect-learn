@@ -76,7 +76,7 @@ export function ConceptTrackPanel({ row }: { row: ProgressRow }) {
           <LadderBadge stage={row.ladder_stage} />
         </div>
         {row.watch_only && (
-          <span className="inline-flex items-center gap-1 text-xs text-amber-600 dark:text-amber-500">
+          <span className="inline-flex items-center gap-1 text-xs text-warning">
             <Eye className="h-3 w-3" /> watch-only · observe to Can-mark
           </span>
         )}
@@ -142,7 +142,7 @@ export function ConceptTrackPanel({ row }: { row: ProgressRow }) {
 
       {/* Gate message */}
       {gateMsg && (
-        <p className="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-500">
+        <p className="flex items-center gap-1.5 text-xs text-warning">
           <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
           {gateMsg}
         </p>

@@ -31,7 +31,7 @@ export function LabelBadge({ label, className }: { label: string | null | undefi
 /** Study-and-watch marker for watch-only (frontier) concepts. */
 export function WatchOnlyBadge({ className }: { className?: string }) {
   return (
-    <Badge variant="outline" className={cn('gap-1 text-amber-600 dark:text-amber-500', className)}>
+    <Badge variant="outline" className={cn('gap-1 text-warning', className)}>
       <Eye className="h-3 w-3" />
       Study &amp; watch
     </Badge>

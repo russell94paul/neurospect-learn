@@ -57,14 +57,14 @@ export function MarkdownRenderer({ body, maps, className }: Props) {
         // `.dark` class theme) rather than prose's own grays + the media-based
         // `dark:prose-invert`, which mismatches the class-based theme.
         'prose prose-sm max-w-none',
-        '[--tw-prose-body:hsl(var(--foreground))] [--tw-prose-headings:hsl(var(--foreground))]',
-        '[--tw-prose-bold:hsl(var(--foreground))] [--tw-prose-code:hsl(var(--foreground))]',
-        '[--tw-prose-links:hsl(var(--primary))] [--tw-prose-quotes:hsl(var(--muted-foreground))]',
-        '[--tw-prose-quote-borders:hsl(var(--border))] [--tw-prose-hr:hsl(var(--border))]',
-        '[--tw-prose-bullets:hsl(var(--muted-foreground))] [--tw-prose-counters:hsl(var(--muted-foreground))]',
-        '[--tw-prose-captions:hsl(var(--muted-foreground))] [--tw-prose-th-borders:hsl(var(--border))]',
-        '[--tw-prose-td-borders:hsl(var(--border))] [--tw-prose-pre-bg:hsl(var(--muted))]',
-        '[--tw-prose-pre-code:hsl(var(--foreground))]',
+        '[--tw-prose-body:var(--foreground)] [--tw-prose-headings:var(--foreground)]',
+        '[--tw-prose-bold:var(--foreground)] [--tw-prose-code:var(--foreground)]',
+        '[--tw-prose-links:var(--primary)] [--tw-prose-quotes:var(--muted-foreground)]',
+        '[--tw-prose-quote-borders:var(--border)] [--tw-prose-hr:var(--border)]',
+        '[--tw-prose-bullets:var(--muted-foreground)] [--tw-prose-counters:var(--muted-foreground)]',
+        '[--tw-prose-captions:var(--muted-foreground)] [--tw-prose-th-borders:var(--border)]',
+        '[--tw-prose-td-borders:var(--border)] [--tw-prose-pre-bg:var(--muted)]',
+        '[--tw-prose-pre-code:var(--foreground)]',
         '[&_h1]:scroll-mt-20 [&_a]:underline-offset-4',
         className
       )}

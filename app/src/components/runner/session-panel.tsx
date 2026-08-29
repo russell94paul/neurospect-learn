@@ -92,7 +92,7 @@ export function SessionPanel({ state, patch }: Props) {
           className="text-sm"
         />
         {/* An honest limit, stated in the face of the record — the E6 idiom. */}
-        <p className="flex items-start gap-1.5 rounded bg-amber-500/10 p-1.5 text-[11px] leading-snug text-amber-700 dark:text-amber-400">
+        <p className="flex items-start gap-1.5 rounded bg-warning-emphasis/10 p-1.5 text-[11px] leading-snug text-warning">
           <TriangleAlert className="mt-0.5 h-3 w-3 shrink-0" />
           <span>
             This is stored in your browser and timestamped by{' '}
@@ -167,7 +167,7 @@ function CopyRow({ label, value }: { label: string; value: string }) {
           );
         }}
       >
-        {copied ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
+        {copied ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3" />}
         <span className="sr-only">Copy {label}</span>
       </Button>
     </div>

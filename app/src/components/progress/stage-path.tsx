@@ -18,7 +18,7 @@ function Ring({ value, met }: { value: number; met: boolean }) {
         fill="none"
         strokeWidth="4"
         strokeLinecap="round"
-        className={cn(met ? 'stroke-emerald-500' : 'stroke-primary')}
+        className={cn(met ? 'stroke-success-emphasis' : 'stroke-primary')}
         strokeDasharray={circ}
         strokeDashoffset={offset}
         transform="rotate(-90 24 24)"
@@ -46,7 +46,7 @@ export function StageNode({ stage }: { stage: StageRollup }) {
           <span className="font-mono text-xs text-muted-foreground">{stage.stage_code}</span>
           <span className="truncate font-semibold">{stage.title}</span>
           {stage.watch_only && (
-            <span className="inline-flex items-center gap-1 text-xs text-amber-600 dark:text-amber-500">
+            <span className="inline-flex items-center gap-1 text-xs text-warning">
               <Eye className="h-3 w-3" /> watch-only
             </span>
           )}
@@ -57,7 +57,7 @@ export function StageNode({ stage }: { stage: StageRollup }) {
               <Lock className="h-3 w-3" /> Locked
             </span>
           ) : stage.met ? (
-            <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+            <span className="inline-flex items-center gap-1 text-success">
               <Check className="h-3 w-3" /> Exit bar met
             </span>
           ) : stage.total === 0 ? (
@@ -71,7 +71,7 @@ export function StageNode({ stage }: { stage: StageRollup }) {
             </span>
           )}
           {stage.attest_pending && !stage.locked && !stage.met && (
-            <span className="text-amber-600 dark:text-amber-500">· attestation pending</span>
+            <span className="text-warning">· attestation pending</span>
           )}
           {stage.never_gate_eligible && (
             <span className="text-muted-foreground">· never gate-eligible</span>

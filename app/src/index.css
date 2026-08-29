@@ -1,123 +1,412 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 
 /*
  * Tailwind v4 defaults the `dark:` variant to the `prefers-color-scheme` media
- * query, but this app's theme is CLASS-based (`.dark` on an ancestor — same as
- * shadcn + the 5d prose token binding). Re-point `dark:` at the class so new
- * `dark:` utilities (5e-1 progress/gate components) track the real theme, not
- * the OS setting. (Flagged in learning-platform.md §5d as-built.)
+ * query, but this app's theme is CLASS-based (`.dark` on <html>, written by
+ * src/lib/settings.ts). Re-point `dark:` at the class so the variant tracks the
+ * real theme, not the OS setting.
  */
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Tailwind v4 + shadcn/ui token bridge.
+ * ============================================================================
+ * THE DESIGN SYSTEM — four independent axes on <html>
+ * ============================================================================
  *
- * The lifted neurospect-app index.css defined the HSL token triples in :root/.dark
- * but had NO @theme block — so Tailwind v4 never generated the semantic utilities
- * (bg-primary, bg-card, text-muted-foreground, border-border, …) the shadcn
- * components rely on, leaving them unstyled. This @theme inline block maps each
- * token to a --color-* / --radius-* theme entry so those utilities are emitted.
+ *   <html class="dark" data-brand data-density data-font data-motion>
+ *
+ * Each axis writes a DISJOINT set of variables, so they compose additively
+ * instead of multiplying. In particular `data-brand` writes only HUE and CHROMA
+ * (--brand-h/--brand-c) while the mode blocks own LIGHTNESS (--brand-l). That is
+ * why five brands x two modes costs 2 + 5 blocks and not 2 x 5.
+ *
+ * WHY OKLCH. The brand axis is a hue rotation that must hold its contrast. In
+ * HSL it cannot: hue 240 at 50% L is far darker perceptually than hue 60 at
+ * 50% L, so every preset would need hand-tuned lightness per mode. OKLCH keeps
+ * lightness perceptually flat as hue moves, which is exactly the axis being made
+ * configurable. Opacity modifiers (`bg-primary/10`) are unaffected either way —
+ * Tailwind v4 compiles them to color-mix() over a COMPLETE colour, which oklch()
+ * and hex both are. A bare HSL triple is not, which is what the old file had.
+ *
+ * CAUTION: if a token resolves to nothing (e.g. a data-brand value with no
+ * matching block) color-mix() becomes invalid and the WHOLE declaration is
+ * dropped — `bg-primary` and `bg-primary/10` vanish silently. Hence the :root
+ * fallbacks below and the value validation in settings.ts.
+ *
+ * `@theme inline` MUST STAY `inline`. With a plain `@theme`, Tailwind emits
+ * `--color-primary` into :root where it computes ONCE against :root's value;
+ * elements inside `.dark` would then inherit the already-computed light colour
+ * and DARK MODE WOULD SILENTLY STOP WORKING. `inline` splices the value text
+ * into each utility body so the var() lookup happens at the element.
+ * ============================================================================
  */
-@theme inline {
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
 
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* The second brand hue. Spent deliberately — logo, one hero accent, chrome.
+     NOT wired to --secondary, which must stay a neutral control surface. */
+  --color-brand-2: var(--brand-2);
+
+  /* Modal scrim. Was `bg-black/80`, which is invisible on a near-black base. */
+  --color-overlay: var(--overlay);
+
+  /* Status scale. Four slots each: ink / solid fill / ink-on-fill / tint.
+     NEVER derived from --brand-*: a violet brand must not turn "pass" violet. */
+  --color-success: var(--success);
+  --color-success-emphasis: var(--success-emphasis);
+  --color-success-on-emphasis: var(--success-on-emphasis);
+  --color-success-muted: var(--success-muted);
+  --color-warning: var(--warning);
+  --color-warning-emphasis: var(--warning-emphasis);
+  --color-warning-on-emphasis: var(--warning-on-emphasis);
+  --color-warning-muted: var(--warning-muted);
+  --color-info: var(--info);
+  --color-info-emphasis: var(--info-emphasis);
+  --color-info-on-emphasis: var(--info-on-emphasis);
+  --color-info-muted: var(--info-muted);
+  /* Danger extends shadcn's existing --destructive rather than inventing a
+     parallel name, so button.tsx / badge.tsx stay untouched. */
+  --color-destructive-ink: var(--destructive-ink);
+  --color-destructive-emphasis: var(--destructive);
+  --color-destructive-muted: var(--destructive-muted);
+
+  /* The mastery ladder: a SEQUENTIAL scale, not a status. Tiers 3-4 alias the
+     warning/success values but keep their own names so the ladder can be
+     re-hued later without redefining what "pending" means. */
+  --color-ladder-1: var(--ladder-1);
+  --color-ladder-1-muted: var(--ladder-1-muted);
+  --color-ladder-2: var(--ladder-2);
+  --color-ladder-2-muted: var(--ladder-2-muted);
+  --color-ladder-3: var(--ladder-3);
+  --color-ladder-3-muted: var(--ladder-3-muted);
+  --color-ladder-4: var(--ladder-4);
+  --color-ladder-4-muted: var(--ladder-4-muted);
+
+  /* Chart palette. Values deliberately UNCHANGED — this pair is CVD-validated
+     (ΔE 24.7 light / 26.8 dark against a ≥8 target); see chart-common.tsx.
+     Promoted into @theme only so `bg-chart-live` becomes a real utility and the
+     `bg-[color:var(--chart-live)]` arbitrary-value escapes can retire. */
+  --color-chart-backtest: var(--chart-backtest);
+  --color-chart-live: var(--chart-live);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-axis: var(--chart-axis);
+  --color-chart-zero: var(--chart-zero);
+
+  /* max(0px, …) because --radius reaches 0 on the "Square" setting, and a
+     negative border-radius is invalid: the declaration is dropped and the
+     utility silently does nothing. xl/2xl are overridden too, otherwise they
+     keep Tailwind's defaults and look wrong at radius 0. */
+  --radius-xs: max(0px, calc(var(--radius) - 6px));
+  --radius-sm: max(0px, calc(var(--radius) - 4px));
+  --radius-md: max(0px, calc(var(--radius) - 2px));
   --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  --font-sans: var(--app-font-sans);
+  --font-mono: var(--app-font-mono);
 }
 
 @layer base {
+  /* ---- L1/L2: light mode ---------------------------------------------- */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --background: oklch(0.99 0.002 250);
+    --foreground: oklch(0.21 0.03 258);
+    /* --card must differ from --background: they were identical before, which
+       makes every Card invisible on a near-black base. */
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.21 0.03 258);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.21 0.03 258);
+
+    --secondary: oklch(0.96 0.005 250);
+    --secondary-foreground: oklch(0.28 0.03 258);
+    --muted: oklch(0.96 0.005 250);
+    --muted-foreground: oklch(0.53 0.02 257);
+    /* shadcn's --accent is the HOVER SURFACE (hover:bg-accent in sidebar.tsx,
+       focus:bg-accent in dropdown-menu.tsx). It is NOT the brand colour — the
+       settings axis is `brand`, and "Accent" survives only as a UI label. */
+    --accent: oklch(0.955 0.008 250);
+    --accent-foreground: oklch(0.28 0.03 258);
+
+    --border: oklch(0.91 0.008 255);
+    --input: oklch(0.91 0.008 255);
+    --overlay: oklch(0.21 0.03 258);
     --radius: 0.5rem;
 
-    /*
-     * Chart palette (Phase 5f). Two validated categorical hues for the two
-     * journal axes — backtest = slot-1 blue, live = slot-2 orange — plus grid /
-     * axis / zero-line chrome. Values + light/dark steps from the dataviz skill's
-     * reference palette; the pair passes all six checks in BOTH modes (light CVD
-     * ΔE 24.7, dark 26.8 — well above the ≥8 target). Axis ink is mode-invariant.
-     */
+    /* Brand: mode owns lightness + the ink that sits on it. */
+    --brand-l: 0.58;
+    --brand-fg: oklch(0.99 0 0);
+    --brand-2-l: 0.55;
+
+    --destructive: oklch(0.58 0.21 27);
+    --destructive-foreground: oklch(0.99 0 0);
+    --destructive-ink: oklch(0.52 0.20 27);
+    --destructive-muted: color-mix(in oklab, oklch(0.58 0.21 27) 12%, transparent);
+
+    --success: oklch(0.52 0.13 155);
+    --success-emphasis: oklch(0.56 0.14 155);
+    --success-on-emphasis: oklch(0.99 0 0);
+    --success-muted: color-mix(in oklab, oklch(0.56 0.14 155) 12%, transparent);
+
+    --warning: oklch(0.50 0.13 75);
+    --warning-emphasis: oklch(0.70 0.16 75);
+    --warning-on-emphasis: oklch(0.24 0.04 75);
+    --warning-muted: color-mix(in oklab, oklch(0.70 0.16 75) 16%, transparent);
+
+    --info: oklch(0.52 0.15 250);
+    --info-emphasis: oklch(0.55 0.16 250);
+    --info-on-emphasis: oklch(0.99 0 0);
+    --info-muted: color-mix(in oklab, oklch(0.55 0.16 250) 12%, transparent);
+
+    --ladder-1: oklch(0.48 0.02 257);
+    --ladder-1-muted: color-mix(in oklab, oklch(0.48 0.02 257) 14%, transparent);
+    --ladder-2: var(--info);
+    --ladder-2-muted: var(--info-muted);
+    --ladder-3: var(--warning);
+    --ladder-3-muted: var(--warning-muted);
+    --ladder-4: var(--success);
+    --ladder-4-muted: var(--success-muted);
+
+    /* Unchanged, validated values — see the @theme note above. */
     --chart-backtest: #2a78d6;
     --chart-live: #eb6834;
     --chart-grid: #e1e0d9;
     --chart-axis: #898781;
     --chart-zero: #c3c2b7;
+
+    color-scheme: light;
   }
 
+  /* ---- L1/L2: dark mode ------------------------------------------------ */
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --background: oklch(0.16 0.02 265);
+    --foreground: oklch(0.95 0.01 250);
+    --card: oklch(0.21 0.025 263);
+    --card-foreground: oklch(0.95 0.01 250);
+    --popover: oklch(0.21 0.025 263);
+    --popover-foreground: oklch(0.95 0.01 250);
 
-    /* Dark steps of the chart palette (see :root above). */
+    --secondary: oklch(0.27 0.025 262);
+    --secondary-foreground: oklch(0.95 0.01 250);
+    --muted: oklch(0.27 0.025 262);
+    --muted-foreground: oklch(0.71 0.02 257);
+    --accent: oklch(0.29 0.028 262);
+    --accent-foreground: oklch(0.97 0.01 250);
+
+    --border: oklch(0.31 0.028 262);
+    --input: oklch(0.31 0.028 262);
+    --overlay: oklch(0.10 0.02 265);
+
+    --brand-l: 0.74;
+    --brand-fg: oklch(0.16 0.02 265);
+    --brand-2-l: 0.70;
+
+    --destructive: oklch(0.55 0.20 27);
+    --destructive-foreground: oklch(0.99 0 0);
+    --destructive-ink: oklch(0.72 0.17 27);
+    --destructive-muted: color-mix(in oklab, oklch(0.72 0.17 27) 16%, transparent);
+
+    --success: oklch(0.79 0.15 155);
+    --success-emphasis: oklch(0.62 0.15 155);
+    --success-on-emphasis: oklch(0.99 0 0);
+    --success-muted: color-mix(in oklab, oklch(0.79 0.15 155) 16%, transparent);
+
+    --warning: oklch(0.82 0.15 75);
+    --warning-emphasis: oklch(0.75 0.16 75);
+    --warning-on-emphasis: oklch(0.22 0.04 75);
+    --warning-muted: color-mix(in oklab, oklch(0.82 0.15 75) 16%, transparent);
+
+    --info: oklch(0.77 0.13 250);
+    --info-emphasis: oklch(0.58 0.17 250);
+    --info-on-emphasis: oklch(0.99 0 0);
+    --info-muted: color-mix(in oklab, oklch(0.77 0.13 250) 16%, transparent);
+
+    --ladder-1: oklch(0.74 0.02 257);
+    --ladder-1-muted: color-mix(in oklab, oklch(0.74 0.02 257) 16%, transparent);
+    --ladder-2: var(--info);
+    --ladder-2-muted: var(--info-muted);
+    --ladder-3: var(--warning);
+    --ladder-3-muted: var(--warning-muted);
+    --ladder-4: var(--success);
+    --ladder-4-muted: var(--success-muted);
+
     --chart-backtest: #3987e5;
     --chart-live: #d95926;
     --chart-grid: #2c2c2a;
     --chart-axis: #898781;
     --chart-zero: #383835;
+
+    color-scheme: dark;
+  }
+
+  /* ---- L2 derived from the brand axis, identical in both modes ---------- */
+  :root,
+  .dark {
+    --primary: oklch(var(--brand-l) var(--brand-c) var(--brand-h));
+    --primary-foreground: var(--brand-fg);
+    --ring: oklch(var(--brand-l) var(--brand-c) var(--brand-h));
+    --brand-2: oklch(var(--brand-2-l) var(--brand-2-c) var(--brand-2-h));
+  }
+
+  /* ---- L0: the brand axis. Hue + chroma only. -------------------------- */
+  /* Placed AFTER the mode blocks so a per-preset override (e.g. amber needing
+     dark ink) resolves correctly. Specificity is equal, so order decides. */
+  :root,
+  [data-brand="cyan"] {
+    --brand-h: 210;
+    --brand-c: 0.13;
+    --brand-2-h: 285;
+    --brand-2-c: 0.16;
+  }
+  [data-brand="violet"] {
+    --brand-h: 285;
+    --brand-c: 0.16;
+    --brand-2-h: 210;
+    --brand-2-c: 0.13;
+  }
+  [data-brand="emerald"] {
+    --brand-h: 158;
+    --brand-c: 0.13;
+    --brand-2-h: 210;
+    --brand-2-c: 0.13;
+  }
+  [data-brand="amber"] {
+    --brand-h: 75;
+    --brand-c: 0.15;
+    --brand-2-h: 27;
+    --brand-2-c: 0.16;
+  }
+  [data-brand="rose"] {
+    --brand-h: 12;
+    --brand-c: 0.16;
+    --brand-2-h: 285;
+    --brand-2-c: 0.16;
+  }
+  /* Amber and rose are light enough that white ink fails on them. Both modes. */
+  [data-brand="amber"] {
+    --brand-fg: oklch(0.20 0.03 75);
+  }
+  .dark [data-brand="amber"],
+  [data-brand="amber"].dark {
+    --brand-fg: oklch(0.18 0.03 75);
+  }
+
+  /* ---- L0: fonts ------------------------------------------------------- */
+  /* System stacks only — no webfont request. The app must render offline
+     (/runner is designed to work with the backend down), and a render-blocking
+     third-party @import at the top of the critical CSS is a latency regression. */
+  :root,
+  [data-font="inter"] {
+    --app-font-sans: "Inter var", "Inter", ui-sans-serif, system-ui, -apple-system,
+      "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --app-font-mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas,
+      monospace;
+  }
+  [data-font="system"] {
+    --app-font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --app-font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  [data-font="serif"] {
+    --app-font-sans: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+    --app-font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+
+  /* ---- L0: density ----------------------------------------------------- */
+  /* Tailwind v4 derives every spacing utility from --spacing (p-6 becomes
+     calc(var(--spacing) * 6)), so one variable rescales the whole app. */
+  [data-density="compact"] {
+    --spacing: 0.22rem;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--app-font-sans);
   }
 }
 
-@layer base {
-  * {
-    border-color: hsl(var(--border));
-  }
-  body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-  }
+/*
+ * ============================================================================
+ * MOTION
+ * ============================================================================
+ * Gated by data-motion, resolved in JS (see settings.ts). There must be NO bare
+ * `@media (prefers-reduced-motion)` block anywhere in this app: it would fight
+ * the explicit user setting and start an unwinnable specificity war. The media
+ * query is consulted only in JS, only to resolve the `system` value.
+ *
+ * `full` needs no block — the defaults apply.
+ */
+
+/* Keeps the fade, kills the movement — without touching a single component
+   class — by zeroing the enter/exit custom properties tw-animate-css uses. */
+[data-motion="subtle"] *,
+[data-motion="subtle"] *::before,
+[data-motion="subtle"] *::after {
+  animation-duration: 120ms !important;
+  transition-duration: 120ms !important;
+  --tw-enter-translate-x: 0 !important;
+  --tw-enter-translate-y: 0 !important;
+  --tw-exit-translate-x: 0 !important;
+  --tw-exit-translate-y: 0 !important;
+  --tw-enter-scale: 1 !important;
+  --tw-exit-scale: 1 !important;
+}
+
+/* 1ms, NOT 0s. Radix Presence unmounts on animationend, and a 0s animation can
+   skip that event in some engines — leaving a dialog permanently mounted. */
+[data-motion="none"] *,
+[data-motion="none"] *::before,
+[data-motion="none"] *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 1ms !important;
+  scroll-behavior: auto !important;
+}
+
+/*
+ * ============================================================================
+ * BRAND BACKDROP — ported from the NeuroSpect marketing site (ns-styles.css)
+ * ============================================================================
+ */
+@utility bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+@utility bg-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.35;
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 75%);
 }

@@ -8,7 +8,7 @@ import { ENTRY_MODEL_LABELS, GRADE_LABELS, OUTCOME_LABELS } from '@/lib/journal'
 import type { JournalEntry } from '@/types/api';
 
 const OUTCOME_STYLE: Record<string, string> = {
-  win: 'text-emerald-600 dark:text-emerald-400',
+  win: 'text-success',
   loss: 'text-destructive',
   breakeven: 'text-muted-foreground',
 };
@@ -32,8 +32,8 @@ export function JournalCard({ entry }: { entry: JournalEntry }) {
               className={cn(
                 'text-[10px] uppercase tracking-wide',
                 entry.mode === 'live'
-                  ? 'border-[color:var(--chart-live)] text-[color:var(--chart-live)]'
-                  : 'border-[color:var(--chart-backtest)] text-[color:var(--chart-backtest)]'
+                  ? 'border-chart-live text-chart-live'
+                  : 'border-chart-backtest text-chart-backtest'
               )}
             >
               {entry.mode}
@@ -49,7 +49,7 @@ export function JournalCard({ entry }: { entry: JournalEntry }) {
               </span>
             )}
             {entry.grade && <span>grade {GRADE_LABELS[entry.grade]}</span>}
-            {entry.plan_followed === false && <span className="text-amber-600 dark:text-amber-400">off-plan</span>}
+            {entry.plan_followed === false && <span className="text-warning">off-plan</span>}
           </div>
         </div>
         <div className="shrink-0 text-right">
@@ -57,7 +57,7 @@ export function JournalCard({ entry }: { entry: JournalEntry }) {
             <span
               className={cn(
                 'font-semibold tabular-nums',
-                entry.r_multiple! > 0 ? 'text-emerald-600 dark:text-emerald-400'
+                entry.r_multiple! > 0 ? 'text-success'
                   : entry.r_multiple! < 0 ? 'text-destructive' : 'text-muted-foreground'
               )}
             >

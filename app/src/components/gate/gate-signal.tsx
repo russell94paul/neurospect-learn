@@ -13,7 +13,7 @@ function SourcePill({ label, met }: { label: string; met: boolean }) {
       className={cn(
         'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium',
         met
-          ? 'border-emerald-600/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400'
+          ? 'border-success-emphasis/30 bg-success-emphasis/10 text-success'
           : 'border-border bg-muted/40 text-muted-foreground'
       )}
     >
@@ -51,7 +51,7 @@ export function GateSignal({
         'cursor-pointer transition-colors',
         selected && 'ring-2 ring-ring',
         cleared
-          ? 'border-emerald-600/40 bg-emerald-500/5'
+          ? 'border-success-emphasis/40 bg-success-emphasis/5'
           : 'hover:border-foreground/20'
       )}
     >
@@ -66,7 +66,7 @@ export function GateSignal({
             </p>
           </div>
           {cleared ? (
-            <Badge className="shrink-0 gap-1 border-transparent bg-emerald-600 text-white hover:bg-emerald-600">
+            <Badge variant="success" className="shrink-0 gap-1">
               <ShieldCheck className="h-3.5 w-3.5" />
               Cleared
             </Badge>
@@ -91,8 +91,8 @@ export function GateSignal({
               className={cn(
                 'font-medium tabular-nums',
                 model.backtest_n >= model.sample_target
-                  ? 'text-emerald-600 dark:text-emerald-400'
-                  : 'text-amber-600 dark:text-amber-400'
+                  ? 'text-success'
+                  : 'text-warning'
               )}
             >
               {model.backtest_n}/{model.sample_target}
@@ -106,7 +106,7 @@ export function GateSignal({
                 model.backtest_expectancy == null
                   ? 'text-muted-foreground'
                   : model.backtest_expectancy > 0
-                    ? 'text-emerald-600 dark:text-emerald-400'
+                    ? 'text-success'
                     : 'text-destructive'
               )}
             >

@@ -33,7 +33,7 @@ function SummaryTile({ summary }: { summary: ModeSummary }) {
             className={cn(
               'text-2xl font-bold tabular-nums',
               summary.expectancy == null ? 'text-muted-foreground'
-                : summary.expectancy > 0 ? 'text-emerald-600 dark:text-emerald-400'
+                : summary.expectancy > 0 ? 'text-success'
                   : summary.expectancy < 0 ? 'text-destructive' : ''
             )}
           >
@@ -76,7 +76,7 @@ function ExpectancyTable({ groups, sampleTarget }: { groups: ExpectancyGroup[]; 
               <td className="py-2 pr-3">{ENTRY_MODEL_LABELS[g.entry_model as EntryModel] ?? g.entry_model}</td>
               <td className="py-2 pr-3 capitalize text-muted-foreground">{g.mode}</td>
               <td className="py-2 pr-3 text-right tabular-nums">
-                <span className={cn(!g.sample_met && 'text-amber-600 dark:text-amber-400')} title={`Reference sample: ${sampleTarget}`}>
+                <span className={cn(!g.sample_met && 'text-warning')} title={`Reference sample: ${sampleTarget}`}>
                   {g.n}
                 </span>
               </td>
@@ -84,12 +84,12 @@ function ExpectancyTable({ groups, sampleTarget }: { groups: ExpectancyGroup[]; 
               <td className="py-2 pr-3 text-right tabular-nums">{g.avg_win_r == null ? '—' : `${g.avg_win_r.toFixed(2)}R`}</td>
               <td className="py-2 pr-3 text-right tabular-nums">{g.avg_loss_r == null ? '—' : `${g.avg_loss_r.toFixed(2)}R`}</td>
               <td className={cn('py-2 pr-3 text-right font-medium tabular-nums',
-                g.expectancy == null ? '' : g.expectancy > 0 ? 'text-emerald-600 dark:text-emerald-400' : g.expectancy < 0 ? 'text-destructive' : '')}>
+                g.expectancy == null ? '' : g.expectancy > 0 ? 'text-success' : g.expectancy < 0 ? 'text-destructive' : '')}>
                 {rMultiple(g.expectancy)}
               </td>
               <td className="py-2 pr-3 text-right tabular-nums">
                 {g.break_even == null ? '—' : (
-                  <span className={cn(g.above_break_even ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground')}>
+                  <span className={cn(g.above_break_even ? 'text-success' : 'text-muted-foreground')}>
                     {pct(g.break_even)}
                   </span>
                 )}

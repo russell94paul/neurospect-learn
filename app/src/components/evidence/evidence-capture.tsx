@@ -106,7 +106,7 @@ export function EvidenceCapture({
               {' '}
               · {assets.length} captured{showRepsClaimed ? ` · ${evidencedReps} reps` : ''}
               {unchecked > 0 && (
-                <span className="text-amber-600 dark:text-amber-500" data-testid="evidence-unchecked">
+                <span className="text-warning" data-testid="evidence-unchecked">
                   {' '}
                   · {unchecked} awaiting your check
                 </span>
@@ -232,7 +232,7 @@ export function EvidenceCapture({
                     alt={asset.original_filename ?? 'Captured evidence'}
                     className={cn(
                       'h-16 w-24 rounded border object-cover',
-                      flagged && 'border-amber-500'
+                      flagged && 'border-warning-emphasis'
                     )}
                   />
                   {/* Only drill/concept evidence counts reps — labelling a journal
@@ -252,7 +252,7 @@ export function EvidenceCapture({
                     <Trash2 className="h-3 w-3 text-destructive" />
                   </button>
                   {flagged && (
-                    <span className="absolute right-0 bottom-0 rounded-tl bg-background/85 px-1 text-[10px] text-amber-600 dark:text-amber-500">
+                    <span className="absolute right-0 bottom-0 rounded-tl bg-background/85 px-1 text-[10px] text-warning">
                       flagged
                     </span>
                   )}
@@ -277,7 +277,7 @@ export function EvidenceCapture({
           rather than a `message`, so including it here rendered an EMPTY amber
           strip. SelfCheck states its own verdict. */}
       {deterministicFlags.length > 0 && (
-        <p className="text-xs text-amber-600 dark:text-amber-500" data-testid="evidence-flag">
+        <p className="text-xs text-warning" data-testid="evidence-flag">
           {deterministicFlags.join(' ')}
         </p>
       )}

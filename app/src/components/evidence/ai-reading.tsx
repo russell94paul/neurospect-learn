@@ -95,7 +95,7 @@ export function AiReading({ asset, className }: { asset: EvidenceAsset; classNam
           Second reader (advisory) · could see {seen} of {items.length}
         </span>
         {disagreements.length > 0 && (
-          <span className="text-amber-600 dark:text-amber-500" data-testid="ai-reading-disagree-count">
+          <span className="text-warning" data-testid="ai-reading-disagree-count">
             · {disagreements.length} differ{disagreements.length === 1 ? 's' : ''} from your check
           </span>
         )}
@@ -142,7 +142,7 @@ export function AiReading({ asset, className }: { asset: EvidenceAsset; classNam
                     )}
                   />
                   <span className="min-w-0 flex-1 text-muted-foreground">
-                    <span className={cn(differs && 'text-amber-600 dark:text-amber-500')}>
+                    <span className={cn(differs && 'text-warning')}>
                       {ITEM_EVIDENCE_LABELS[item.visible_evidence]}
                     </span>
                     {' — '}
@@ -167,7 +167,7 @@ export function AiReading({ asset, className }: { asset: EvidenceAsset; classNam
               className="space-y-1 border-t pt-2 text-[11px]"
               data-testid="ai-reading-disagreements"
             >
-              <p className="font-medium text-amber-600 dark:text-amber-500">
+              <p className="font-medium text-warning">
                 Worth a look — you and the reader saw this differently
               </p>
               {disagreements.map((d) => (

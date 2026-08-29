@@ -106,9 +106,9 @@ function Tile({
 }) {
   const toneCls =
     tone === 'warn'
-      ? 'text-amber-600 dark:text-amber-400'
+      ? 'text-warning'
       : tone === 'good'
-        ? 'text-emerald-600 dark:text-emerald-400'
+        ? 'text-success'
         : 'text-muted-foreground';
   return (
     <div className="rounded-lg border p-3">
@@ -148,9 +148,9 @@ function BucketRow({
               className={cn(
                 'font-medium tabular-nums',
                 (b.net_r ?? 0) > 0
-                  ? 'text-amber-600 dark:text-amber-400'
+                  ? 'text-warning'
                   : (b.net_r ?? 0) < 0
-                    ? 'text-emerald-600 dark:text-emerald-400'
+                    ? 'text-success'
                     : 'text-muted-foreground'
               )}
             >

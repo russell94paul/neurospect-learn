@@ -15,6 +15,19 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
+        // Status variants (design-system sweep). Solid `-emphasis` fills pair
+        // with `-on-emphasis` ink; the `-subtle` forms are a tinted surface with
+        // the ink token on top. No `dark:` variants — the tokens carry the mode.
+        success:
+          "border-transparent bg-success-emphasis text-success-on-emphasis",
+        warning:
+          "border-transparent bg-warning-emphasis text-warning-on-emphasis",
+        info: "border-transparent bg-info-emphasis text-info-on-emphasis",
+        "success-subtle": "border-transparent bg-success-muted text-success",
+        "warning-subtle": "border-transparent bg-warning-muted text-warning",
+        "info-subtle": "border-transparent bg-info-muted text-info",
+        "destructive-subtle":
+          "border-transparent bg-destructive-muted text-destructive-ink",
       },
     },
     defaultVariants: {

@@ -83,8 +83,8 @@ export function SelfCheck({
             className={cn(
               'flex items-center gap-1 text-xs',
               existing.state === 'passed'
-                ? 'text-emerald-600 dark:text-emerald-500'
-                : 'text-amber-600 dark:text-amber-500'
+                ? 'text-success'
+                : 'text-warning'
             )}
             data-testid="self-check-state"
           >
@@ -146,7 +146,7 @@ export function SelfCheck({
       )}
 
       {staleVersion && (
-        <p className="text-[11px] text-amber-600 dark:text-amber-500" data-testid="self-check-stale">
+        <p className="text-[11px] text-warning" data-testid="self-check-stale">
           Your last check was against v{existing?.rubric_version}; this bar is now v{rubric.version}.
         </p>
       )}

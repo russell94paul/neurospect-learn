@@ -55,9 +55,9 @@ export function MissedTradeCard({ miss }: { miss: MissedTrade }) {
                 className={cn(
                   'font-semibold tabular-nums',
                   miss.hypothetical_r! > 0
-                    ? 'text-amber-600 dark:text-amber-400'
+                    ? 'text-warning'
                     : miss.hypothetical_r! < 0
-                      ? 'text-emerald-600 dark:text-emerald-400'
+                      ? 'text-success'
                       : 'text-muted-foreground'
                 )}
               >

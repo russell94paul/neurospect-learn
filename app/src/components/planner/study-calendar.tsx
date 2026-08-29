@@ -21,8 +21,8 @@ import type { PlanItem, PlanItemStatus } from '@/types/api';
 const WEEK_HEADERS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 const DOT: Record<PlanItemStatus, string> = {
-  done: 'bg-emerald-500',
-  partial: 'bg-amber-500',
+  done: 'bg-success-emphasis',
+  partial: 'bg-warning-emphasis',
   skipped: 'bg-destructive',
   pending: 'bg-primary/60',
 };
@@ -138,15 +138,15 @@ export function StudyCalendar() {
 
       {/* Legend + accountability */}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> done</span>
-        <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-amber-500" /> partial</span>
+        <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-success-emphasis" /> done</span>
+        <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-warning-emphasis" /> partial</span>
         <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-destructive" /> skipped</span>
         <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-primary/60" /> pending</span>
         <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-primary/30" /> projected (future)</span>
       </div>
 
       {unplaced > 0 && (
-        <p className="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-500">
+        <p className="flex items-center gap-1.5 text-xs text-warning">
           <AlertTriangle className="h-3.5 w-3.5" />
           {unplaced} task{unplaced === 1 ? '' : 's'} couldn't fit the visible horizon — add availability to place them.
         </p>

@@ -4,11 +4,14 @@ import { LADDER_LABELS } from '@/lib/learning';
 
 // Colour climbs with the ladder (concepts/mastery/README §ladder): grey Learned
 // → blue Can-mark → amber Backtested → green Live-ready.
+//
+// No `dark:` variants: the ladder tokens already carry their own dark step, so
+// the mode is handled once in index.css rather than at every use site.
 const LADDER_STYLES: Record<number, string> = {
-  1: 'bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-100',
-  2: 'bg-blue-200 text-blue-900 dark:bg-blue-900 dark:text-blue-100',
-  3: 'bg-amber-200 text-amber-900 dark:bg-amber-900 dark:text-amber-100',
-  4: 'bg-emerald-200 text-emerald-900 dark:bg-emerald-900 dark:text-emerald-100',
+  1: 'bg-ladder-1-muted text-ladder-1',
+  2: 'bg-ladder-2-muted text-ladder-2',
+  3: 'bg-ladder-3-muted text-ladder-3',
+  4: 'bg-ladder-4-muted text-ladder-4',
 };
 
 /** The 4-stage mastery ladder position (1 Learned → 4 Live-ready). */

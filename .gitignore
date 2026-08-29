@@ -38,3 +38,6 @@ venv/
 # cloudflared quick-tunnel logs.
 .tunnel.log
 .tunnel.out.log
+
+# The reserved ngrok hostname — this machine's front door, and account-specific.
+.tunnel-domain

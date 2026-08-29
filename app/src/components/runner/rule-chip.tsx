@@ -31,7 +31,7 @@ export function RuleChip({ id }: { id: string }) {
           className={cn(
             'rounded px-1 py-0.5 font-mono text-[10px] transition-colors',
             'bg-primary/10 text-primary hover:bg-primary/20',
-            (rule.soft || rule.flagged) && 'ring-1 ring-amber-500/50'
+            (rule.soft || rule.flagged) && 'ring-1 ring-warning-emphasis/50'
           )}
         >
           {id}
@@ -45,7 +45,7 @@ export function RuleChip({ id }: { id: string }) {
         <p className="mt-1 font-mono text-xs text-primary">{rule.id}</p>
         <p className="mt-1 leading-snug">{stripMarkdown(rule.text)}</p>
         {(rule.soft || rule.flagged) && (
-          <p className="mt-2 rounded bg-amber-500/10 p-1.5 text-[11px] leading-snug text-amber-600 dark:text-amber-400">
+          <p className="mt-2 rounded bg-warning-emphasis/10 p-1.5 text-[11px] leading-snug text-warning">
             {rule.soft && rule.flagged
               ? 'dOoMeR states this as a preference AND flags his own uncertainty.'
               : rule.soft

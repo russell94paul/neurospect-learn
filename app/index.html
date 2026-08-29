@@ -1,10 +1,54 @@
 <!doctype html>
-<html lang="en">
+<!--
+  The static attributes below ARE the defaults in src/lib/settings.ts. Slow JS,
+  blocked JS or no JS therefore lands on the correct dark-first theme rather
+  than a white flash.
+-->
+<html lang="en" class="dark" data-brand="cyan" data-density="comfortable" data-font="inter" data-motion="full">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Neurospect Learn</title>
+    <title>NeuroSpect Learn</title>
+    <meta
+      name="description"
+      content="Evidence-gated ICT mastery: curriculum, drills, a study planner, a trade journal and a readiness gate that cannot be overridden."
+    />
+    <meta name="theme-color" content="#020617" />
+    <!--
+      Anti-FOUC. MUST be inline and non-module: an external or type="module"
+      script is deferred, and the page paints the wrong theme before it runs.
+
+      This deliberately duplicates resolve()/apply() from src/lib/settings.ts in
+      a dumber form. That is the correct trade — 15 inline lines against a
+      guaranteed flash on every load. Keep the two in sync; settings.ts re-applies
+      on import, so a mismatch self-corrects but only after first paint.
+    -->
+    <script>
+      try {
+        var s = JSON.parse(localStorage.getItem('neurospect.learn.settings.v1') || '{}');
+        var e = document.documentElement;
+        var dark =
+          s.mode === 'light'
+            ? false
+            : s.mode === 'system'
+              ? matchMedia('(prefers-color-scheme: dark)').matches
+              : true;
+        e.classList.toggle('dark', dark);
+        if (s.brand) e.dataset.brand = s.brand;
+        if (s.density) e.dataset.density = s.density;
+        if (s.font) e.dataset.font = s.font;
+        e.dataset.motion =
+          s.motion === 'none' || s.motion === 'subtle' || s.motion === 'full'
+            ? s.motion
+            : matchMedia('(prefers-reduced-motion: reduce)').matches
+              ? 'none'
+              : 'full';
+        if (typeof s.radius === 'number') e.style.setProperty('--radius', s.radius + 'rem');
+      } catch (_) {
+        /* first visit, private mode, or corrupt value — the static defaults stand */
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

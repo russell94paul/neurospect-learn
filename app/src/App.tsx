@@ -11,12 +11,13 @@ import { DrillsPage } from '@/pages/drills';
 import { TodayPage } from '@/pages/today';
 import { RunnerPage } from '@/pages/runner';
 import { PlanPage } from '@/pages/plan';
-import { PlanSetupPage } from '@/pages/plan-setup';
 import { JournalPage } from '@/pages/journal';
 import { JournalEntryPage } from '@/pages/journal-entry';
 import { MissedTradeEntryPage } from '@/pages/missed-trade-entry';
 import { ExpectancyPage } from '@/pages/expectancy';
 import { GatePage } from '@/pages/gate';
+import { SettingsPage } from '@/pages/settings';
+import { LandingPage } from '@/pages/landing';
 
 // ============================================================
 // Protected layout — redirects to /login if not authenticated
@@ -46,6 +47,12 @@ function ProtectedLayout() {
 // ============================================================
 
 const router = createBrowserRouter([
+  // The public front door. Signed-in visitors are sent straight into the app;
+  // signed-out ones get the overview instead of a bare auth card.
+  {
+    path: '/',
+    element: <LandingPage />,
+  },
   {
     path: '/login',
     element: <LoginPage />,
@@ -57,10 +64,6 @@ const router = createBrowserRouter([
   {
     element: <ProtectedLayout />,
     children: [
-      {
-        index: true,
-        element: <Navigate to="/path" replace />,
-      },
       {
         path: '/path',
         element: <PathPage />,
@@ -96,9 +99,12 @@ const router = createBrowserRouter([
         path: '/plan',
         element: <PlanPage />,
       },
+      // Availability moved into Settings → Study. This URL stays a real address
+      // rather than a redirect: it is linked from /today and /plan, may be
+      // bookmarked, and five e2e specs drive it.
       {
         path: '/plan/setup',
-        element: <PlanSetupPage />,
+        element: <SettingsPage initialTab="study" />,
       },
       {
         path: '/journal',
@@ -130,6 +136,10 @@ const router = createBrowserRouter([
       {
         path: '/gate',
         element: <GatePage />,
+      },
+      {
+        path: '/settings',
+        element: <SettingsPage />,
       },
     ],
   },

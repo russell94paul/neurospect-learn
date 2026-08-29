@@ -16,6 +16,7 @@ from app.routers.missed_trades import router as missed_trades_router
 from app.routers.planner import router as planner_router
 from app.routers.predictions import router as predictions_router
 from app.routers.rubrics import router as rubrics_router
+from app.routers.stats import router as stats_router
 from app.services import ai_grade_queue
 
 
@@ -88,3 +89,6 @@ app.include_router(analytics_router)
 
 # Gate API (the computed per-model "cleared to live?" verdict — non-overridable)
 app.include_router(gate_router)
+
+# Public, counts-only. The one unauthenticated data route — see its docstring.
+app.include_router(stats_router)

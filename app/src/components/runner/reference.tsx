@@ -64,7 +64,7 @@ function SectionBlock({ section, defaultOpen }: { section: RunnerSection; defaul
                       </span>
                       <span className="mt-0.5 flex flex-wrap items-center gap-1">
                         {item.hardGate && (
-                          <span className="rounded bg-amber-500/20 px-1 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-400">
+                          <span className="rounded bg-warning-emphasis/20 px-1 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-warning">
                             hard gate
                           </span>
                         )}
@@ -131,9 +131,9 @@ function SectionBlock({ section, defaultOpen }: { section: RunnerSection; defaul
  */
 export function OpenFlags({ className }: { className?: string }) {
   return (
-    <div className={cn('rounded-lg border border-amber-600/40 bg-amber-500/5 p-3', className)}>
+    <div className={cn('rounded-lg border border-warning-emphasis/40 bg-warning-emphasis/5 p-3', className)}>
       <div className="flex items-center gap-1.5">
-        <Flag className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+        <Flag className="h-3.5 w-3.5 text-warning" />
         <h3 className="text-[13px] font-semibold">Open flags — do not silently resolve</h3>
       </div>
       <p className="mt-1 text-[11px] leading-snug text-muted-foreground">

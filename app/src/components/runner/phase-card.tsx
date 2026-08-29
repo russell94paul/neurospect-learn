@@ -35,15 +35,15 @@ export function PhaseCard({ phase, day, setup, ticks, onToggle, open, onOpenChan
       <div
         className={cn(
           'rounded-lg border bg-card',
-          complete && 'border-emerald-600/40',
-          gatesOpen > 0 && !complete && 'border-amber-600/40'
+          complete && 'border-success-emphasis/40',
+          gatesOpen > 0 && !complete && 'border-warning-emphasis/40'
         )}
       >
         <CollapsibleTrigger className="flex w-full items-start gap-2 p-3 text-left">
           <span
             className={cn(
               'mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold',
-              complete ? 'bg-emerald-600 text-white' : 'bg-muted text-muted-foreground'
+              complete ? 'bg-success-emphasis text-success-on-emphasis' : 'bg-muted text-muted-foreground'
             )}
           >
             {phase.index}
@@ -63,7 +63,7 @@ export function PhaseCard({ phase, day, setup, ticks, onToggle, open, onOpenChan
                 {SCOPE_LABEL[phase.scope]}
               </span>
               {gatesOpen > 0 && (
-                <span className="inline-flex items-center gap-1 rounded bg-amber-500/15 px-1 py-0.5 text-[10px] text-amber-600 dark:text-amber-400">
+                <span className="inline-flex items-center gap-1 rounded bg-warning-emphasis/15 px-1 py-0.5 text-[10px] text-warning">
                   <Lock className="h-2.5 w-2.5" />
                   {gatesOpen} hard gate{gatesOpen > 1 ? 's' : ''} open
                 </span>
@@ -99,7 +99,7 @@ export function PhaseCard({ phase, day, setup, ticks, onToggle, open, onOpenChan
                   <label
                     className={cn(
                       'flex cursor-pointer items-start gap-2.5 rounded-md p-2 transition-colors hover:bg-accent/50',
-                      item.hardGate && !on && 'bg-amber-500/5'
+                      item.hardGate && !on && 'bg-warning-emphasis/5'
                     )}
                   >
                     <Checkbox
@@ -118,7 +118,7 @@ export function PhaseCard({ phase, day, setup, ticks, onToggle, open, onOpenChan
                       </span>
                       <span className="mt-1 flex flex-wrap items-center gap-1">
                         {item.hardGate && (
-                          <span className="rounded bg-amber-500/20 px-1 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-400">
+                          <span className="rounded bg-warning-emphasis/20 px-1 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-warning">
                             hard gate — a &ldquo;no&rdquo; means no trade
                           </span>
                         )}

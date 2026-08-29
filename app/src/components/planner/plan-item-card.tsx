@@ -28,8 +28,8 @@ const ACTIVITY_ICON: Record<PlanActivity, typeof BookOpen> = {
 
 const STATUS_STYLE: Record<PlanItemStatus, string> = {
   pending: '',
-  done: 'border-emerald-500/40 bg-emerald-500/5',
-  partial: 'border-amber-500/40 bg-amber-500/5',
+  done: 'border-success-emphasis/40 bg-success-emphasis/5',
+  partial: 'border-warning-emphasis/40 bg-warning-emphasis/5',
   skipped: 'border-muted bg-muted/30 opacity-70',
 };
 
@@ -80,7 +80,7 @@ export function PlanItemCard({ item }: { item: PlanItem }) {
                 {ACTIVITY_LABELS[item.activity] ?? item.activity}
               </Badge>
               {item.carried_over && (
-                <Badge variant="outline" className="border-amber-500/50 text-[10px] text-amber-600 dark:text-amber-400">
+                <Badge variant="outline" className="border-warning-emphasis/50 text-[10px] text-warning">
                   carried over
                 </Badge>
               )}

@@ -72,11 +72,11 @@ export function GatePage() {
           <Card
             data-testid="gate-overall"
             data-cleared-count={clearedCount}
-            className={cn(clearedCount > 0 && 'border-emerald-600/40 bg-emerald-500/5')}
+            className={cn(clearedCount > 0 && 'border-success-emphasis/40 bg-success-emphasis/5')}
           >
             <CardContent className="flex flex-wrap items-center gap-3 py-4">
               {clearedCount > 0 ? (
-                <ShieldCheck className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+                <ShieldCheck className="h-6 w-6 text-success" />
               ) : (
                 <Lock className="h-6 w-6 text-muted-foreground" />
               )}
