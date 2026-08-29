@@ -1,0 +1,126 @@
+{
+ "symbol": "NQ",
+ "resolution": "5",
+ "span": {
+  "from": "2025-05-29",
+  "to": "2025-05-30"
+ },
+ "anchor": "18:00 NY session open (matches the segment model and NDOG)",
+ "quadrants": "NOT EMITTED \u2014 rule 5 / ranges.md: discount/EQ/premium only",
+ "range_extreme_erl": "NOT-IMPLEMENTED \u2014 the range engine is not rebuilt yet",
+ "periods_kept": {
+  "D": 2,
+  "W": 1,
+  "M": 1
+ },
+ "counts_by_label": {
+  "pD.L": 2,
+  "pD.EQ": 2,
+  "pD.H": 1,
+  "pW.L": 1,
+  "pW.EQ": 1,
+  "pM.L": 1,
+  "pM.EQ": 1
+ },
+ "levels": [
+  {
+   "period": "D",
+   "label": "pD.L",
+   "side": "low",
+   "price": 21321.25,
+   "formed_t": 1748469600,
+   "source_period": "2025-05-27",
+   "broken_t": 1748534400,
+   "formed_ny": "2025-05-28T18:00:00-04:00",
+   "broken_ny": "2025-05-29T12:00:00-04:00"
+  },
+  {
+   "period": "D",
+   "label": "pD.EQ",
+   "side": "eq",
+   "price": 21444.375,
+   "formed_t": 1748469600,
+   "source_period": "2025-05-27",
+   "broken_t": null,
+   "formed_ny": "2025-05-28T18:00:00-04:00",
+   "broken_ny": null
+  },
+  {
+   "period": "D",
+   "label": "pD.H",
+   "side": "high",
+   "price": 21858.75,
+   "formed_t": 1748556000,
+   "source_period": "2025-05-28",
+   "broken_t": null,
+   "formed_ny": "2025-05-29T18:00:00-04:00",
+   "broken_ny": null
+  },
+  {
+   "period": "D",
+   "label": "pD.L",
+   "side": "low",
+   "price": 21301.0,
+   "formed_t": 1748556000,
+   "source_period": "2025-05-28",
+   "broken_t": 1748567100,
+   "formed_ny": "2025-05-29T18:00:00-04:00",
+   "broken_ny": "2025-05-29T21:05:00-04:00"
+  },
+  {
+   "period": "D",
+   "label": "pD.EQ",
+   "side": "eq",
+   "price": 21579.875,
+   "formed_t": 1748556000,
+   "source_period": "2025-05-28",
+   "broken_t": null,
+   "formed_ny": "2025-05-29T18:00:00-04:00",
+   "broken_ny": null
+  },
+  {
+   "period": "M",
+   "label": "pM.L",
+   "side": "low",
+   "price": 16460.0,
+   "formed_t": 1746136800,
+   "source_period": "(2025, 4)",
+   "broken_t": null,
+   "formed_ny": "2025-05-01T18:00:00-04:00",
+   "broken_ny": null
+  },
+  {
+   "period": "M",
+   "label": "pM.EQ",
+   "side": "eq",
+   "price": 18292.875,
+   "formed_t": 1746136800,
+   "source_period": "(2025, 4)",
+   "broken_t": null,
+   "formed_ny": "2025-05-01T18:00:00-04:00",
+   "broken_ny": null
+  },
+  {
+   "period": "W",
+   "label": "pW.L",
+   "side": "low",
+   "price": 20727.0,
+   "formed_t": 1748296800,
+   "source_period": "(2025, 21)",
+   "broken_t": null,
+   "formed_ny": "2025-05-26T18:00:00-04:00",
+   "broken_ny": null
+  },
+  {
+   "period": "W",
+   "label": "pW.EQ",
+   "side": "eq",
+   "price": 21144.625,
+   "formed_t": 1748296800,
+   "source_period": "(2025, 21)",
+   "broken_t": null,
+   "formed_ny": "2025-05-26T18:00:00-04:00",
+   "broken_ny": null
+  }
+ ]
+}

@@ -1,0 +1,1498 @@
+{
+ "object": "swing-point SMT \u2014 qualifies RANGE ANCHORS (aura-06/11, R3/R8)",
+ "not_the_same_as": "cycle SMT (aura_qt_smt.py) which sets BIAS",
+ "resolution": "D",
+ "span": {
+  "from": "2025-01-02",
+  "to": "2025-05-30"
+ },
+ "forward_bars_declared": 3,
+ "noise_ticks_declared": 1.0,
+ "aura_asset_join": "session-date",
+ "r8_note": "R8 is a rulebook CONTRADICTION and is NOT resolved: sentence 1 wants SMT-qualified swings (which diverge), sentence 2 wants the extreme swept on ALL legs (which does not). Both measured, neither chosen.",
+ "totals": {
+  "pivots": 43,
+  "smt_qualified": 20,
+  "swept_on_all": 9,
+  "both_r8_conflict": 0,
+  "diverging_leg_counts": {
+   "CHFUSD": 18,
+   "ES": 5,
+   "YM": 7
+  },
+  "not_visible_by_leg": {
+   "CHFUSD": 9
+  }
+ },
+ "events": [
+  {
+   "side": "low",
+   "level": 20983.75,
+   "pivot_t": 1735828200,
+   "known_at": 1736260200,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 146.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 189.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 38537.09,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-01-02T09:30:00-05:00",
+   "known_at_ny": "2025-01-07T09:30:00-05:00"
+  },
+  {
+   "side": "high",
+   "level": 21896.75,
+   "pivot_t": 1736173800,
+   "known_at": 1736433000,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 91.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 197.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 7835.41,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-01-06T09:30:00-05:00",
+   "known_at_ny": "2025-01-09T09:30:00-05:00"
+  },
+  {
+   "side": "low",
+   "level": 21166.25,
+   "pivot_t": 1736346600,
+   "known_at": 1736778600,
+   "res": "D",
+   "primary_verdict": "TOOK",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 432.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 625.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 3435.42,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": true,
+   "pivot_ny": "2025-01-08T09:30:00-05:00",
+   "known_at_ny": "2025-01-13T09:30:00-05:00"
+  },
+  {
+   "side": "high",
+   "level": 21372.5,
+   "pivot_t": 1736519400,
+   "known_at": 1736951400,
+   "res": "D",
+   "primary_verdict": "TOOK",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 168.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 665.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "NOT-VISIBLE",
+     "margin_ticks": null,
+     "note": "no bar matched for the pivot"
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": true,
+   "pivot_ny": "2025-01-10T09:30:00-05:00",
+   "known_at_ny": "2025-01-15T09:30:00-05:00"
+  },
+  {
+   "side": "low",
+   "level": 20694.0,
+   "pivot_t": 1736778600,
+   "known_at": 1737037800,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 134.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 407.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 1191.87,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-01-13T09:30:00-05:00",
+   "known_at_ny": "2025-01-16T09:30:00-05:00"
+  },
+  {
+   "side": "high",
+   "level": 22093.5,
+   "pivot_t": 1737556200,
+   "known_at": 1737988200,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 106.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 514.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 11333.08,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "ES",
+    "YM",
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-01-22T09:30:00-05:00",
+   "known_at_ny": "2025-01-27T09:30:00-05:00"
+  },
+  {
+   "side": "high",
+   "level": 22078.25,
+   "pivot_t": 1737729000,
+   "known_at": 1738161000,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 203.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 386.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "NOT-VISIBLE",
+     "margin_ticks": null,
+     "note": "no bar matched for the pivot"
+    }
+   ],
+   "diverging": [
+    "YM"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-01-24T09:30:00-05:00",
+   "known_at_ny": "2025-01-29T09:30:00-05:00"
+  },
+  {
+   "side": "low",
+   "level": 20763.75,
+   "pivot_t": 1737988200,
+   "known_at": 1738247400,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 302.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 734.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 8460.6,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-01-27T09:30:00-05:00",
+   "known_at_ny": "2025-01-30T09:30:00-05:00"
+  },
+  {
+   "side": "high",
+   "level": 21966.0,
+   "pivot_t": 1738333800,
+   "known_at": 1738765800,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 223.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 170.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "NOT-VISIBLE",
+     "margin_ticks": null,
+     "note": "no bar matched for the pivot"
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-01-31T09:30:00-05:00",
+   "known_at_ny": "2025-02-05T09:30:00-05:00"
+  },
+  {
+   "side": "low",
+   "level": 20943.0,
+   "pivot_t": 1738593000,
+   "known_at": 1738852200,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 206.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 384.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 2609.7,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-02-03T09:30:00-05:00",
+   "known_at_ny": "2025-02-06T09:30:00-05:00"
+  },
+  {
+   "side": "high",
+   "level": 21968.0,
+   "pivot_t": 1738938600,
+   "known_at": 1739370600,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 98.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 218.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "NOT-VISIBLE",
+     "margin_ticks": null,
+     "note": "no bar matched for the pivot"
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-02-07T09:30:00-05:00",
+   "known_at_ny": "2025-02-12T09:30:00-05:00"
+  },
+  {
+   "side": "low",
+   "level": 21418.0,
+   "pivot_t": 1739197800,
+   "known_at": 1739457000,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 27.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 88.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 1179.27,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-02-10T09:30:00-05:00",
+   "known_at_ny": "2025-02-13T09:30:00-05:00"
+  },
+  {
+   "side": "low",
+   "level": 21510.75,
+   "pivot_t": 1739370600,
+   "known_at": 1739889000,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 131.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 170.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 10856.46,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-02-12T09:30:00-05:00",
+   "known_at_ny": "2025-02-18T09:30:00-05:00"
+  },
+  {
+   "side": "high",
+   "level": 22319.75,
+   "pivot_t": 1739889000,
+   "known_at": 1740148200,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 35.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 37.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 8537.32,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "ES",
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-02-18T09:30:00-05:00",
+   "known_at_ny": "2025-02-21T09:30:00-05:00"
+  },
+  {
+   "side": "high",
+   "level": 22245.5,
+   "pivot_t": 1740148200,
+   "known_at": 1740580200,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 300.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 399.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "NOT-VISIBLE",
+     "margin_ticks": null,
+     "note": "no bar matched for the pivot"
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-02-21T09:30:00-05:00",
+   "known_at_ny": "2025-02-26T09:30:00-05:00"
+  },
+  {
+   "side": "low",
+   "level": 20990.0,
+   "pivot_t": 1740493800,
+   "known_at": 1740753000,
+   "res": "D",
+   "primary_verdict": "TOOK",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 304.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 190.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 8895.01,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": true,
+   "pivot_ny": "2025-02-25T09:30:00-05:00",
+   "known_at_ny": "2025-02-28T09:30:00-05:00"
+  },
+  {
+   "side": "high",
+   "level": 21121.0,
+   "pivot_t": 1741012200,
+   "known_at": 1741271400,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 466.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 758.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 13384.75,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-03-03T09:30:00-05:00",
+   "known_at_ny": "2025-03-06T09:30:00-05:00"
+  },
+  {
+   "side": "low",
+   "level": 20075.25,
+   "pivot_t": 1741098600,
+   "known_at": 1741357800,
+   "res": "D",
+   "primary_verdict": "TOOK",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 284.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 213.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 86.83,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": true,
+   "pivot_ny": "2025-03-04T09:30:00-05:00",
+   "known_at_ny": "2025-03-07T09:30:00-05:00"
+  },
+  {
+   "side": "low",
+   "level": 19139.25,
+   "pivot_t": 1741699800,
+   "known_at": 1741959000,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 99.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 512.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 5257.51,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "ES",
+    "YM",
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-03-11T09:30:00-04:00",
+   "known_at_ny": "2025-03-14T09:30:00-04:00"
+  },
+  {
+   "side": "high",
+   "level": 19788.75,
+   "pivot_t": 1741786200,
+   "known_at": 1742218200,
+   "res": "D",
+   "primary_verdict": "TOOK",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 339.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 363.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 5728.66,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": true,
+   "pivot_ny": "2025-03-12T09:30:00-04:00",
+   "known_at_ny": "2025-03-17T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 19170.0,
+   "pivot_t": 1741872600,
+   "known_at": 1742304600,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 118.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 206.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 5465.96,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-03-13T09:30:00-04:00",
+   "known_at_ny": "2025-03-18T09:30:00-04:00"
+  },
+  {
+   "side": "high",
+   "level": 20143.0,
+   "pivot_t": 1742391000,
+   "known_at": 1742823000,
+   "res": "D",
+   "primary_verdict": "TOOK",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 220.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 423.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 5317.35,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-03-19T09:30:00-04:00",
+   "known_at_ny": "2025-03-24T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 19602.25,
+   "pivot_t": 1742563800,
+   "known_at": 1742995800,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 351.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 675.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "NOT-VISIBLE",
+     "margin_ticks": null,
+     "note": "no bar matched for the pivot"
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-03-21T09:30:00-04:00",
+   "known_at_ny": "2025-03-26T09:30:00-04:00"
+  },
+  {
+   "side": "high",
+   "level": 20536.75,
+   "pivot_t": 1742995800,
+   "known_at": 1743427800,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 227.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 275.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 3070.84,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-03-26T09:30:00-04:00",
+   "known_at_ny": "2025-03-31T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 18976.75,
+   "pivot_t": 1743427800,
+   "known_at": 1743687000,
+   "res": "D",
+   "primary_verdict": "TOOK",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 474.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 773.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 1666.38,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": true,
+   "pivot_ny": "2025-03-31T09:30:00-04:00",
+   "known_at_ny": "2025-04-03T09:30:00-04:00"
+  },
+  {
+   "side": "high",
+   "level": 20044.25,
+   "pivot_t": 1743600600,
+   "known_at": 1744032600,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 834.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 966.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 13518.72,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-04-02T09:30:00-04:00",
+   "known_at_ny": "2025-04-07T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 16460.0,
+   "pivot_t": 1744032600,
+   "known_at": 1744291800,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 167.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 174.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 1432.97,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-04-07T09:30:00-04:00",
+   "known_at_ny": "2025-04-10T09:30:00-04:00"
+  },
+  {
+   "side": "high",
+   "level": 19386.75,
+   "pivot_t": 1744205400,
+   "known_at": 1744637400,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 35.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 111.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 15994.85,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "ES",
+    "YM",
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-04-09T09:30:00-04:00",
+   "known_at_ny": "2025-04-14T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 16735.0,
+   "pivot_t": 1744205400,
+   "known_at": 1744637400,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 1100.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 1749.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 43289.48,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-04-09T09:30:00-04:00",
+   "known_at_ny": "2025-04-14T09:30:00-04:00"
+  },
+  {
+   "side": "high",
+   "level": 19256.0,
+   "pivot_t": 1744637400,
+   "known_at": 1744896600,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 51.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 16.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 14135.95,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "YM",
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-04-14T09:30:00-04:00",
+   "known_at_ny": "2025-04-17T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 18116.25,
+   "pivot_t": 1744810200,
+   "known_at": 1745328600,
+   "res": "D",
+   "primary_verdict": "TOOK",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 495.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 1586.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 13854.0,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": true,
+   "pivot_ny": "2025-04-16T09:30:00-04:00",
+   "known_at_ny": "2025-04-22T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 17700.0,
+   "pivot_t": 1745242200,
+   "known_at": 1745501400,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 178.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 248.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 6921.26,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-04-21T09:30:00-04:00",
+   "known_at_ny": "2025-04-24T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 18594.75,
+   "pivot_t": 1745501400,
+   "known_at": 1745933400,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 500.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 453.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 2181.92,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-04-24T09:30:00-04:00",
+   "known_at_ny": "2025-04-29T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 19103.75,
+   "pivot_t": 1746019800,
+   "known_at": 1746451800,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 582.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 867.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 2197.91,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-04-30T09:30:00-04:00",
+   "known_at_ny": "2025-05-05T09:30:00-04:00"
+  },
+  {
+   "side": "high",
+   "level": 20276.75,
+   "pivot_t": 1746192600,
+   "known_at": 1746624600,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 74.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 49.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "NOT-VISIBLE",
+     "margin_ticks": null,
+     "note": "no bar matched for the pivot"
+    }
+   ],
+   "diverging": [
+    "YM"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-05-02T09:30:00-04:00",
+   "known_at_ny": "2025-05-07T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 19749.5,
+   "pivot_t": 1746192600,
+   "known_at": 1746624600,
+   "res": "D",
+   "primary_verdict": "TOOK",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 20.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 3.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "NOT-VISIBLE",
+     "margin_ticks": null,
+     "note": "no bar matched for the pivot"
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": true,
+   "pivot_ny": "2025-05-02T09:30:00-04:00",
+   "known_at_ny": "2025-05-07T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 19678.75,
+   "pivot_t": 1746624600,
+   "known_at": 1747056600,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 162.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 299.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 19750.0,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-05-07T09:30:00-04:00",
+   "known_at_ny": "2025-05-12T09:30:00-04:00"
+  },
+  {
+   "side": "high",
+   "level": 20337.25,
+   "pivot_t": 1746711000,
+   "known_at": 1747143000,
+   "res": "D",
+   "primary_verdict": "TOOK",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 744.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 690.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 8200.39,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-05-08T09:30:00-04:00",
+   "known_at_ny": "2025-05-13T09:30:00-04:00"
+  },
+  {
+   "side": "high",
+   "level": 21529.75,
+   "pivot_t": 1747315800,
+   "known_at": 1747747800,
+   "res": "D",
+   "primary_verdict": "TOOK",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 196.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 523.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 17212.34,
+     "note": ""
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": true,
+   "pivot_ny": "2025-05-15T09:30:00-04:00",
+   "known_at_ny": "2025-05-20T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 21192.0,
+   "pivot_t": 1747315800,
+   "known_at": 1747747800,
+   "res": "D",
+   "primary_verdict": "TOOK",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 103.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 490.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 3758.21,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "ES",
+    "YM",
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-05-15T09:30:00-04:00",
+   "known_at_ny": "2025-05-20T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 21112.5,
+   "pivot_t": 1747661400,
+   "known_at": 1747920600,
+   "res": "D",
+   "primary_verdict": "TOOK",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "TOOK",
+     "margin_ticks": 256.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "TOOK",
+     "margin_ticks": 643.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 7110.0,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-05-19T09:30:00-04:00",
+   "known_at_ny": "2025-05-22T09:30:00-04:00"
+  },
+  {
+   "side": "high",
+   "level": 21562.25,
+   "pivot_t": 1747747800,
+   "known_at": 1748007000,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 141.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 234.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "TOOK",
+     "margin_ticks": 2289.91,
+     "note": ""
+    }
+   ],
+   "diverging": [
+    "CHFUSD"
+   ],
+   "smt_qualified": true,
+   "swept_on_all": false,
+   "pivot_ny": "2025-05-20T09:30:00-04:00",
+   "known_at_ny": "2025-05-23T09:30:00-04:00"
+  },
+  {
+   "side": "low",
+   "level": 20727.0,
+   "pivot_t": 1748007000,
+   "known_at": 1748525400,
+   "res": "D",
+   "primary_verdict": "DID-NOT-TAKE",
+   "legs": [
+    {
+     "symbol": "ES",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 226.0,
+     "note": ""
+    },
+    {
+     "symbol": "YM",
+     "verdict": "DID-NOT-TAKE",
+     "margin_ticks": 415.0,
+     "note": ""
+    },
+    {
+     "symbol": "CHFUSD",
+     "verdict": "NOT-VISIBLE",
+     "margin_ticks": null,
+     "note": "no bar matched for the pivot"
+    }
+   ],
+   "diverging": [],
+   "smt_qualified": false,
+   "swept_on_all": false,
+   "pivot_ny": "2025-05-23T09:30:00-04:00",
+   "known_at_ny": "2025-05-29T09:30:00-04:00"
+  }
+ ]
+}

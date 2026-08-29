@@ -1,5 +1,15 @@
 # S1c — honest accuracy statement
 
+> **⚠️ SUPERSEDED as the current statement by `../s1d/accuracy.md` (2026-08-14).** This
+> file is the **frozen record of the S1c run** and is deliberately not updated to match.
+> Most of its §"What it does NOT do" list was implemented in S1d — weekly cycle, NWOG/NDOG,
+> R21, R22, R13, bounded markup and outcome simulation. Read the S1d statement for what the
+> engine does today; read this one for what S1c actually produced.
+>
+> S1d also found that S1c had **no FVG size floor at all**, so a one-tick gap was an entry
+> candidate on equal footing with a six-tick one. A 4-tick floor was added and **proved not
+> to change this run's result.**
+
 What the engine finds, what it misses, and where it defers to Paul. Written after the
 run, against the run's actual output — not against what the engine was intended to do.
 

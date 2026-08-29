@@ -1,0 +1,1583 @@
+{
+ "engine_version": "S1d.1",
+ "marker": "[S1d]",
+ "quarantine": "MACHINE-GENERATED tutorial markup. Every shape carries the [S1d] marker. Must be REMOVED before Paul marks this week by hand \u2014 pre-drawn levels turn a markup rep into tracing.",
+ "primitives_note": "Bounded shapes only: rectangles / rays / bounded segments with computed start AND end. No horizontal_line \u2014 an infinite line asserts the level applies at all times, which R6 and R7 deny (chart-markup \u00a70b).",
+ "days": [
+  {
+   "day": "2025-05-26",
+   "kind": "REJECTION",
+   "shapes": [
+    {
+     "tool": "trend_line",
+     "rule": "R4",
+     "label": "[S1d] R4 range high 20,276.75",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 20276.75
+      },
+      {
+       "time": 1747056600,
+       "price": 20276.75
+      }
+     ],
+     "colour": "#ffffff"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R4",
+     "label": "[S1d] R4 range low 19,103.75",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19103.75
+      },
+      {
+       "time": 1747056600,
+       "price": 19103.75
+      }
+     ],
+     "colour": "#ffffff"
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R5",
+     "label": "[S1d] R5 premium 19,690.25-20,276.75",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19690.25
+      },
+      {
+       "time": 1747056600,
+       "price": 20276.75
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R5",
+     "label": "[S1d] R5 discount 19,103.75-19,690.25",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19103.75
+      },
+      {
+       "time": 1747056600,
+       "price": 19690.25
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R5",
+     "label": "[S1d] R5 equilibrium 19,690.25",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19690.25
+      },
+      {
+       "time": 1747056600,
+       "price": 19690.25
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R3",
+     "label": "[S1d] R3 SMT-qualified low 19,749.50",
+     "points": [
+      {
+       "time": 1746192600,
+       "price": 19749.5
+      },
+      {
+       "time": 1746624600,
+       "price": 19749.5
+      }
+     ],
+     "colour": "#ffeb3b"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R6",
+     "label": "[S1d] R6 invalidating close 20,948.75",
+     "points": [
+      {
+       "time": 1747056600,
+       "price": 20948.75
+      },
+      {
+       "time": 1747229400,
+       "price": 20948.75
+      }
+     ],
+     "colour": "#f44336"
+    }
+   ]
+  },
+  {
+   "day": "2025-05-27",
+   "kind": "REJECTION",
+   "shapes": [
+    {
+     "tool": "trend_line",
+     "rule": "R4",
+     "label": "[S1d] R4 range high 20,276.75",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 20276.75
+      },
+      {
+       "time": 1747056600,
+       "price": 20276.75
+      }
+     ],
+     "colour": "#ffffff"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R4",
+     "label": "[S1d] R4 range low 19,103.75",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19103.75
+      },
+      {
+       "time": 1747056600,
+       "price": 19103.75
+      }
+     ],
+     "colour": "#ffffff"
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R5",
+     "label": "[S1d] R5 premium 19,690.25-20,276.75",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19690.25
+      },
+      {
+       "time": 1747056600,
+       "price": 20276.75
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R5",
+     "label": "[S1d] R5 discount 19,103.75-19,690.25",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19103.75
+      },
+      {
+       "time": 1747056600,
+       "price": 19690.25
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R5",
+     "label": "[S1d] R5 equilibrium 19,690.25",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19690.25
+      },
+      {
+       "time": 1747056600,
+       "price": 19690.25
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R3",
+     "label": "[S1d] R3 SMT-qualified low 19,749.50",
+     "points": [
+      {
+       "time": 1746192600,
+       "price": 19749.5
+      },
+      {
+       "time": 1746624600,
+       "price": 19749.5
+      }
+     ],
+     "colour": "#ffeb3b"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R6",
+     "label": "[S1d] R6 invalidating close 20,948.75",
+     "points": [
+      {
+       "time": 1747056600,
+       "price": 20948.75
+      },
+      {
+       "time": 1747229400,
+       "price": 20948.75
+      }
+     ],
+     "colour": "#f44336"
+    }
+   ]
+  },
+  {
+   "day": "2025-05-28",
+   "kind": "REJECTION",
+   "shapes": [
+    {
+     "tool": "trend_line",
+     "rule": "R4",
+     "label": "[S1d] R4 range high 20,276.75",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 20276.75
+      },
+      {
+       "time": 1747056600,
+       "price": 20276.75
+      }
+     ],
+     "colour": "#ffffff"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R4",
+     "label": "[S1d] R4 range low 19,103.75",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19103.75
+      },
+      {
+       "time": 1747056600,
+       "price": 19103.75
+      }
+     ],
+     "colour": "#ffffff"
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R5",
+     "label": "[S1d] R5 premium 19,690.25-20,276.75",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19690.25
+      },
+      {
+       "time": 1747056600,
+       "price": 20276.75
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R5",
+     "label": "[S1d] R5 discount 19,103.75-19,690.25",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19103.75
+      },
+      {
+       "time": 1747056600,
+       "price": 19690.25
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R5",
+     "label": "[S1d] R5 equilibrium 19,690.25",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19690.25
+      },
+      {
+       "time": 1747056600,
+       "price": 19690.25
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R3",
+     "label": "[S1d] R3 SMT-qualified low 19,749.50",
+     "points": [
+      {
+       "time": 1746192600,
+       "price": 19749.5
+      },
+      {
+       "time": 1746624600,
+       "price": 19749.5
+      }
+     ],
+     "colour": "#ffeb3b"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R6",
+     "label": "[S1d] R6 invalidating close 20,948.75",
+     "points": [
+      {
+       "time": 1747056600,
+       "price": 20948.75
+      },
+      {
+       "time": 1747229400,
+       "price": 20948.75
+      }
+     ],
+     "colour": "#f44336"
+    }
+   ]
+  },
+  {
+   "day": "2025-05-29",
+   "kind": "REJECTION",
+   "shapes": [
+    {
+     "tool": "trend_line",
+     "rule": "R4",
+     "label": "[S1d] R4 range high 20,276.75",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 20276.75
+      },
+      {
+       "time": 1747056600,
+       "price": 20276.75
+      }
+     ],
+     "colour": "#ffffff"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R4",
+     "label": "[S1d] R4 range low 19,103.75",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19103.75
+      },
+      {
+       "time": 1747056600,
+       "price": 19103.75
+      }
+     ],
+     "colour": "#ffffff"
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R5",
+     "label": "[S1d] R5 premium 19,690.25-20,276.75",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19690.25
+      },
+      {
+       "time": 1747056600,
+       "price": 20276.75
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R5",
+     "label": "[S1d] R5 discount 19,103.75-19,690.25",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19103.75
+      },
+      {
+       "time": 1747056600,
+       "price": 19690.25
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R5",
+     "label": "[S1d] R5 equilibrium 19,690.25",
+     "points": [
+      {
+       "time": 1746019800,
+       "price": 19690.25
+      },
+      {
+       "time": 1747056600,
+       "price": 19690.25
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R3",
+     "label": "[S1d] R3 SMT-qualified low 19,749.50",
+     "points": [
+      {
+       "time": 1746192600,
+       "price": 19749.5
+      },
+      {
+       "time": 1746624600,
+       "price": 19749.5
+      }
+     ],
+     "colour": "#ffeb3b"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R6",
+     "label": "[S1d] R6 invalidating close 20,948.75",
+     "points": [
+      {
+       "time": 1747056600,
+       "price": 20948.75
+      },
+      {
+       "time": 1747229400,
+       "price": 20948.75
+      }
+     ],
+     "colour": "#f44336"
+    }
+   ]
+  },
+  {
+   "day": "2025-05-30",
+   "kind": "SETUP",
+   "shapes": [
+    {
+     "tool": "ray",
+     "rule": "R4",
+     "label": "[S1d] R4 range high 21,562.25",
+     "points": [
+      {
+       "time": 1747747800,
+       "price": 21562.25
+      },
+      {
+       "time": 1748664000,
+       "price": 21562.25
+      }
+     ],
+     "colour": "#ffffff"
+    },
+    {
+     "tool": "ray",
+     "rule": "R4",
+     "label": "[S1d] R4 range low 20,727.00",
+     "points": [
+      {
+       "time": 1747747800,
+       "price": 20727.0
+      },
+      {
+       "time": 1748664000,
+       "price": 20727.0
+      }
+     ],
+     "colour": "#ffffff"
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R5",
+     "label": "[S1d] R5 premium 21,144.62-21,562.25",
+     "points": [
+      {
+       "time": 1747747800,
+       "price": 21144.625
+      },
+      {
+       "time": 1748664000,
+       "price": 21562.25
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R5",
+     "label": "[S1d] R5 discount 20,727.00-21,144.62",
+     "points": [
+      {
+       "time": 1747747800,
+       "price": 20727.0
+      },
+      {
+       "time": 1748664000,
+       "price": 21144.625
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R5",
+     "label": "[S1d] R5 equilibrium 21,144.62",
+     "points": [
+      {
+       "time": 1747747800,
+       "price": 21144.625
+      },
+      {
+       "time": 1748664000,
+       "price": 21144.625
+      }
+     ],
+     "colour": "#9e9e9e"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R3",
+     "label": "[S1d] R3 SMT-qualified high 21,562.25",
+     "points": [
+      {
+       "time": 1747747800,
+       "price": 21562.25
+      },
+      {
+       "time": 1748439000,
+       "price": 21562.25
+      }
+     ],
+     "colour": "#ffeb3b"
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 NDOG 21,371.25-21,385.00 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748556000,
+       "price": 21371.25
+      },
+      {
+       "time": 1748556300,
+       "price": 21385.0
+      }
+     ],
+     "colour": "#2196f3"
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 iFVG 21,328.75-21,330.75 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748566800,
+       "price": 21328.75
+      },
+      {
+       "time": 1748567100,
+       "price": 21330.75
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": false
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 ** TRADED iFVG ** 21,341.75-21,343.25 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748565000,
+       "price": 21341.75
+      },
+      {
+       "time": 1748565600,
+       "price": 21343.25
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": true
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 iFVG 21,337.75-21,340.00 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748575200,
+       "price": 21337.75
+      },
+      {
+       "time": 1748575500,
+       "price": 21340.0
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": false
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 iFVG 21,349.25-21,353.00 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748574900,
+       "price": 21349.25
+      },
+      {
+       "time": 1748577900,
+       "price": 21353.0
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": false
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 iFVG 21,342.50-21,347.75 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748587200,
+       "price": 21342.5
+      },
+      {
+       "time": 1748587500,
+       "price": 21347.75
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": false
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 iFVG 21,350.75-21,359.25 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748586900,
+       "price": 21350.75
+      },
+      {
+       "time": 1748587200,
+       "price": 21359.25
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": false
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 iFVG 21,366.75-21,373.00 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748586000,
+       "price": 21366.75
+      },
+      {
+       "time": 1748586300,
+       "price": 21373.0
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": false
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 iFVG 21,381.50-21,388.25 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748585100,
+       "price": 21381.5
+      },
+      {
+       "time": 1748585400,
+       "price": 21388.25
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": false
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 iFVG 21,389.25-21,402.25 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748584200,
+       "price": 21389.25
+      },
+      {
+       "time": 1748584500,
+       "price": 21402.25
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": false
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 iFVG 21,378.00-21,385.75 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748598300,
+       "price": 21378.0
+      },
+      {
+       "time": 1748599500,
+       "price": 21385.75
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": false
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 iFVG 21,369.75-21,374.75 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748599800,
+       "price": 21369.75
+      },
+      {
+       "time": 1748600400,
+       "price": 21374.75
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": false
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 iFVG 21,374.75-21,376.75 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748602200,
+       "price": 21374.75
+      },
+      {
+       "time": 1748602500,
+       "price": 21376.75
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": false
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 iFVG 21,385.00-21,388.50 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748606700,
+       "price": 21385.0
+      },
+      {
+       "time": 1748611800,
+       "price": 21388.5
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": false
+    },
+    {
+     "tool": "rectangle",
+     "rule": "R11",
+     "label": "[S1d] R11 iFVG 21,392.25-21,405.50 [PREMIUM]",
+     "points": [
+      {
+       "time": 1748605200,
+       "price": 21392.25
+      },
+      {
+       "time": 1748605500,
+       "price": 21405.5
+      }
+     ],
+     "colour": "#2196f3",
+     "traded": false
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R12",
+     "label": "[S1d] R12 liquidity 21,342.00",
+     "points": [
+      {
+       "time": 1748564100,
+       "price": 21342.0
+      },
+      {
+       "time": 1748565600,
+       "price": 21342.0
+      }
+     ],
+     "colour": "#64b5f6"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R30",
+     "label": "[S1d] R30 entry 21,341.75",
+     "points": [
+      {
+       "time": 1748606700,
+       "price": 21341.75
+      },
+      {
+       "time": 1748638740,
+       "price": 21341.75
+      }
+     ],
+     "colour": "#4caf50"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R33",
+     "label": "[S1d] R33 stop 21,567.50",
+     "points": [
+      {
+       "time": 1748606700,
+       "price": 21567.5
+      },
+      {
+       "time": 1748638740,
+       "price": 21567.5
+      }
+     ],
+     "colour": "#f44336"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R35",
+     "label": "[S1d] R35 target 20,727.00",
+     "points": [
+      {
+       "time": 1748606700,
+       "price": 20727.0
+      },
+      {
+       "time": 1748638740,
+       "price": 20727.0
+      }
+     ],
+     "colour": "#4caf50"
+    },
+    {
+     "tool": "trend_line",
+     "rule": "R29",
+     "label": "[S1d] R29 invalidation: close beyond 21,567.50 kills this SHORT",
+     "points": [
+      {
+       "time": 1748606700,
+       "price": 21567.5
+      },
+      {
+       "time": 1748638740,
+       "price": 21567.5
+      }
+     ],
+     "colour": "#f44336",
+     "is_text_note": true
+    }
+   ]
+  }
+ ],
+ "draw": [
+  {
+   "tool": "trend_line",
+   "rule": "R4",
+   "label": "[S1d] R4 range high 20,276.75",
+   "points": [
+    {
+     "time": 1746019800,
+     "price": 20276.75
+    },
+    {
+     "time": 1747056600,
+     "price": 20276.75
+    }
+   ],
+   "colour": "#ffffff",
+   "days": [
+    "2025-05-26",
+    "2025-05-27",
+    "2025-05-28",
+    "2025-05-29"
+   ]
+  },
+  {
+   "tool": "trend_line",
+   "rule": "R4",
+   "label": "[S1d] R4 range low 19,103.75",
+   "points": [
+    {
+     "time": 1746019800,
+     "price": 19103.75
+    },
+    {
+     "time": 1747056600,
+     "price": 19103.75
+    }
+   ],
+   "colour": "#ffffff",
+   "days": [
+    "2025-05-26",
+    "2025-05-27",
+    "2025-05-28",
+    "2025-05-29"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R5",
+   "label": "[S1d] R5 premium 19,690.25-20,276.75",
+   "points": [
+    {
+     "time": 1746019800,
+     "price": 19690.25
+    },
+    {
+     "time": 1747056600,
+     "price": 20276.75
+    }
+   ],
+   "colour": "#9e9e9e",
+   "days": [
+    "2025-05-26",
+    "2025-05-27",
+    "2025-05-28",
+    "2025-05-29"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R5",
+   "label": "[S1d] R5 discount 19,103.75-19,690.25",
+   "points": [
+    {
+     "time": 1746019800,
+     "price": 19103.75
+    },
+    {
+     "time": 1747056600,
+     "price": 19690.25
+    }
+   ],
+   "colour": "#9e9e9e",
+   "days": [
+    "2025-05-26",
+    "2025-05-27",
+    "2025-05-28",
+    "2025-05-29"
+   ]
+  },
+  {
+   "tool": "trend_line",
+   "rule": "R5",
+   "label": "[S1d] R5 equilibrium 19,690.25",
+   "points": [
+    {
+     "time": 1746019800,
+     "price": 19690.25
+    },
+    {
+     "time": 1747056600,
+     "price": 19690.25
+    }
+   ],
+   "colour": "#9e9e9e",
+   "days": [
+    "2025-05-26",
+    "2025-05-27",
+    "2025-05-28",
+    "2025-05-29"
+   ]
+  },
+  {
+   "tool": "trend_line",
+   "rule": "R3",
+   "label": "[S1d] R3 SMT-qualified low 19,749.50",
+   "points": [
+    {
+     "time": 1746192600,
+     "price": 19749.5
+    },
+    {
+     "time": 1746624600,
+     "price": 19749.5
+    }
+   ],
+   "colour": "#ffeb3b",
+   "days": [
+    "2025-05-26",
+    "2025-05-27",
+    "2025-05-28",
+    "2025-05-29"
+   ]
+  },
+  {
+   "tool": "trend_line",
+   "rule": "R6",
+   "label": "[S1d] R6 invalidating close 20,948.75",
+   "points": [
+    {
+     "time": 1747056600,
+     "price": 20948.75
+    },
+    {
+     "time": 1747229400,
+     "price": 20948.75
+    }
+   ],
+   "colour": "#f44336",
+   "days": [
+    "2025-05-26",
+    "2025-05-27",
+    "2025-05-28",
+    "2025-05-29"
+   ]
+  },
+  {
+   "tool": "ray",
+   "rule": "R4",
+   "label": "[S1d] R4 range high 21,562.25",
+   "points": [
+    {
+     "time": 1747747800,
+     "price": 21562.25
+    },
+    {
+     "time": 1748664000,
+     "price": 21562.25
+    }
+   ],
+   "colour": "#ffffff",
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "ray",
+   "rule": "R4",
+   "label": "[S1d] R4 range low 20,727.00",
+   "points": [
+    {
+     "time": 1747747800,
+     "price": 20727.0
+    },
+    {
+     "time": 1748664000,
+     "price": 20727.0
+    }
+   ],
+   "colour": "#ffffff",
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R5",
+   "label": "[S1d] R5 premium 21,144.62-21,562.25",
+   "points": [
+    {
+     "time": 1747747800,
+     "price": 21144.625
+    },
+    {
+     "time": 1748664000,
+     "price": 21562.25
+    }
+   ],
+   "colour": "#9e9e9e",
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R5",
+   "label": "[S1d] R5 discount 20,727.00-21,144.62",
+   "points": [
+    {
+     "time": 1747747800,
+     "price": 20727.0
+    },
+    {
+     "time": 1748664000,
+     "price": 21144.625
+    }
+   ],
+   "colour": "#9e9e9e",
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "trend_line",
+   "rule": "R5",
+   "label": "[S1d] R5 equilibrium 21,144.62",
+   "points": [
+    {
+     "time": 1747747800,
+     "price": 21144.625
+    },
+    {
+     "time": 1748664000,
+     "price": 21144.625
+    }
+   ],
+   "colour": "#9e9e9e",
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "trend_line",
+   "rule": "R3",
+   "label": "[S1d] R3 SMT-qualified high 21,562.25",
+   "points": [
+    {
+     "time": 1747747800,
+     "price": 21562.25
+    },
+    {
+     "time": 1748439000,
+     "price": 21562.25
+    }
+   ],
+   "colour": "#ffeb3b",
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 NDOG 21,371.25-21,385.00 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748556000,
+     "price": 21371.25
+    },
+    {
+     "time": 1748556300,
+     "price": 21385.0
+    }
+   ],
+   "colour": "#2196f3",
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 iFVG 21,328.75-21,330.75 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748566800,
+     "price": 21328.75
+    },
+    {
+     "time": 1748567100,
+     "price": 21330.75
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": false,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 ** TRADED iFVG ** 21,341.75-21,343.25 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748565000,
+     "price": 21341.75
+    },
+    {
+     "time": 1748565600,
+     "price": 21343.25
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": true,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 iFVG 21,337.75-21,340.00 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748575200,
+     "price": 21337.75
+    },
+    {
+     "time": 1748575500,
+     "price": 21340.0
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": false,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 iFVG 21,349.25-21,353.00 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748574900,
+     "price": 21349.25
+    },
+    {
+     "time": 1748577900,
+     "price": 21353.0
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": false,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 iFVG 21,342.50-21,347.75 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748587200,
+     "price": 21342.5
+    },
+    {
+     "time": 1748587500,
+     "price": 21347.75
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": false,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 iFVG 21,350.75-21,359.25 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748586900,
+     "price": 21350.75
+    },
+    {
+     "time": 1748587200,
+     "price": 21359.25
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": false,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 iFVG 21,366.75-21,373.00 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748586000,
+     "price": 21366.75
+    },
+    {
+     "time": 1748586300,
+     "price": 21373.0
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": false,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 iFVG 21,381.50-21,388.25 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748585100,
+     "price": 21381.5
+    },
+    {
+     "time": 1748585400,
+     "price": 21388.25
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": false,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 iFVG 21,389.25-21,402.25 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748584200,
+     "price": 21389.25
+    },
+    {
+     "time": 1748584500,
+     "price": 21402.25
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": false,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 iFVG 21,378.00-21,385.75 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748598300,
+     "price": 21378.0
+    },
+    {
+     "time": 1748599500,
+     "price": 21385.75
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": false,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 iFVG 21,369.75-21,374.75 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748599800,
+     "price": 21369.75
+    },
+    {
+     "time": 1748600400,
+     "price": 21374.75
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": false,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 iFVG 21,374.75-21,376.75 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748602200,
+     "price": 21374.75
+    },
+    {
+     "time": 1748602500,
+     "price": 21376.75
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": false,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 iFVG 21,385.00-21,388.50 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748606700,
+     "price": 21385.0
+    },
+    {
+     "time": 1748611800,
+     "price": 21388.5
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": false,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "rectangle",
+   "rule": "R11",
+   "label": "[S1d] R11 iFVG 21,392.25-21,405.50 [PREMIUM]",
+   "points": [
+    {
+     "time": 1748605200,
+     "price": 21392.25
+    },
+    {
+     "time": 1748605500,
+     "price": 21405.5
+    }
+   ],
+   "colour": "#2196f3",
+   "traded": false,
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "trend_line",
+   "rule": "R12",
+   "label": "[S1d] R12 liquidity 21,342.00",
+   "points": [
+    {
+     "time": 1748564100,
+     "price": 21342.0
+    },
+    {
+     "time": 1748565600,
+     "price": 21342.0
+    }
+   ],
+   "colour": "#64b5f6",
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "trend_line",
+   "rule": "R30",
+   "label": "[S1d] R30 entry 21,341.75",
+   "points": [
+    {
+     "time": 1748606700,
+     "price": 21341.75
+    },
+    {
+     "time": 1748638740,
+     "price": 21341.75
+    }
+   ],
+   "colour": "#4caf50",
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "trend_line",
+   "rule": "R33",
+   "label": "[S1d] R33 stop 21,567.50",
+   "points": [
+    {
+     "time": 1748606700,
+     "price": 21567.5
+    },
+    {
+     "time": 1748638740,
+     "price": 21567.5
+    }
+   ],
+   "colour": "#f44336",
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "trend_line",
+   "rule": "R35",
+   "label": "[S1d] R35 target 20,727.00",
+   "points": [
+    {
+     "time": 1748606700,
+     "price": 20727.0
+    },
+    {
+     "time": 1748638740,
+     "price": 20727.0
+    }
+   ],
+   "colour": "#4caf50",
+   "days": [
+    "2025-05-30"
+   ]
+  },
+  {
+   "tool": "trend_line",
+   "rule": "R29",
+   "label": "[S1d] R29 invalidation: close beyond 21,567.50 kills this SHORT",
+   "points": [
+    {
+     "time": 1748606700,
+     "price": 21567.5
+    },
+    {
+     "time": 1748638740,
+     "price": 21567.5
+    }
+   ],
+   "colour": "#f44336",
+   "is_text_note": true,
+   "days": [
+    "2025-05-30"
+   ]
+  }
+ ],
+ "draw_note": "33 DISTINCT shapes de-duplicated from 54 per-day shapes. Each carries the days it applies to. Draw this list, not the per-day lists."
+}

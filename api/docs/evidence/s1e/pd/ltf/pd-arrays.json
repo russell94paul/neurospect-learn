@@ -1,0 +1,4878 @@
+{
+ "symbol": "NQ",
+ "resolution": "5",
+ "span": {
+  "from": "2025-05-29",
+  "to": "2025-05-30"
+ },
+ "tick_measured": 0.25,
+ "min_gap_ticks_declared": 4,
+ "fvgs_excluded_below_floor": 7,
+ "zoom_in_source": "NOT-AVAILABLE",
+ "counts_by_kind": {
+  "iFVG": 80,
+  "FVG": 13,
+  "NDOG": 1
+ },
+ "session_gap_subtypes": {
+  "VOID-BEAR": 1
+ },
+ "liquidity_route_counts": {
+  "NOT-VISIBLE": 24,
+  "INSIDE": 70
+ },
+ "gaps": [
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21794.5,
+   "bottom": 21793.0,
+   "formed_t": 1748492400,
+   "res": "5",
+   "size_ticks": 6.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748493600,
+   "mitigated_t": 1748493600,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21795.0,
+     "bottom": 21790.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21797.0,
+     "bottom": 21791.0
+    },
+    {
+     "kind": "FVG",
+     "top": 21816.0,
+     "bottom": 21792.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21799.0,
+     "bottom": 21791.75
+    },
+    {
+     "kind": "FVG",
+     "top": 21799.0,
+     "bottom": 21787.75
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T00:20:00-04:00",
+   "mid": 21793.75
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21795.0,
+   "bottom": 21790.0,
+   "formed_t": 1748493900,
+   "res": "5",
+   "size_ticks": 20.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748499000,
+   "mitigated_t": 1748498700,
+   "internal_liquidity": 21793.75,
+   "internal_liquidity_t": 1748493000,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21794.5,
+     "bottom": 21793.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21797.0,
+     "bottom": 21791.0
+    },
+    {
+     "kind": "FVG",
+     "top": 21816.0,
+     "bottom": 21792.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21799.0,
+     "bottom": 21791.75
+    },
+    {
+     "kind": "FVG",
+     "top": 21799.0,
+     "bottom": 21787.75
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T00:45:00-04:00",
+   "mid": 21792.5
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21805.75,
+   "bottom": 21800.0,
+   "formed_t": 1748496000,
+   "res": "5",
+   "size_ticks": 23.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748498400,
+   "mitigated_t": 1748498400,
+   "internal_liquidity": 21800.75,
+   "internal_liquidity_t": 1748492100,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21801.5,
+     "bottom": 21797.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21807.0,
+     "bottom": 21804.5
+    },
+    {
+     "kind": "FVG",
+     "top": 21816.0,
+     "bottom": 21792.0
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T01:20:00-04:00",
+   "mid": 21802.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21816.75,
+   "bottom": 21806.25,
+   "formed_t": 1748498400,
+   "res": "5",
+   "size_ticks": 42.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748505000,
+   "mitigated_t": 1748504400,
+   "internal_liquidity": 21807.25,
+   "internal_liquidity_t": 1748494500,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21807.0,
+     "bottom": 21804.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21821.75,
+     "bottom": 21816.0
+    },
+    {
+     "kind": "FVG",
+     "top": 21816.0,
+     "bottom": 21792.0
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T02:00:00-04:00",
+   "mid": 21811.5
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21797.0,
+   "bottom": 21791.0,
+   "formed_t": 1748499000,
+   "res": "5",
+   "size_ticks": 24.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748504100,
+   "mitigated_t": 1748503800,
+   "internal_liquidity": 21791.0,
+   "internal_liquidity_t": 1748495100,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21794.5,
+     "bottom": 21793.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21795.0,
+     "bottom": 21790.0
+    },
+    {
+     "kind": "FVG",
+     "top": 21816.0,
+     "bottom": 21792.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21799.0,
+     "bottom": 21791.75
+    },
+    {
+     "kind": "FVG",
+     "top": 21799.0,
+     "bottom": 21787.75
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T02:10:00-04:00",
+   "mid": 21794.0
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21788.75,
+   "bottom": 21782.75,
+   "formed_t": 1748499300,
+   "res": "5",
+   "size_ticks": 24.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748500200,
+   "mitigated_t": 1748499600,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "FVG",
+     "top": 21799.0,
+     "bottom": 21787.75
+    },
+    {
+     "kind": "FVG",
+     "top": 21783.75,
+     "bottom": 21768.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T02:15:00-04:00",
+   "mid": 21785.75
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21774.5,
+   "bottom": 21770.25,
+   "formed_t": 1748503500,
+   "res": "5",
+   "size_ticks": 17.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748512800,
+   "mitigated_t": 1748512800,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "FVG",
+     "top": 21783.75,
+     "bottom": 21768.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T03:25:00-04:00",
+   "mid": 21772.375
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21801.5,
+   "bottom": 21797.75,
+   "formed_t": 1748504400,
+   "res": "5",
+   "size_ticks": 15.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748507100,
+   "mitigated_t": 1748507100,
+   "internal_liquidity": 21800.75,
+   "internal_liquidity_t": 1748496600,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21805.75,
+     "bottom": 21800.0
+    },
+    {
+     "kind": "FVG",
+     "top": 21816.0,
+     "bottom": 21792.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21799.0,
+     "bottom": 21791.75
+    },
+    {
+     "kind": "FVG",
+     "top": 21799.0,
+     "bottom": 21787.75
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T03:40:00-04:00",
+   "mid": 21799.625
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21807.0,
+   "bottom": 21804.5,
+   "formed_t": 1748504700,
+   "res": "5",
+   "size_ticks": 10.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748507100,
+   "mitigated_t": 1748507100,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21805.75,
+     "bottom": 21800.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21816.75,
+     "bottom": 21806.25
+    },
+    {
+     "kind": "FVG",
+     "top": 21816.0,
+     "bottom": 21792.0
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T03:45:00-04:00",
+   "mid": 21805.75
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21821.75,
+   "bottom": 21816.0,
+   "formed_t": 1748505300,
+   "res": "5",
+   "size_ticks": 23.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748506500,
+   "mitigated_t": 1748506500,
+   "internal_liquidity": 21818.0,
+   "internal_liquidity_t": 1748504400,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21816.75,
+     "bottom": 21806.25
+    },
+    {
+     "kind": "FVG",
+     "top": 21816.0,
+     "bottom": 21792.0
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T03:55:00-04:00",
+   "mid": 21818.875
+  },
+  {
+   "kind": "FVG",
+   "direction": "bearish",
+   "top": 21816.0,
+   "bottom": 21792.0,
+   "formed_t": 1748507400,
+   "res": "5",
+   "size_ticks": 96.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": null,
+   "mitigated_t": 1748511600,
+   "internal_liquidity": 21814.25,
+   "internal_liquidity_t": 1748506500,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21794.5,
+     "bottom": 21793.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21795.0,
+     "bottom": 21790.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21805.75,
+     "bottom": 21800.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21816.75,
+     "bottom": 21806.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21797.0,
+     "bottom": 21791.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21801.5,
+     "bottom": 21797.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21807.0,
+     "bottom": 21804.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21821.75,
+     "bottom": 21816.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21799.0,
+     "bottom": 21791.75
+    },
+    {
+     "kind": "FVG",
+     "top": 21799.0,
+     "bottom": 21787.75
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T04:30:00-04:00",
+   "mid": 21804.0
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21799.0,
+   "bottom": 21791.75,
+   "formed_t": 1748509800,
+   "res": "5",
+   "size_ticks": 29.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748512500,
+   "mitigated_t": 1748510100,
+   "internal_liquidity": 21793.5,
+   "internal_liquidity_t": 1748508600,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21794.5,
+     "bottom": 21793.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21795.0,
+     "bottom": 21790.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21797.0,
+     "bottom": 21791.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21801.5,
+     "bottom": 21797.75
+    },
+    {
+     "kind": "FVG",
+     "top": 21816.0,
+     "bottom": 21792.0
+    },
+    {
+     "kind": "FVG",
+     "top": 21799.0,
+     "bottom": 21787.75
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T05:10:00-04:00",
+   "mid": 21795.375
+  },
+  {
+   "kind": "FVG",
+   "direction": "bearish",
+   "top": 21799.0,
+   "bottom": 21787.75,
+   "formed_t": 1748512800,
+   "res": "5",
+   "size_ticks": 45.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": null,
+   "mitigated_t": null,
+   "internal_liquidity": 21798.0,
+   "internal_liquidity_t": 1748511900,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21794.5,
+     "bottom": 21793.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21795.0,
+     "bottom": 21790.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21797.0,
+     "bottom": 21791.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21788.75,
+     "bottom": 21782.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21801.5,
+     "bottom": 21797.75
+    },
+    {
+     "kind": "FVG",
+     "top": 21816.0,
+     "bottom": 21792.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21799.0,
+     "bottom": 21791.75
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T06:00:00-04:00",
+   "mid": 21793.375
+  },
+  {
+   "kind": "FVG",
+   "direction": "bearish",
+   "top": 21783.75,
+   "bottom": 21768.25,
+   "formed_t": 1748513100,
+   "res": "5",
+   "size_ticks": 62.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": null,
+   "mitigated_t": null,
+   "internal_liquidity": 21782.0,
+   "internal_liquidity_t": 1748510100,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21788.75,
+     "bottom": 21782.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21774.5,
+     "bottom": 21770.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T06:05:00-04:00",
+   "mid": 21776.0
+  },
+  {
+   "kind": "FVG",
+   "direction": "bearish",
+   "top": 21749.5,
+   "bottom": 21745.0,
+   "formed_t": 1748514000,
+   "res": "5",
+   "size_ticks": 18.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": null,
+   "mitigated_t": 1748514600,
+   "internal_liquidity": 21747.25,
+   "internal_liquidity_t": 1748513100,
+   "liquidity_route": "INSIDE",
+   "overlaps": [],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T06:20:00-04:00",
+   "mid": 21747.25
+  },
+  {
+   "kind": "FVG",
+   "direction": "bearish",
+   "top": 21728.0,
+   "bottom": 21701.75,
+   "formed_t": 1748517900,
+   "res": "5",
+   "size_ticks": 105.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": null,
+   "mitigated_t": null,
+   "internal_liquidity": 21718.25,
+   "internal_liquidity_t": 1748517000,
+   "liquidity_route": "INSIDE",
+   "overlaps": [],
+   "liquidity_left": 21733.5,
+   "formed_ny": "2025-05-29T07:25:00-04:00",
+   "mid": 21714.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21699.0,
+   "bottom": 21698.0,
+   "formed_t": 1748518200,
+   "res": "5",
+   "size_ticks": 4.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748518800,
+   "mitigated_t": 1748518500,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T07:30:00-04:00",
+   "mid": 21698.5
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21678.25,
+   "bottom": 21666.0,
+   "formed_t": 1748519700,
+   "res": "5",
+   "size_ticks": 49.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748521800,
+   "mitigated_t": 1748520300,
+   "internal_liquidity": 21677.5,
+   "internal_liquidity_t": 1748518800,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21678.0,
+     "bottom": 21671.0
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T07:55:00-04:00",
+   "mid": 21672.125
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21652.5,
+   "bottom": 21649.5,
+   "formed_t": 1748521800,
+   "res": "5",
+   "size_ticks": 12.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748522100,
+   "mitigated_t": 1748522100,
+   "internal_liquidity": 21652.25,
+   "internal_liquidity_t": 1748520900,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21652.5,
+     "bottom": 21647.75
+    },
+    {
+     "kind": "FVG",
+     "top": 21661.75,
+     "bottom": 21612.75
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T08:30:00-04:00",
+   "mid": 21651.0
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21652.5,
+   "bottom": 21647.75,
+   "formed_t": 1748522400,
+   "res": "5",
+   "size_ticks": 19.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748523000,
+   "mitigated_t": 1748522700,
+   "internal_liquidity": 21652.25,
+   "internal_liquidity_t": 1748520900,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21652.5,
+     "bottom": 21649.5
+    },
+    {
+     "kind": "FVG",
+     "top": 21661.75,
+     "bottom": 21612.75
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T08:40:00-04:00",
+   "mid": 21650.125
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21678.0,
+   "bottom": 21671.0,
+   "formed_t": 1748524800,
+   "res": "5",
+   "size_ticks": 28.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748525400,
+   "mitigated_t": 1748525100,
+   "internal_liquidity": 21677.5,
+   "internal_liquidity_t": 1748518800,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21678.25,
+     "bottom": 21666.0
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T09:20:00-04:00",
+   "mid": 21674.5
+  },
+  {
+   "kind": "FVG",
+   "direction": "bearish",
+   "top": 21661.75,
+   "bottom": 21612.75,
+   "formed_t": 1748525700,
+   "res": "5",
+   "size_ticks": 196.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": null,
+   "mitigated_t": null,
+   "internal_liquidity": 21647.75,
+   "internal_liquidity_t": 1748524200,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21652.5,
+     "bottom": 21649.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21652.5,
+     "bottom": 21647.75
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T09:35:00-04:00",
+   "mid": 21637.25
+  },
+  {
+   "kind": "FVG",
+   "direction": "bearish",
+   "top": 21560.5,
+   "bottom": 21537.5,
+   "formed_t": 1748526300,
+   "res": "5",
+   "size_ticks": 92.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": null,
+   "mitigated_t": null,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T09:45:00-04:00",
+   "mid": 21549.0
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21499.5,
+   "bottom": 21487.5,
+   "formed_t": 1748527500,
+   "res": "5",
+   "size_ticks": 48.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748530500,
+   "mitigated_t": 1748530200,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21493.0,
+     "bottom": 21484.0
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T10:05:00-04:00",
+   "mid": 21493.5
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21487.25,
+   "bottom": 21440.25,
+   "formed_t": 1748527800,
+   "res": "5",
+   "size_ticks": 188.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748530200,
+   "mitigated_t": 1748530200,
+   "internal_liquidity": 21485.25,
+   "internal_liquidity_t": 1748526600,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21467.25,
+     "bottom": 21463.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21493.0,
+     "bottom": 21484.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21482.0,
+     "bottom": 21480.75
+    },
+    {
+     "kind": "FVG",
+     "top": 21482.0,
+     "bottom": 21459.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21452.0,
+     "bottom": 21446.5
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T10:10:00-04:00",
+   "mid": 21463.75
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21431.25,
+   "bottom": 21420.75,
+   "formed_t": 1748529000,
+   "res": "5",
+   "size_ticks": 42.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748534100,
+   "mitigated_t": 1748533800,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T10:30:00-04:00",
+   "mid": 21426.0
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21467.25,
+   "bottom": 21463.5,
+   "formed_t": 1748530200,
+   "res": "5",
+   "size_ticks": 15.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748531400,
+   "mitigated_t": 1748531400,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21487.25,
+     "bottom": 21440.25
+    },
+    {
+     "kind": "FVG",
+     "top": 21482.0,
+     "bottom": 21459.5
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T10:50:00-04:00",
+   "mid": 21465.375
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21493.0,
+   "bottom": 21484.0,
+   "formed_t": 1748530500,
+   "res": "5",
+   "size_ticks": 36.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748531400,
+   "mitigated_t": 1748530800,
+   "internal_liquidity": 21485.25,
+   "internal_liquidity_t": 1748526600,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21499.5,
+     "bottom": 21487.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21487.25,
+     "bottom": 21440.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T10:55:00-04:00",
+   "mid": 21488.5
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21482.0,
+   "bottom": 21480.75,
+   "formed_t": 1748532300,
+   "res": "5",
+   "size_ticks": 5.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748532600,
+   "mitigated_t": 1748532600,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21487.25,
+     "bottom": 21440.25
+    },
+    {
+     "kind": "FVG",
+     "top": 21482.0,
+     "bottom": 21459.5
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T11:25:00-04:00",
+   "mid": 21481.375
+  },
+  {
+   "kind": "FVG",
+   "direction": "bearish",
+   "top": 21482.0,
+   "bottom": 21459.5,
+   "formed_t": 1748532900,
+   "res": "5",
+   "size_ticks": 90.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": null,
+   "mitigated_t": 1748538000,
+   "internal_liquidity": 21475.0,
+   "internal_liquidity_t": 1748529300,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21487.25,
+     "bottom": 21440.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21467.25,
+     "bottom": 21463.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21482.0,
+     "bottom": 21480.75
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T11:35:00-04:00",
+   "mid": 21470.75
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21420.5,
+   "bottom": 21364.0,
+   "formed_t": 1748534400,
+   "res": "5",
+   "size_ticks": 226.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748535300,
+   "mitigated_t": 1748535300,
+   "internal_liquidity": 21380.5,
+   "internal_liquidity_t": 1748528400,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21369.75,
+     "bottom": 21367.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21363.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21398.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21394.75,
+     "bottom": 21391.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21377.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21381.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21371.0,
+     "bottom": 21363.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21388.25,
+     "bottom": 21381.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21389.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21394.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21369.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21385.75,
+     "bottom": 21378.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21376.75,
+     "bottom": 21374.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21388.5,
+     "bottom": 21385.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21392.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21406.5,
+     "bottom": 21401.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21383.5,
+     "bottom": 21377.0
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T12:00:00-04:00",
+   "mid": 21392.25
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21405.5,
+   "bottom": 21371.75,
+   "formed_t": 1748535300,
+   "res": "5",
+   "size_ticks": 135.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748542500,
+   "mitigated_t": 1748541300,
+   "internal_liquidity": 21380.5,
+   "internal_liquidity_t": 1748528400,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21363.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21398.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21394.75,
+     "bottom": 21391.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21377.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21381.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21388.25,
+     "bottom": 21381.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21389.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21394.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21369.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21385.75,
+     "bottom": 21378.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21376.75,
+     "bottom": 21374.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21388.5,
+     "bottom": 21385.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21392.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21406.5,
+     "bottom": 21401.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21383.5,
+     "bottom": 21377.0
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T12:15:00-04:00",
+   "mid": 21388.625
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21452.0,
+   "bottom": 21446.5,
+   "formed_t": 1748538000,
+   "res": "5",
+   "size_ticks": 22.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748538900,
+   "mitigated_t": 1748538300,
+   "internal_liquidity": 21449.5,
+   "internal_liquidity_t": 1748528100,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21487.25,
+     "bottom": 21440.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T13:00:00-04:00",
+   "mid": 21449.25
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21379.25,
+   "bottom": 21352.5,
+   "formed_t": 1748542800,
+   "res": "5",
+   "size_ticks": 107.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748543700,
+   "mitigated_t": 1748543700,
+   "internal_liquidity": 21368.0,
+   "internal_liquidity_t": 1748541300,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.25,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21369.75,
+     "bottom": 21367.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21363.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21377.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21371.0,
+     "bottom": 21363.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21357.5,
+     "bottom": 21352.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21353.0,
+     "bottom": 21349.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.5,
+     "bottom": 21348.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21359.25,
+     "bottom": 21350.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21369.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.0,
+     "bottom": 21360.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21354.75,
+     "bottom": 21351.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21385.75,
+     "bottom": 21378.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21376.75,
+     "bottom": 21374.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21383.5,
+     "bottom": 21377.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21363.25,
+     "bottom": 21359.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21363.25,
+     "bottom": 21359.25
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T14:20:00-04:00",
+   "mid": 21365.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21362.25,
+   "bottom": 21349.0,
+   "formed_t": 1748543700,
+   "res": "5",
+   "size_ticks": 53.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748545800,
+   "mitigated_t": 1748544900,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21357.5,
+     "bottom": 21352.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21353.0,
+     "bottom": 21349.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.5,
+     "bottom": 21348.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21350.5,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21359.25,
+     "bottom": 21350.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.0,
+     "bottom": 21360.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21354.75,
+     "bottom": 21351.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21363.25,
+     "bottom": 21359.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21363.25,
+     "bottom": 21359.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T14:35:00-04:00",
+   "mid": 21355.625
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21369.75,
+   "bottom": 21367.0,
+   "formed_t": 1748544000,
+   "res": "5",
+   "size_ticks": 11.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748544900,
+   "mitigated_t": 1748544900,
+   "internal_liquidity": 21368.0,
+   "internal_liquidity_t": 1748541300,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21363.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21371.0,
+     "bottom": 21363.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21369.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21368.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T14:40:00-04:00",
+   "mid": 21368.375
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21372.0,
+   "bottom": 21363.5,
+   "formed_t": 1748546400,
+   "res": "5",
+   "size_ticks": 34.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748557200,
+   "mitigated_t": 1748556000,
+   "internal_liquidity": 21368.0,
+   "internal_liquidity_t": 1748541300,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21369.75,
+     "bottom": 21367.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21371.0,
+     "bottom": 21363.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21369.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T15:20:00-04:00",
+   "mid": 21367.75
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21402.25,
+   "bottom": 21398.25,
+   "formed_t": 1748551500,
+   "res": "5",
+   "size_ticks": 16.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748583300,
+   "mitigated_t": 1748583300,
+   "internal_liquidity": 21398.75,
+   "internal_liquidity_t": 1748544900,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21389.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21394.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21392.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21406.5,
+     "bottom": 21401.5
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T16:45:00-04:00",
+   "mid": 21400.25
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21394.75,
+   "bottom": 21391.75,
+   "formed_t": 1748551800,
+   "res": "5",
+   "size_ticks": 12.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748583300,
+   "mitigated_t": 1748556600,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21389.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21394.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21392.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T16:50:00-04:00",
+   "mid": 21393.25
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21377.5,
+   "bottom": 21372.5,
+   "formed_t": 1748556000,
+   "res": "5",
+   "size_ticks": 20.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748556300,
+   "mitigated_t": 1748556300,
+   "internal_liquidity": 21377.5,
+   "internal_liquidity_t": 1748551800,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21376.75,
+     "bottom": 21374.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21383.5,
+     "bottom": 21377.0
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T18:00:00-04:00",
+   "mid": 21375.0
+  },
+  {
+   "kind": "NDOG",
+   "direction": "bullish",
+   "top": 21385.0,
+   "bottom": 21371.25,
+   "formed_t": 1748556000,
+   "res": "session",
+   "size_ticks": 55.0,
+   "subtype": "VOID-BEAR",
+   "prior_session_open": 21782.5,
+   "prior_session_close": 21385.0,
+   "inverted_t": 1748583000,
+   "mitigated_t": 1748556600,
+   "internal_liquidity": 21377.5,
+   "internal_liquidity_t": 1748551800,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21363.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21377.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21381.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21388.25,
+     "bottom": 21381.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21369.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21385.75,
+     "bottom": 21378.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21376.75,
+     "bottom": 21374.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21388.5,
+     "bottom": 21385.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21383.5,
+     "bottom": 21377.0
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T18:00:00-04:00",
+   "mid": 21378.125
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21382.5,
+   "bottom": 21372.5,
+   "formed_t": 1748556600,
+   "res": "5",
+   "size_ticks": 40.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748557200,
+   "mitigated_t": 1748556900,
+   "internal_liquidity": 21377.5,
+   "internal_liquidity_t": 1748551800,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21377.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21381.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21388.25,
+     "bottom": 21381.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21385.75,
+     "bottom": 21378.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21376.75,
+     "bottom": 21374.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21383.5,
+     "bottom": 21377.0
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T18:10:00-04:00",
+   "mid": 21377.5
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21382.5,
+   "bottom": 21381.25,
+   "formed_t": 1748557200,
+   "res": "5",
+   "size_ticks": 5.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748583000,
+   "mitigated_t": 1748583000,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21388.25,
+     "bottom": 21381.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21385.75,
+     "bottom": 21378.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21383.5,
+     "bottom": 21377.0
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T18:20:00-04:00",
+   "mid": 21381.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21371.0,
+   "bottom": 21363.0,
+   "formed_t": 1748557500,
+   "res": "5",
+   "size_ticks": 32.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748582400,
+   "mitigated_t": 1748582400,
+   "internal_liquidity": 21367.25,
+   "internal_liquidity_t": 1748549100,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21369.75,
+     "bottom": 21367.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21363.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21369.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21363.25,
+     "bottom": 21359.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21363.25,
+     "bottom": 21359.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T18:25:00-04:00",
+   "mid": 21367.0
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21357.5,
+   "bottom": 21352.0,
+   "formed_t": 1748561700,
+   "res": "5",
+   "size_ticks": 22.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748573700,
+   "mitigated_t": 1748572800,
+   "internal_liquidity": 21355.0,
+   "internal_liquidity_t": 1748559000,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.25,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21353.0,
+     "bottom": 21349.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.5,
+     "bottom": 21348.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21359.25,
+     "bottom": 21350.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21354.75,
+     "bottom": 21351.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T19:35:00-04:00",
+   "mid": 21354.75
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21347.0,
+   "bottom": 21346.0,
+   "formed_t": 1748562000,
+   "res": "5",
+   "size_ticks": 4.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748564100,
+   "mitigated_t": 1748564100,
+   "internal_liquidity": 21347.0,
+   "internal_liquidity_t": 1748557500,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21347.75,
+     "bottom": 21342.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T19:40:00-04:00",
+   "mid": 21346.5
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21340.0,
+   "bottom": 21331.75,
+   "formed_t": 1748562300,
+   "res": "5",
+   "size_ticks": 33.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748564100,
+   "mitigated_t": 1748563500,
+   "internal_liquidity": 21335.25,
+   "internal_liquidity_t": 1748559000,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21340.0,
+     "bottom": 21337.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21345.5,
+     "bottom": 21339.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21334.75,
+     "bottom": 21315.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21336.5,
+     "bottom": 21325.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21336.75,
+     "bottom": 21335.0
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T19:45:00-04:00",
+   "mid": 21335.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21330.75,
+   "bottom": 21328.75,
+   "formed_t": 1748563500,
+   "res": "5",
+   "size_ticks": 8.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748566800,
+   "mitigated_t": 1748563800,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21334.75,
+     "bottom": 21315.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21336.5,
+     "bottom": 21325.25
+    },
+    {
+     "kind": "FVG",
+     "top": 21329.5,
+     "bottom": 21307.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T20:05:00-04:00",
+   "mid": 21329.75
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21343.25,
+   "bottom": 21341.75,
+   "formed_t": 1748564400,
+   "res": "5",
+   "size_ticks": 6.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748565000,
+   "mitigated_t": 1748564700,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21345.5,
+     "bottom": 21339.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21347.75,
+     "bottom": 21342.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T20:20:00-04:00",
+   "mid": 21342.5
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21316.0,
+   "bottom": 21311.75,
+   "formed_t": 1748568600,
+   "res": "5",
+   "size_ticks": 17.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748607000,
+   "mitigated_t": 1748606700,
+   "internal_liquidity": 21313.75,
+   "internal_liquidity_t": 1748562900,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21334.75,
+     "bottom": 21315.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21322.0,
+     "bottom": 21276.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21313.0,
+     "bottom": 21287.25
+    },
+    {
+     "kind": "FVG",
+     "top": 21329.5,
+     "bottom": 21307.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T21:30:00-04:00",
+   "mid": 21313.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21340.0,
+   "bottom": 21337.75,
+   "formed_t": 1748570400,
+   "res": "5",
+   "size_ticks": 9.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748575200,
+   "mitigated_t": 1748570700,
+   "internal_liquidity": 21338.25,
+   "internal_liquidity_t": 1748546100,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21340.0,
+     "bottom": 21331.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21345.5,
+     "bottom": 21339.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T22:00:00-04:00",
+   "mid": 21338.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21353.0,
+   "bottom": 21349.25,
+   "formed_t": 1748572800,
+   "res": "5",
+   "size_ticks": 15.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748574900,
+   "mitigated_t": 1748573400,
+   "internal_liquidity": 21351.0,
+   "internal_liquidity_t": 1748571600,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.25,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21357.5,
+     "bottom": 21352.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.5,
+     "bottom": 21348.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21350.5,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21359.25,
+     "bottom": 21350.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21354.75,
+     "bottom": 21351.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T22:40:00-04:00",
+   "mid": 21351.125
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21358.5,
+   "bottom": 21348.75,
+   "formed_t": 1748575200,
+   "res": "5",
+   "size_ticks": 39.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748581200,
+   "mitigated_t": 1748581200,
+   "internal_liquidity": 21350.25,
+   "internal_liquidity_t": 1748574000,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.25,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21357.5,
+     "bottom": 21352.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21353.0,
+     "bottom": 21349.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21350.5,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21359.25,
+     "bottom": 21350.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21354.75,
+     "bottom": 21351.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-29T23:20:00-04:00",
+   "mid": 21353.625
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21350.5,
+   "bottom": 21349.0,
+   "formed_t": 1748579400,
+   "res": "5",
+   "size_ticks": 6.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748581200,
+   "mitigated_t": 1748580900,
+   "internal_liquidity": 21350.25,
+   "internal_liquidity_t": 1748574000,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21362.25,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21353.0,
+     "bottom": 21349.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.5,
+     "bottom": 21348.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T00:30:00-04:00",
+   "mid": 21349.75
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21345.5,
+   "bottom": 21339.5,
+   "formed_t": 1748580000,
+   "res": "5",
+   "size_ticks": 24.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748580900,
+   "mitigated_t": 1748580900,
+   "internal_liquidity": 21345.0,
+   "internal_liquidity_t": 1748579100,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21340.0,
+     "bottom": 21331.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21343.25,
+     "bottom": 21341.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21340.0,
+     "bottom": 21337.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21347.75,
+     "bottom": 21342.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T00:40:00-04:00",
+   "mid": 21342.5
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21347.75,
+   "bottom": 21342.5,
+   "formed_t": 1748581200,
+   "res": "5",
+   "size_ticks": 21.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748587200,
+   "mitigated_t": 1748586600,
+   "internal_liquidity": 21345.0,
+   "internal_liquidity_t": 1748579100,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21347.0,
+     "bottom": 21346.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21343.25,
+     "bottom": 21341.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21345.5,
+     "bottom": 21339.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T01:00:00-04:00",
+   "mid": 21345.125
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21359.25,
+   "bottom": 21350.75,
+   "formed_t": 1748581500,
+   "res": "5",
+   "size_ticks": 34.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748586900,
+   "mitigated_t": 1748586600,
+   "internal_liquidity": 21356.25,
+   "internal_liquidity_t": 1748578800,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.25,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21357.5,
+     "bottom": 21352.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21353.0,
+     "bottom": 21349.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.5,
+     "bottom": 21348.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21354.75,
+     "bottom": 21351.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21363.25,
+     "bottom": 21359.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21363.25,
+     "bottom": 21359.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T01:05:00-04:00",
+   "mid": 21355.0
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21373.0,
+   "bottom": 21366.75,
+   "formed_t": 1748582700,
+   "res": "5",
+   "size_ticks": 25.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748586000,
+   "mitigated_t": 1748586000,
+   "internal_liquidity": 21369.5,
+   "internal_liquidity_t": 1748560800,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21369.75,
+     "bottom": 21367.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21363.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21377.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21371.0,
+     "bottom": 21363.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21369.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T01:25:00-04:00",
+   "mid": 21369.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21388.25,
+   "bottom": 21381.5,
+   "formed_t": 1748583300,
+   "res": "5",
+   "size_ticks": 27.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748585100,
+   "mitigated_t": 1748584800,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21381.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21385.75,
+     "bottom": 21378.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21388.5,
+     "bottom": 21385.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21383.5,
+     "bottom": 21377.0
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T01:35:00-04:00",
+   "mid": 21384.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21402.25,
+   "bottom": 21389.25,
+   "formed_t": 1748583600,
+   "res": "5",
+   "size_ticks": 52.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748584200,
+   "mitigated_t": 1748584200,
+   "internal_liquidity": 21395.25,
+   "internal_liquidity_t": 1748556600,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21398.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21394.75,
+     "bottom": 21391.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21394.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21392.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21406.5,
+     "bottom": 21401.5
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T01:40:00-04:00",
+   "mid": 21395.75
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21402.25,
+   "bottom": 21394.0,
+   "formed_t": 1748584200,
+   "res": "5",
+   "size_ticks": 33.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748603100,
+   "mitigated_t": 1748603100,
+   "internal_liquidity": 21395.25,
+   "internal_liquidity_t": 1748556600,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21398.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21394.75,
+     "bottom": 21391.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21389.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21392.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21406.5,
+     "bottom": 21401.5
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T01:50:00-04:00",
+   "mid": 21398.125
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21372.0,
+   "bottom": 21369.25,
+   "formed_t": 1748586300,
+   "res": "5",
+   "size_ticks": 11.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748592300,
+   "mitigated_t": 1748590500,
+   "internal_liquidity": 21369.5,
+   "internal_liquidity_t": 1748560800,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21369.75,
+     "bottom": 21367.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21363.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21371.0,
+     "bottom": 21363.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T02:25:00-04:00",
+   "mid": 21370.625
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21362.0,
+   "bottom": 21360.0,
+   "formed_t": 1748586600,
+   "res": "5",
+   "size_ticks": 8.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748590500,
+   "mitigated_t": 1748586900,
+   "internal_liquidity": 21360.25,
+   "internal_liquidity_t": 1748573100,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.25,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21363.25,
+     "bottom": 21359.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21363.25,
+     "bottom": 21359.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T02:30:00-04:00",
+   "mid": 21361.0
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21354.75,
+   "bottom": 21351.0,
+   "formed_t": 1748589900,
+   "res": "5",
+   "size_ticks": 15.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748607000,
+   "mitigated_t": 1748591400,
+   "internal_liquidity": 21352.25,
+   "internal_liquidity_t": 1748587500,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.25,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21357.5,
+     "bottom": 21352.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21353.0,
+     "bottom": 21349.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.5,
+     "bottom": 21348.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21359.25,
+     "bottom": 21350.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.0,
+     "bottom": 21338.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T03:25:00-04:00",
+   "mid": 21352.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21385.75,
+   "bottom": 21378.0,
+   "formed_t": 1748596800,
+   "res": "5",
+   "size_ticks": 31.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748598300,
+   "mitigated_t": 1748597700,
+   "internal_liquidity": 21381.25,
+   "internal_liquidity_t": 1748595900,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21381.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21388.25,
+     "bottom": 21381.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21388.5,
+     "bottom": 21385.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21383.5,
+     "bottom": 21377.0
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T05:20:00-04:00",
+   "mid": 21381.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21372.75,
+   "bottom": 21369.75,
+   "formed_t": 1748598900,
+   "res": "5",
+   "size_ticks": 12.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748599200,
+   "mitigated_t": 1748599200,
+   "internal_liquidity": 21372.5,
+   "internal_liquidity_t": 1748590500,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21369.75,
+     "bottom": 21367.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21363.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21377.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21371.0,
+     "bottom": 21363.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21369.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T05:55:00-04:00",
+   "mid": 21371.25
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21374.75,
+   "bottom": 21369.75,
+   "formed_t": 1748599500,
+   "res": "5",
+   "size_ticks": 20.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748599800,
+   "mitigated_t": 1748599800,
+   "internal_liquidity": 21372.5,
+   "internal_liquidity_t": 1748590500,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21369.75,
+     "bottom": 21367.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21363.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21377.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21371.0,
+     "bottom": 21363.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21369.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21376.75,
+     "bottom": 21374.75
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T06:05:00-04:00",
+   "mid": 21372.25
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21374.75,
+   "bottom": 21368.25,
+   "formed_t": 1748600100,
+   "res": "5",
+   "size_ticks": 26.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748600700,
+   "mitigated_t": 1748600400,
+   "internal_liquidity": 21372.5,
+   "internal_liquidity_t": 1748590500,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21369.75,
+     "bottom": 21367.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21363.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21377.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21371.0,
+     "bottom": 21363.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21369.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21376.75,
+     "bottom": 21374.75
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T06:15:00-04:00",
+   "mid": 21371.5
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21372.0,
+   "bottom": 21368.25,
+   "formed_t": 1748600700,
+   "res": "5",
+   "size_ticks": 15.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748607000,
+   "mitigated_t": 1748606700,
+   "internal_liquidity": 21369.5,
+   "internal_liquidity_t": 1748560800,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21369.75,
+     "bottom": 21367.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21363.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21371.0,
+     "bottom": 21363.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21373.0,
+     "bottom": 21366.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.0,
+     "bottom": 21369.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21372.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T06:25:00-04:00",
+   "mid": 21370.125
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21376.75,
+   "bottom": 21374.75,
+   "formed_t": 1748601000,
+   "res": "5",
+   "size_ticks": 8.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748602200,
+   "mitigated_t": 1748602200,
+   "internal_liquidity": 21375.0,
+   "internal_liquidity_t": 1748540700,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21377.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21369.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21374.75,
+     "bottom": 21368.25
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T06:30:00-04:00",
+   "mid": 21375.75
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21388.5,
+   "bottom": 21385.0,
+   "formed_t": 1748603100,
+   "res": "5",
+   "size_ticks": 14.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748606700,
+   "mitigated_t": 1748606100,
+   "internal_liquidity": 21386.5,
+   "internal_liquidity_t": 1748598300,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21388.25,
+     "bottom": 21381.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21385.75,
+     "bottom": 21378.0
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T07:05:00-04:00",
+   "mid": 21386.75
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21405.5,
+   "bottom": 21392.25,
+   "formed_t": 1748603400,
+   "res": "5",
+   "size_ticks": 53.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748605200,
+   "mitigated_t": 1748604600,
+   "internal_liquidity": 21395.5,
+   "internal_liquidity_t": 1748597700,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21398.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21394.75,
+     "bottom": 21391.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21389.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21394.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21406.5,
+     "bottom": 21401.5
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T07:10:00-04:00",
+   "mid": 21398.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21406.5,
+   "bottom": 21401.5,
+   "formed_t": 1748604300,
+   "res": "5",
+   "size_ticks": 20.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748606400,
+   "mitigated_t": 1748606400,
+   "internal_liquidity": 21405.0,
+   "internal_liquidity_t": 1748541900,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21398.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21389.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21402.25,
+     "bottom": 21394.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21392.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T07:25:00-04:00",
+   "mid": 21404.0
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21383.5,
+   "bottom": 21377.0,
+   "formed_t": 1748607000,
+   "res": "5",
+   "size_ticks": 26.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748615100,
+   "mitigated_t": 1748611500,
+   "internal_liquidity": 21381.25,
+   "internal_liquidity_t": 1748595900,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21420.5,
+     "bottom": 21364.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21405.5,
+     "bottom": 21371.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21377.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21372.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21382.5,
+     "bottom": 21381.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21388.25,
+     "bottom": 21381.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21385.75,
+     "bottom": 21378.0
+    },
+    {
+     "kind": "NDOG",
+     "top": 21385.0,
+     "bottom": 21371.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T08:10:00-04:00",
+   "mid": 21380.25
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21334.75,
+   "bottom": 21315.25,
+   "formed_t": 1748608500,
+   "res": "5",
+   "size_ticks": 78.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748612400,
+   "mitigated_t": 1748610300,
+   "internal_liquidity": 21332.5,
+   "internal_liquidity_t": 1748607600,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21340.0,
+     "bottom": 21331.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21330.75,
+     "bottom": 21328.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21316.0,
+     "bottom": 21311.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21322.0,
+     "bottom": 21276.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21336.5,
+     "bottom": 21325.25
+    },
+    {
+     "kind": "FVG",
+     "top": 21329.5,
+     "bottom": 21307.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T08:35:00-04:00",
+   "mid": 21325.0
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21358.0,
+   "bottom": 21338.25,
+   "formed_t": 1748611200,
+   "res": "5",
+   "size_ticks": 79.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748612100,
+   "mitigated_t": 1748611800,
+   "internal_liquidity": 21353.75,
+   "internal_liquidity_t": 1748610300,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.25,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21357.5,
+     "bottom": 21352.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21347.0,
+     "bottom": 21346.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21340.0,
+     "bottom": 21331.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21343.25,
+     "bottom": 21341.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21340.0,
+     "bottom": 21337.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21353.0,
+     "bottom": 21349.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21358.5,
+     "bottom": 21348.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21350.5,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21345.5,
+     "bottom": 21339.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21347.75,
+     "bottom": 21342.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21359.25,
+     "bottom": 21350.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21354.75,
+     "bottom": 21351.0
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T09:20:00-04:00",
+   "mid": 21348.125
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21295.25,
+   "bottom": 21290.5,
+   "formed_t": 1748613000,
+   "res": "5",
+   "size_ticks": 19.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748613600,
+   "mitigated_t": 1748613600,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21322.0,
+     "bottom": 21276.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21313.0,
+     "bottom": 21287.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T09:50:00-04:00",
+   "mid": 21292.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21286.75,
+   "bottom": 21276.25,
+   "formed_t": 1748613300,
+   "res": "5",
+   "size_ticks": 42.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748613600,
+   "mitigated_t": 1748613600,
+   "internal_liquidity": 21280.0,
+   "internal_liquidity_t": 1748568000,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21322.0,
+     "bottom": 21276.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T09:55:00-04:00",
+   "mid": 21281.5
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21322.0,
+   "bottom": 21276.25,
+   "formed_t": 1748613900,
+   "res": "5",
+   "size_ticks": 183.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748622000,
+   "mitigated_t": 1748621700,
+   "internal_liquidity": 21314.0,
+   "internal_liquidity_t": 1748610300,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21316.0,
+     "bottom": 21311.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21334.75,
+     "bottom": 21315.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21295.25,
+     "bottom": 21290.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21286.75,
+     "bottom": 21276.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21313.0,
+     "bottom": 21287.25
+    },
+    {
+     "kind": "FVG",
+     "top": 21329.5,
+     "bottom": 21307.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T10:05:00-04:00",
+   "mid": 21299.125
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21336.5,
+   "bottom": 21325.25,
+   "formed_t": 1748614200,
+   "res": "5",
+   "size_ticks": 45.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748618100,
+   "mitigated_t": 1748618100,
+   "internal_liquidity": 21332.5,
+   "internal_liquidity_t": 1748607600,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21340.0,
+     "bottom": 21331.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21330.75,
+     "bottom": 21328.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21334.75,
+     "bottom": 21315.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21336.75,
+     "bottom": 21335.0
+    },
+    {
+     "kind": "FVG",
+     "top": 21329.5,
+     "bottom": 21307.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T10:10:00-04:00",
+   "mid": 21330.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21336.75,
+   "bottom": 21335.0,
+   "formed_t": 1748619300,
+   "res": "5",
+   "size_ticks": 7.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748632200,
+   "mitigated_t": 1748620500,
+   "internal_liquidity": 21336.75,
+   "internal_liquidity_t": 1748577300,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21340.0,
+     "bottom": 21331.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21336.5,
+     "bottom": 21325.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T11:35:00-04:00",
+   "mid": 21335.875
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21313.0,
+   "bottom": 21287.25,
+   "formed_t": 1748622000,
+   "res": "5",
+   "size_ticks": 103.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748631600,
+   "mitigated_t": 1748631600,
+   "internal_liquidity": 21296.0,
+   "internal_liquidity_t": 1748620800,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21316.0,
+     "bottom": 21311.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21295.25,
+     "bottom": 21290.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21322.0,
+     "bottom": 21276.25
+    },
+    {
+     "kind": "FVG",
+     "top": 21329.5,
+     "bottom": 21307.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T12:20:00-04:00",
+   "mid": 21300.125
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21268.0,
+   "bottom": 21262.0,
+   "formed_t": 1748622300,
+   "res": "5",
+   "size_ticks": 24.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748628900,
+   "mitigated_t": 1748628900,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "FVG",
+     "top": 21263.0,
+     "bottom": 21243.5
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T12:25:00-04:00",
+   "mid": 21265.0
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21243.5,
+   "bottom": 21179.0,
+   "formed_t": 1748622600,
+   "res": "5",
+   "size_ticks": 258.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748628900,
+   "mitigated_t": 1748628600,
+   "internal_liquidity": 21234.75,
+   "internal_liquidity_t": 1748613000,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "FVG",
+     "top": 21227.75,
+     "bottom": 21207.0
+    },
+    {
+     "kind": "FVG",
+     "top": 21263.0,
+     "bottom": 21243.5
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T12:30:00-04:00",
+   "mid": 21211.25
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21159.0,
+   "bottom": 21157.5,
+   "formed_t": 1748622900,
+   "res": "5",
+   "size_ticks": 6.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748624700,
+   "mitigated_t": 1748623200,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "FVG",
+     "top": 21160.0,
+     "bottom": 21137.5
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T12:35:00-04:00",
+   "mid": 21158.25
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21122.75,
+   "bottom": 21120.25,
+   "formed_t": 1748623800,
+   "res": "5",
+   "size_ticks": 10.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748624400,
+   "mitigated_t": 1748624400,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "FVG",
+     "top": 21133.25,
+     "bottom": 21109.5
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T12:50:00-04:00",
+   "mid": 21121.5
+  },
+  {
+   "kind": "FVG",
+   "direction": "bullish",
+   "top": 21133.25,
+   "bottom": 21109.5,
+   "formed_t": 1748624700,
+   "res": "5",
+   "size_ticks": 95.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": null,
+   "mitigated_t": null,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21122.75,
+     "bottom": 21120.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T13:05:00-04:00",
+   "mid": 21121.375
+  },
+  {
+   "kind": "FVG",
+   "direction": "bullish",
+   "top": 21160.0,
+   "bottom": 21137.5,
+   "formed_t": 1748625000,
+   "res": "5",
+   "size_ticks": 90.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": null,
+   "mitigated_t": null,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21159.0,
+     "bottom": 21157.5
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T13:10:00-04:00",
+   "mid": 21148.75
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21178.25,
+   "bottom": 21176.25,
+   "formed_t": 1748626500,
+   "res": "5",
+   "size_ticks": 8.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748627700,
+   "mitigated_t": 1748627100,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T13:35:00-04:00",
+   "mid": 21177.25
+  },
+  {
+   "kind": "FVG",
+   "direction": "bullish",
+   "top": 21227.75,
+   "bottom": 21207.0,
+   "formed_t": 1748628600,
+   "res": "5",
+   "size_ticks": 83.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": null,
+   "mitigated_t": null,
+   "internal_liquidity": 21214.75,
+   "internal_liquidity_t": 1748627400,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21243.5,
+     "bottom": 21179.0
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T14:10:00-04:00",
+   "mid": 21217.375
+  },
+  {
+   "kind": "FVG",
+   "direction": "bullish",
+   "top": 21263.0,
+   "bottom": 21243.5,
+   "formed_t": 1748629200,
+   "res": "5",
+   "size_ticks": 78.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": null,
+   "mitigated_t": null,
+   "internal_liquidity": null,
+   "internal_liquidity_t": null,
+   "liquidity_route": "NOT-VISIBLE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21268.0,
+     "bottom": 21262.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21243.5,
+     "bottom": 21179.0
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T14:20:00-04:00",
+   "mid": 21253.25
+  },
+  {
+   "kind": "FVG",
+   "direction": "bullish",
+   "top": 21329.5,
+   "bottom": 21307.25,
+   "formed_t": 1748631900,
+   "res": "5",
+   "size_ticks": 89.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": null,
+   "mitigated_t": null,
+   "internal_liquidity": 21318.25,
+   "internal_liquidity_t": 1748618100,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21330.75,
+     "bottom": 21328.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21316.0,
+     "bottom": 21311.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21334.75,
+     "bottom": 21315.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21322.0,
+     "bottom": 21276.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21336.5,
+     "bottom": 21325.25
+    },
+    {
+     "kind": "iFVG",
+     "top": 21313.0,
+     "bottom": 21287.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T15:05:00-04:00",
+   "mid": 21318.375
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bullish",
+   "top": 21363.25,
+   "bottom": 21359.25,
+   "formed_t": 1748635500,
+   "res": "5",
+   "size_ticks": 16.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748635800,
+   "mitigated_t": 1748635800,
+   "internal_liquidity": 21359.25,
+   "internal_liquidity_t": 1748615700,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.25,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21371.0,
+     "bottom": 21363.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21359.25,
+     "bottom": 21350.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.0,
+     "bottom": 21360.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21363.25,
+     "bottom": 21359.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T16:05:00-04:00",
+   "mid": 21361.25
+  },
+  {
+   "kind": "iFVG",
+   "direction": "bearish",
+   "top": 21363.25,
+   "bottom": 21359.25,
+   "formed_t": 1748636100,
+   "res": "5",
+   "size_ticks": 16.0,
+   "subtype": null,
+   "prior_session_open": null,
+   "prior_session_close": null,
+   "inverted_t": 1748637900,
+   "mitigated_t": 1748636700,
+   "internal_liquidity": 21359.25,
+   "internal_liquidity_t": 1748615700,
+   "liquidity_route": "INSIDE",
+   "overlaps": [
+    {
+     "kind": "iFVG",
+     "top": 21379.25,
+     "bottom": 21352.5
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.25,
+     "bottom": 21349.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21371.0,
+     "bottom": 21363.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21359.25,
+     "bottom": 21350.75
+    },
+    {
+     "kind": "iFVG",
+     "top": 21362.0,
+     "bottom": 21360.0
+    },
+    {
+     "kind": "iFVG",
+     "top": 21363.25,
+     "bottom": 21359.25
+    }
+   ],
+   "liquidity_left": null,
+   "formed_ny": "2025-05-30T16:15:00-04:00",
+   "mid": 21361.25
+  }
+ ]
+}

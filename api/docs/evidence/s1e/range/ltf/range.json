@@ -1,0 +1,49 @@
+{
+ "symbol": "NQ",
+ "resolution": "5",
+ "span": {
+  "from": "2025-05-29",
+  "to": "2025-05-30"
+ },
+ "anchor_mode": "smt-qualified",
+ "anchor_source": "api\\docs\\evidence\\s1e\\swing\\ltf\\swing-smt.json",
+ "quadrants": "NOT EMITTED \u2014 rule 5: discount/EQ/premium only",
+ "r7_trigger": "NOT IMPLEMENTED \u2014 a new range is triggered by HTF *Sequential* SMT + expansive move, which needs the cycle detector currently awaiting Paul's TradingView validation. Declared hook, not guessed.",
+ "ambiguity_tolerance": 0.15,
+ "range": {
+  "high": 21858.75,
+  "low": 21071.5,
+  "high_t": 1748505600,
+  "low_t": 1748623800,
+  "direction": "bearish",
+  "framed_at": 1748623800,
+  "res": "5",
+  "anchors_smt_qualified": true,
+  "size": 787.25,
+  "extended_to": null,
+  "extended_t": null,
+  "invalidated_t": null,
+  "invalidated_by": null,
+  "invalidated_side": null,
+  "runner_up": {
+   "high": 21858.75,
+   "low": 21079.0,
+   "size": 779.75
+  },
+  "ambiguous": true,
+  "eq": 21465.125,
+  "top_effective": 21858.75,
+  "discount": [
+   21071.5,
+   21465.125
+  ],
+  "premium": [
+   21465.125,
+   21858.75
+  ],
+  "framed_ny": "2025-05-30T12:50:00-04:00",
+  "invalidated_ny": null
+ },
+ "pivots_considered": 213,
+ "pivots_smt_qualified": 145
+}

@@ -1,0 +1,222 @@
+{
+ "range_file": "api\\docs\\evidence\\s1e\\range\\ltf\\range.json",
+ "range": {
+  "low": 21071.5,
+  "eq": 21465.125,
+  "high": 21858.75,
+  "resolution": "5",
+  "span": {
+   "from": "2025-05-29",
+   "to": "2025-05-30"
+  },
+  "ambiguous_r9": true
+ },
+ "zone_reference_note": "rule 30 specifies discount/premium of the LTF range; the old engine used the HTF range and that single choice flipped S1d's entry from PREMIUM to DISCOUNT",
+ "quadrants": "NOT EMITTED \u2014 rule 5",
+ "counts_by_class": {
+  "ERL": 5,
+  "RANGE": 3,
+  "IRL": 6,
+  "PD-ARRAY": 10
+ },
+ "counts_by_zone": {
+  "PREMIUM": 11,
+  "EQUILIBRIUM": 1,
+  "DISCOUNT": 10,
+  "OUTSIDE": 2
+ },
+ "levels": [
+  {
+   "price": 21858.75,
+   "object": "pD.H",
+   "class": "ERL",
+   "detail": "prev D high, from 2025-05-28",
+   "state": "resting",
+   "zone": "PREMIUM"
+  },
+  {
+   "price": 21858.75,
+   "object": "RANGE.HIGH",
+   "class": "RANGE",
+   "detail": "bearish range, 787.25 pts",
+   "state": "live",
+   "zone": "PREMIUM"
+  },
+  {
+   "price": 21798.0,
+   "object": "IRL",
+   "class": "IRL",
+   "detail": "inside FVG, found by INSIDE",
+   "state": "target",
+   "zone": "PREMIUM"
+  },
+  {
+   "price": 21793.375,
+   "object": "FVG",
+   "class": "PD-ARRAY",
+   "detail": "bearish 21,787.75-21,799.00 (45t), overlaps 7",
+   "state": "unfilled",
+   "zone": "PREMIUM"
+  },
+  {
+   "price": 21782.0,
+   "object": "IRL",
+   "class": "IRL",
+   "detail": "inside FVG, found by INSIDE",
+   "state": "target",
+   "zone": "PREMIUM"
+  },
+  {
+   "price": 21776.0,
+   "object": "FVG",
+   "class": "PD-ARRAY",
+   "detail": "bearish 21,768.25-21,783.75 (62t), overlaps 2",
+   "state": "unfilled",
+   "zone": "PREMIUM"
+  },
+  {
+   "price": 21718.25,
+   "object": "IRL",
+   "class": "IRL",
+   "detail": "inside FVG, found by INSIDE",
+   "state": "target",
+   "zone": "PREMIUM"
+  },
+  {
+   "price": 21714.875,
+   "object": "FVG",
+   "class": "PD-ARRAY",
+   "detail": "bearish 21,701.75-21,728.00 (105t)",
+   "state": "unfilled",
+   "zone": "PREMIUM"
+  },
+  {
+   "price": 21647.75,
+   "object": "IRL",
+   "class": "IRL",
+   "detail": "inside FVG, found by INSIDE",
+   "state": "target",
+   "zone": "PREMIUM"
+  },
+  {
+   "price": 21637.25,
+   "object": "FVG",
+   "class": "PD-ARRAY",
+   "detail": "bearish 21,612.75-21,661.75 (196t), overlaps 2",
+   "state": "unfilled",
+   "zone": "PREMIUM"
+  },
+  {
+   "price": 21549.0,
+   "object": "FVG",
+   "class": "PD-ARRAY",
+   "detail": "bearish 21,537.50-21,560.50 (92t)",
+   "state": "unfilled",
+   "zone": "PREMIUM"
+  },
+  {
+   "price": 21465.125,
+   "object": "RANGE.EQ",
+   "class": "RANGE",
+   "detail": "bearish range, 787.25 pts",
+   "state": "live",
+   "zone": "EQUILIBRIUM"
+  },
+  {
+   "price": 21321.25,
+   "object": "pD.L",
+   "class": "ERL",
+   "detail": "prev D low, from 2025-05-27",
+   "state": "BROKEN",
+   "zone": "DISCOUNT"
+  },
+  {
+   "price": 21318.375,
+   "object": "FVG",
+   "class": "PD-ARRAY",
+   "detail": "bullish 21,307.25-21,329.50 (89t), overlaps 6",
+   "state": "unfilled",
+   "zone": "DISCOUNT"
+  },
+  {
+   "price": 21318.25,
+   "object": "IRL",
+   "class": "IRL",
+   "detail": "inside FVG, found by INSIDE",
+   "state": "target",
+   "zone": "DISCOUNT"
+  },
+  {
+   "price": 21301.0,
+   "object": "pD.L",
+   "class": "ERL",
+   "detail": "prev D low, from 2025-05-28",
+   "state": "BROKEN",
+   "zone": "DISCOUNT"
+  },
+  {
+   "price": 21253.25,
+   "object": "FVG",
+   "class": "PD-ARRAY",
+   "detail": "bullish 21,243.50-21,263.00 (78t), overlaps 2",
+   "state": "unfilled",
+   "zone": "DISCOUNT"
+  },
+  {
+   "price": 21217.375,
+   "object": "FVG",
+   "class": "PD-ARRAY",
+   "detail": "bullish 21,207.00-21,227.75 (83t), overlaps 1",
+   "state": "unfilled",
+   "zone": "DISCOUNT"
+  },
+  {
+   "price": 21214.75,
+   "object": "IRL",
+   "class": "IRL",
+   "detail": "inside FVG, found by INSIDE",
+   "state": "target",
+   "zone": "DISCOUNT"
+  },
+  {
+   "price": 21148.75,
+   "object": "FVG",
+   "class": "PD-ARRAY",
+   "detail": "bullish 21,137.50-21,160.00 (90t), overlaps 1",
+   "state": "unfilled",
+   "zone": "DISCOUNT"
+  },
+  {
+   "price": 21121.375,
+   "object": "FVG",
+   "class": "PD-ARRAY",
+   "detail": "bullish 21,109.50-21,133.25 (95t), overlaps 1",
+   "state": "unfilled",
+   "zone": "DISCOUNT"
+  },
+  {
+   "price": 21071.5,
+   "object": "RANGE.LOW",
+   "class": "RANGE",
+   "detail": "bearish range, 787.25 pts",
+   "state": "live",
+   "zone": "DISCOUNT"
+  },
+  {
+   "price": 20727.0,
+   "object": "pW.L",
+   "class": "ERL",
+   "detail": "prev W low, from (2025, 21)",
+   "state": "resting",
+   "zone": "OUTSIDE"
+  },
+  {
+   "price": 16460.0,
+   "object": "pM.L",
+   "class": "ERL",
+   "detail": "prev M low, from (2025, 4)",
+   "state": "resting",
+   "zone": "OUTSIDE"
+  }
+ ]
+}
